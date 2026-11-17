@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:tower:manifest:local-1",
+  "type": "object",
+  "properties": {
+    "networks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$"
+          },
+          "front_man": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$"
+          },
+          "hocon": {
+            "type": "string",
+            "pattern": "^[\\s\\S]{1,2048}$"
+          }
+        },
+        "required": [
+          "name",
+          "front_man",
+          "hocon"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "llm_router": {
+      "type": "object",
+      "properties": {
+        "base_url": {
+          "type": "string",
+          "pattern": "^[\\s\\S]{1,2048}$"
+        },
+        "mock": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "base_url",
+        "mock"
+      ],
+      "additionalProperties": false
+    },
+    "allowed_peers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[\\s\\S]{1,2048}$"
+      },
+      "minItems": 0,
+      "maxItems": 8
+    },
+    "deployment": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "const": "static"
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "additionalProperties": false
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "warning": {
+          "type": "string",
+          "pattern": "^[\\s\\S]{1,4000}$"
+        }
+      },
+      "required": [
+        "warning"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "networks",
+    "llm_router",
+    "allowed_peers",
+    "deployment",
+    "metadata"
+  ],
+  "additionalProperties": false
+}

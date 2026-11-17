@@ -2,6 +2,8 @@
 
 Date: 2026-11-17. This continues the local spike at `d4eb3ff1a3bbb0c3e82cb799f9e859c7268220ae`; M1 remains at `4eff2a7354eaed106f2bb7f0d3af37f67d80b4dc`. **M2 is still incomplete. Inference is scripted mock only.** The M1 Home Studio is not connected to this runtime and retains its memory-only draft behavior.
 
+> Historical milestone at `018b950f47aedf81d614f8a0a461d6262f6b50b3`. Subsequent [runtime-boundary work](M2-RUNTIME-BOUNDARIES.md) adds a narrower strict profile, rejects redirects and implements bounded cancellation. The 22-test evidence below remains preserved.
+
 ## Implemented behavior
 
 - **Explicit default-deny consent.** Only the literal `allow` decision permits a peer/MCP contact. Missing hooks, empty/null/boolean responses, cancellation, unsupported `always` responses and rejected hooks all decline. A failed hook does not poison later queued decisions; its private exception detail is not copied to the trace. There are no remembered origin-wide grants in this local fork.

@@ -13,8 +13,8 @@
     "test": "node --experimental-strip-types --test tests/domain.test.ts",
     "test:ui": "playwright test",
     "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:ui",
-    "spike:m2": "node spikes/m2/verify-vendor.mjs && node --experimental-strip-types spikes/m2/server.mjs",
-    "test:m2": "node spikes/m2/verify-vendor.mjs && playwright test --config spikes/m2/playwright.config.ts"
+    "spike:m2": "node spikes/m2/generate-schema.mjs --check && node spikes/m2/verify-vendor.mjs && node --experimental-strip-types spikes/m2/server.mjs",
+    "test:m2": "node spikes/m2/generate-schema.mjs --check && node spikes/m2/verify-vendor.mjs && playwright test --config spikes/m2/playwright.config.ts"
   },
   "dependencies": { "ajv": "8.20.0" },
   "devDependencies": {

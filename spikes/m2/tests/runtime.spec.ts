@@ -75,7 +75,7 @@ for (const scenario of ['missing', 'invalid', 'no-cors']) {
     const trace = await events(page);
     expect(trace.some(e => e.kind === 'remote_fetch' && e.phase === 'end' && e.status === 'error')).toBe(true);
     expect(trace.filter(e => e.kind === 'agent' && e.phase === 'start').map(e => e.agent)).toEqual(['caller']);
-    await expect(page.locator('#result')).toContainText('Error');
+    expect((await page.locator('#result').innerText()) + (await page.locator('#status').innerText())).toMatch(/Error|failed/);
   });
 }
 test('invalid generated bundle is rejected by shared deterministic validator', async ({ page }) => {
@@ -213,4 +213,86 @@ test('normalized duplicate names also fail instead of shadowing another agent', 
   })()`);
   expect(observed[0]).toContain('Duplicate agent names'); expect(observed[1]).toContain('Duplicate agent names');
   expect(observed[2]).toContain('non-empty name');
+});
+
+for (const scenario of ['unknown-network', 'executable-network', 'bad-invocation', 'deep-network', 'oversized-network', 'unknown-manifest', 'manifest-duplicate', 'front-mismatch', 'malformed-network', 'duplicate-json', 'hocon-network', 'cross-artifact', 'response-oversized', 'ambiguous-tools', 'invalid-encoding']) {
+  test(`strict artifact profile rejects ${scenario} before peer execution`, async ({ page }) => {
+    const targets: string[] = []; page.on('request', request => { if (request.url().includes('redirect-target')) targets.push(request.url()); });
+    await start(page, scenario); await allow(page, 'call'); await finish(page);
+    const trace = await events(page);
+    expect(trace.some(event => event.kind === 'remote_fetch' && event.status === 'error')).toBe(true);
+    expect(trace.filter(event => event.kind === 'agent' && event.phase === 'start').map(event => event.agent)).toEqual(['caller']);
+    expect(trace.some(event => event.kind === 'mcp_call')).toBe(false); expect(targets).toEqual([]);
+    await expect(page.locator('#status')).toContainText('failed');
+    expect(trace.filter(event => event.kind === 'model_call' && event.phase === 'start')).toHaveLength(1);
+  });
+}
+for (const scenario of ['redirect-manifest', 'redirect-same', 'redirect-network', 'redirect-model', 'redirect-mcp']) {
+  test(`redirect authorization rejects ${scenario} without contacting its target`, async ({ page }) => {
+    const targets: Request[] = []; page.on('request', request => { if (request.url().includes('redirect-target')) targets.push(request); });
+    await start(page, scenario);
+    if (scenario !== 'redirect-model') await allow(page, 'call');
+    if (scenario === 'redirect-mcp') await allow(page, 'discover');
+    await finish(page);
+    expect(targets).toEqual([]); expect((await events(page)).some(event => event.status === 'error')).toBe(true);
+    if (scenario === 'redirect-model') await expect(page.locator('#status')).toContainText('failed');
+  });
+}
+for (const scenario of ['slow-headers', 'slow-manifest', 'slow-model', 'slow-mcp']) {
+  test(`deadline aborts stalled ${scenario} response body without automatic retry`, async ({ page }) => {
+    const calls: Request[] = []; const failed: string[] = [];
+    page.on('request', request => calls.push(request)); page.on('requestfailed', request => failed.push(request.url()));
+    await page.goto(`?scenario=${scenario}`); await page.evaluate('window.m2Spike.engine.timeoutMs = 3000');
+    await page.locator('#run').click();
+    if (scenario === 'slow-manifest' || scenario === 'slow-headers') await allow(page, 'call');
+    if (scenario === 'slow-mcp') await allowAll(page);
+    await finish(page); await expect(page.locator('#status')).toContainText('deadline exceeded');
+    await expect(page.locator('#status')).toContainText('outcomes may be unknown');
+    await expect(page.locator('#consent')).toBeHidden();
+    expect((await events(page)).some(event => event.kind === 'runtime_stopped')).toBe(true);
+    expect(failed.length).toBeGreaterThan(0);
+    if (scenario === 'slow-mcp') expect(calls.filter(request => request.url().endsWith('/mcp') && request.method() === 'POST' && request.postDataJSON().method === 'tools/call')).toHaveLength(1);
+    const count = calls.length; await page.waitForTimeout(150); expect(calls).toHaveLength(count);
+  });
+}
+test('deadline also closes pending consent without peer contact', async ({ page }) => {
+  const peers: Request[] = []; page.on('request', request => { if (request.url().startsWith(B)) peers.push(request); });
+  await page.goto('?scenario=valid'); await page.evaluate('window.m2Spike.engine.timeoutMs = 2000'); await page.locator('#run').click();
+  await expect(page.locator('#consent')).toBeVisible(); await finish(page);
+  await expect(page.locator('#status')).toContainText('deadline exceeded'); await expect(page.locator('#consent')).toBeHidden();
+  expect(peers).toEqual([]);
+});
+test('cancel during consent closes its UI and a fresh run succeeds with new approvals', async ({ page }) => {
+  const peers: Request[] = []; page.on('request', request => { if (request.url().startsWith(B)) peers.push(request); });
+  await start(page); await expect(page.locator('#consent')).toBeVisible(); await page.locator('#cancel-run').click(); await finish(page);
+  await expect(page.locator('#status')).toContainText('cancelled'); await expect(page.locator('#consent')).toBeHidden(); expect(peers).toEqual([]);
+  await page.locator('#run').click(); await allowAll(page); await finish(page);
+  await expect(page.locator('#result')).toContainText('MOCK ONLY');
+});
+test('late approval after cancellation cannot resume the old turn', async ({ page }) => {
+  const peers: Request[] = []; page.on('request', request => { if (request.url().startsWith(B)) peers.push(request); });
+  await page.goto('?scenario=valid');
+  await page.evaluate('window.m2Spike.engine.onConsent = () => new Promise(resolve => { window.lateApproval = resolve; })');
+  await page.locator('#run').click(); await page.waitForFunction('typeof window.lateApproval === "function"');
+  await page.locator('#cancel-run').click(); await finish(page);
+  await page.evaluate('window.lateApproval("allow")'); await page.waitForTimeout(150);
+  expect(peers).toEqual([]); await expect(page.locator('#status')).toContainText('cancelled'); await expect(page.locator('#result')).toHaveText('');
+});
+test('cancelling a started MCP request reports uncertainty and never retries it', async ({ page }) => {
+  const calls: Request[] = []; page.on('request', request => { if (request.url().endsWith('/mcp') && request.method() === 'POST' && request.postDataJSON().method === 'tools/call') calls.push(request); });
+  await start(page, 'slow-mcp'); await allowAll(page);
+  await expect.poll(() => calls.length).toBe(1); await page.locator('#cancel-run').click(); await finish(page);
+  await expect(page.locator('#status')).toContainText('outcomes may be unknown');
+  await page.waitForTimeout(150); expect(calls).toHaveLength(1); await expect(page.locator('#result')).toHaveText('');
+});
+test('bounded transport rejects oversized requests and invalid timeout configuration', async ({ page }) => {
+  await page.goto('');
+  const failures = await page.evaluate<string[]>(`(async () => {
+    const { Operation } = await import('/spikes/m2/safety.js'); const results = [];
+    for (const value of [0, -1, Infinity, 30001, '100']) { try {new Operation(value);results.push('unexpected success');}catch(error){results.push(error.message);} }
+    const operation = new Operation(1000);
+    try {await operation.fetch(location.origin+'/redirect-target',{method:'POST',body:'x'.repeat(262145)});results.push('unexpected success');}catch(error){results.push(error.message);}finally{operation.dispose();}
+    return results;
+  })()`);
+  expect(failures).toHaveLength(6); expect(failures.every(message => !message.includes('unexpected success'))).toBe(true);
 });

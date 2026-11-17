@@ -1,0 +1,451 @@
+{
+  "recordedAt": "2026-11-17T08:02:58.289Z",
+  "scope": "Local strict schema, blocked redirects and bounded cancellation with scripted inference only; no deployment",
+  "node": "v24.22.1",
+  "chromium": "Chromium 156.0.8078.79 built on Debian GNU/Linux 13 (trixie)",
+  "upstreamCommit": "4e4cb36731ae71cbbb905d3fe98f26299ac3b4f2",
+  "sourceHashes": {
+    "server.mjs": "b4ebe4b66efda484b6eaa8cd22be53a56de943c31255e8eec666eb5c698abe92",
+    "site/spike.js": "3ee63ffbcd9e142c145600a33bea9886c3a188a176ca3e97ab81bf61a54c950b",
+    "site/index.html": "02bbf22d9b5c1341854671fea7164344ade3cf94f32dd5e90a08e26dd54037c5",
+    "tests/runtime.spec.ts": "7fd2711caa00a300002cb3808677f0f200d0356284e6e60f3403eccc53f07715",
+    "vendor/runtime/engine.js": "cac89d7e33a7a86b2fd1459e202f5712b6ab0bd0ec3fb77c77c36f9d334b46d8",
+    "vendor/runtime/kernel.js": "58e8c600a5699099e5ecefb6c55c17f7e8c12a15c1ef44fa8d9c194bf0a0e254",
+    "vendor/runtime/runner.js": "9b7169a631cf9a7339db5020b8836217616844397c67e0d221b5ee36e287b3be",
+    "vendor/provenance.json": "0a740f140deeffeccee9cf7c18c6be4476474dc51fb309c1824bcbe6721896cc",
+    "safety.js": "31aecd04bd3ea4acdbd9c506acc36aec4879888d19f929ea46ea89f60011a3a3",
+    "generate-schema.mjs": "19b33a000d97bec6a97f1ab1692fd35dad3c1cf10eb2c93356c4ca37b57a46ee",
+    "schema/manifest.schema.json": "86a533df3a46ebf14a8c575ca41e7388a234488dbd6b2459a0aaf51f19cf0ee5",
+    "schema/network.schema.json": "40fcc41d0bc68fcbea3fde61010fd1cd2ca4ebda82126dfda73a53e5dc64113e",
+    "schema/validators.js": "62df842d9caf2b14928e943c06a284067ace1893a2e4d6fd67a3f3126616238c",
+    "vendor/runtime/remote.js": "09a98b697c440425dfa82282eeee37854dc8ec379c9281a0f3432a92f5d0e7b2",
+    "vendor/runtime/llm.js": "623afc0ceed24c417893e9447f60dbf1a9988710ff2dcb46a017f8d5208a4c67",
+    "vendor/runtime/mcp.js": "9008fc5a51e279a8dc66ccbea7e25439b19d30c6586765655555fe5e50271469"
+  },
+  "stats": {
+    "startTime": "2026-11-17T08:02:58.289Z",
+    "duration": 35008.04,
+    "expected": 51,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "patched nsdeploy runtime runs two peer agents inside caller browser and calls local validator with mock inference",
+      "status": "passed",
+      "durationMs": 2316
+    },
+    {
+      "title": "denying network consent makes zero requests to peer",
+      "status": "passed",
+      "durationMs": 1512
+    },
+    {
+      "title": "missing peer fails explicitly before peer model execution",
+      "status": "passed",
+      "durationMs": 927
+    },
+    {
+      "title": "invalid peer fails explicitly before peer model execution",
+      "status": "passed",
+      "durationMs": 1201
+    },
+    {
+      "title": "no-cors peer fails explicitly before peer model execution",
+      "status": "passed",
+      "durationMs": 1122
+    },
+    {
+      "title": "invalid generated bundle is rejected by shared deterministic validator",
+      "status": "passed",
+      "durationMs": 1469
+    },
+    {
+      "title": "scripted provider failure stays a failure with no peer contact",
+      "status": "passed",
+      "durationMs": 1018
+    },
+    {
+      "title": "synthetic router canary goes only to caller router, never peer artifacts, MCP or prompts",
+      "status": "passed",
+      "durationMs": 1473
+    },
+    {
+      "title": "consent accepts only explicit allow and recovers its queue after hook errors",
+      "status": "passed",
+      "durationMs": 552
+    },
+    {
+      "title": "runtime characterization: keyless non-mock local inference is rejected before HTTP",
+      "status": "passed",
+      "durationMs": 424
+    },
+    {
+      "title": "runtime budget primitives stop exhausted invocation, remote count and deadline",
+      "status": "passed",
+      "durationMs": 696
+    },
+    {
+      "title": "network consent absent hook causes no peer contact",
+      "status": "passed",
+      "durationMs": 1011
+    },
+    {
+      "title": "network consent empty hook causes no peer contact",
+      "status": "passed",
+      "durationMs": 940
+    },
+    {
+      "title": "network consent error hook causes no peer contact",
+      "status": "passed",
+      "durationMs": 892
+    },
+    {
+      "title": "peer MCP discovery requires fresh consent and denial sends no MCP request",
+      "status": "passed",
+      "durationMs": 1130
+    },
+    {
+      "title": "peer MCP tool call requires separate consent with exact payload; denial prevents tools/call",
+      "status": "passed",
+      "durationMs": 1349
+    },
+    {
+      "title": "cached peer session still requires a new network grant on the next run",
+      "status": "passed",
+      "durationMs": 1356
+    },
+    {
+      "title": "duplicate-front agent names are rejected before ambiguous execution",
+      "status": "passed",
+      "durationMs": 796
+    },
+    {
+      "title": "duplicate-helper agent names are rejected before ambiguous execution",
+      "status": "passed",
+      "durationMs": 1121
+    },
+    {
+      "title": "duplicate-top agent names are rejected before ambiguous execution",
+      "status": "passed",
+      "durationMs": 886
+    },
+    {
+      "title": "MCP consent boundary uses actual browser origin, including relative peer URLs",
+      "status": "passed",
+      "durationMs": 640
+    },
+    {
+      "title": "normalized duplicate names also fail instead of shadowing another agent",
+      "status": "passed",
+      "durationMs": 647
+    },
+    {
+      "title": "strict artifact profile rejects unknown-network before peer execution",
+      "status": "passed",
+      "durationMs": 1049
+    },
+    {
+      "title": "strict artifact profile rejects executable-network before peer execution",
+      "status": "passed",
+      "durationMs": 980
+    },
+    {
+      "title": "strict artifact profile rejects bad-invocation before peer execution",
+      "status": "passed",
+      "durationMs": 950
+    },
+    {
+      "title": "strict artifact profile rejects deep-network before peer execution",
+      "status": "passed",
+      "durationMs": 1111
+    },
+    {
+      "title": "strict artifact profile rejects oversized-network before peer execution",
+      "status": "passed",
+      "durationMs": 875
+    },
+    {
+      "title": "strict artifact profile rejects unknown-manifest before peer execution",
+      "status": "passed",
+      "durationMs": 946
+    },
+    {
+      "title": "strict artifact profile rejects manifest-duplicate before peer execution",
+      "status": "passed",
+      "durationMs": 997
+    },
+    {
+      "title": "strict artifact profile rejects front-mismatch before peer execution",
+      "status": "passed",
+      "durationMs": 1098
+    },
+    {
+      "title": "strict artifact profile rejects malformed-network before peer execution",
+      "status": "passed",
+      "durationMs": 827
+    },
+    {
+      "title": "strict artifact profile rejects duplicate-json before peer execution",
+      "status": "passed",
+      "durationMs": 952
+    },
+    {
+      "title": "strict artifact profile rejects hocon-network before peer execution",
+      "status": "passed",
+      "durationMs": 954
+    },
+    {
+      "title": "strict artifact profile rejects cross-artifact before peer execution",
+      "status": "passed",
+      "durationMs": 975
+    },
+    {
+      "title": "strict artifact profile rejects response-oversized before peer execution",
+      "status": "passed",
+      "durationMs": 928
+    },
+    {
+      "title": "strict artifact profile rejects ambiguous-tools before peer execution",
+      "status": "passed",
+      "durationMs": 1055
+    },
+    {
+      "title": "strict artifact profile rejects invalid-encoding before peer execution",
+      "status": "passed",
+      "durationMs": 818
+    },
+    {
+      "title": "redirect authorization rejects redirect-manifest without contacting its target",
+      "status": "passed",
+      "durationMs": 1008
+    },
+    {
+      "title": "redirect authorization rejects redirect-same without contacting its target",
+      "status": "passed",
+      "durationMs": 957
+    },
+    {
+      "title": "redirect authorization rejects redirect-network without contacting its target",
+      "status": "passed",
+      "durationMs": 1015
+    },
+    {
+      "title": "redirect authorization rejects redirect-model without contacting its target",
+      "status": "passed",
+      "durationMs": 915
+    },
+    {
+      "title": "redirect authorization rejects redirect-mcp without contacting its target",
+      "status": "passed",
+      "durationMs": 1077
+    },
+    {
+      "title": "deadline aborts stalled slow-headers response body without automatic retry",
+      "status": "passed",
+      "durationMs": 4419
+    },
+    {
+      "title": "deadline aborts stalled slow-manifest response body without automatic retry",
+      "status": "passed",
+      "durationMs": 4061
+    },
+    {
+      "title": "deadline aborts stalled slow-model response body without automatic retry",
+      "status": "passed",
+      "durationMs": 3935
+    },
+    {
+      "title": "deadline aborts stalled slow-mcp response body without automatic retry",
+      "status": "passed",
+      "durationMs": 3863
+    },
+    {
+      "title": "deadline also closes pending consent without peer contact",
+      "status": "passed",
+      "durationMs": 2842
+    },
+    {
+      "title": "cancel during consent closes its UI and a fresh run succeeds with new approvals",
+      "status": "passed",
+      "durationMs": 868
+    },
+    {
+      "title": "late approval after cancellation cannot resume the old turn",
+      "status": "passed",
+      "durationMs": 704
+    },
+    {
+      "title": "cancelling a started MCP request reports uncertainty and never retries it",
+      "status": "passed",
+      "durationMs": 980
+    },
+    {
+      "title": "bounded transport rejects oversized requests and invalid timeout configuration",
+      "status": "passed",
+      "durationMs": 409
+    }
+  ],
+  "runtimePatch": {
+    "date": "2026-11-17",
+    "description": "Local strict data-only profile, default-deny consent, blocked redirects and bounded cancellable transport; not an unmodified upstream release.",
+    "notes": "PATCHES.md"
+  },
+  "consentSequence": [
+    {
+      "kind": "network",
+      "phase": "call",
+      "peerOrigin": "http://127.0.0.1:4181"
+    },
+    {
+      "kind": "mcp",
+      "phase": "discover",
+      "peerOrigin": "http://127.0.0.1:4181"
+    },
+    {
+      "kind": "mcp",
+      "phase": "call",
+      "peerOrigin": "http://127.0.0.1:4181"
+    }
+  ],
+  "webgpu": {
+    "api": true,
+    "adapter": false,
+    "realInference": "not-attempted"
+  },
+  "traceSummary": [
+    {
+      "phase": "start",
+      "kind": "agent",
+      "origin": "127.0.0.1:4180",
+      "agent": "caller",
+      "network": "caller",
+      "status": "running"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4180",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "remote_fetch",
+      "origin": "127.0.0.1:4180",
+      "peerOrigin": "127.0.0.1:4181",
+      "network": "tower-home-builder",
+      "status": "ok"
+    },
+    {
+      "phase": "start",
+      "kind": "agent",
+      "origin": "127.0.0.1:4181",
+      "agent": "reception",
+      "network": "tower-home-builder",
+      "status": "running"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4181",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "start",
+      "kind": "agent",
+      "origin": "127.0.0.1:4181",
+      "agent": "home_builder",
+      "network": "tower-home-builder",
+      "status": "running"
+    },
+    {
+      "phase": "end",
+      "kind": "mcp_call",
+      "peerOrigin": "127.0.0.1:4181",
+      "method": "initialize",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "mcp_call",
+      "peerOrigin": "127.0.0.1:4181",
+      "method": "notifications/initialized",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "mcp_call",
+      "peerOrigin": "127.0.0.1:4181",
+      "method": "tools/list",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4181",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "mcp_call",
+      "peerOrigin": "127.0.0.1:4181",
+      "method": "tools/call",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4181",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4181",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4180",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    }
+  ]
+}

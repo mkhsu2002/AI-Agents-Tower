@@ -48,3 +48,7 @@ The original M1 evidence above remains historical. See [M2-FEASIBILITY.md](M2-FE
 ## Subsequent consent and network-validation hardening
 
 See [M2-CONSENT-VALIDATION.md](M2-CONSENT-VALIDATION.md) for the local default-deny, duplicate-name and peer-MCP consent fixes, separate current evidence and remaining blockers. Original M1 and spike snapshots remain historical records.
+
+## Subsequent runtime boundaries
+
+See [M2-RUNTIME-BOUNDARIES.md](M2-RUNTIME-BOUNDARIES.md) for strict local JSON schemas, blocked redirects, cancellable bounded transport, current tests and explicit browser/server enforcement limits. Earlier evidence snapshots remain preserved.

@@ -1,3 +1,4 @@
+// Tower local patch, 2026-11-17: bounded MCP transport; redirects rejected. See ../PATCHES.md.
 // mcp.js — an MCP (Model Context Protocol) client.
 //
 // Lets a browser-run agent call a HOSTED MCP server over JSON-RPC 2.0 / HTTP
@@ -20,7 +21,7 @@ export class McpClient {
     this.rpcId = 0;
   }
 
-  async _rpc(method, params, { parentSpan, notification = false } = {}) {
+  async _rpc(method, params, { parentSpan, notification = false, operation } = {}) {
     const span = this.trace?.start("mcp_call", {
       parent: parentSpan, peerOrigin: hostOf(this.url), url: this.url, method, args: params,
     });
@@ -35,7 +36,8 @@ export class McpClient {
       };
       if (this.sessionId) headers["Mcp-Session-Id"] = this.sessionId;
 
-      const resp = await fetch(this.url, { method: "POST", headers, body: JSON.stringify(body) });
+      if (!operation) throw new Error("MCP transport requires an active bounded operation.");
+      const resp = await operation.fetch(this.url, { method: "POST", headers, body: JSON.stringify(body) });
       const sid = resp.headers.get("Mcp-Session-Id");
       if (sid) this.sessionId = sid;
       if (notification) { this.trace?.end(span, { status: "ok", notification: true }); return null; }
@@ -44,7 +46,8 @@ export class McpClient {
         const text = await resp.text();
         throw new Error(`MCP HTTP ${resp.status}: ${text.slice(0, 200)}`);
       }
-      const json = await readJsonRpcResponse(resp, body.id, (notice) => {
+      const json = await operation.read(readJsonRpcResponse(resp, body.id, (notice) => {
+        operation.assert();
         const params = notice.params || {};
         const message = params.message || params.data?.message || (typeof params.data === "string" ? params.data : "");
         const progress = params.progress ?? params.data ?? params;
@@ -57,7 +60,7 @@ export class McpClient {
           message,
         });
         this.onProgress?.({ method: notice.method, progress, message, params });
-      });
+      }));
       if (json.error) throw new Error(`MCP error ${json.error.code}: ${json.error.message}`);
       this.trace?.end(span, { status: "ok" });
       return json.result;
@@ -67,28 +70,28 @@ export class McpClient {
     }
   }
 
-  async ensureInit(parentSpan) {
+  async ensureInit(parentSpan, operation) {
     if (this.initialized) return this.initialized;
     this.initialized = (async () => {
       await this._rpc("initialize", {
         protocolVersion: PROTOCOL_VERSION,
         capabilities: {},
         clientInfo: { name: "neuro-san-web", title: "neuro-san-web MCP client", version: "0.1.0" },
-      }, { parentSpan });
-      await this._rpc("notifications/initialized", {}, { parentSpan, notification: true });
+      }, { parentSpan, operation });
+      await this._rpc("notifications/initialized", {}, { parentSpan, notification: true, operation });
     })();
     return this.initialized;
   }
 
-  async listTools(parentSpan) {
-    await this.ensureInit(parentSpan);
-    const result = await this._rpc("tools/list", {}, { parentSpan });
+  async listTools(parentSpan, operation) {
+    await this.ensureInit(parentSpan, operation);
+    const result = await this._rpc("tools/list", {}, { parentSpan, operation });
     return result?.tools || [];
   }
 
-  async callTool(name, args, parentSpan) {
-    await this.ensureInit(parentSpan);
-    const result = await this._rpc("tools/call", { name, arguments: args || {} }, { parentSpan });
+  async callTool(name, args, parentSpan, operation) {
+    await this.ensureInit(parentSpan, operation);
+    const result = await this._rpc("tools/call", { name, arguments: args || {} }, { parentSpan, operation });
     const parts = (result?.content || []).map((c) => (c.type === "text" ? c.text : JSON.stringify(c)));
     const text = parts.join("\n");
     return result?.isError ? `MCP tool error: ${text}` : text;

@@ -1,3 +1,4 @@
+// Tower local patch, 2026-11-17: bounded model transport; redirects rejected. See ../PATCHES.md.
 // llm.js — the LlmClient intrinsic: an OpenAI-compatible chat-completions client.
 
 import { assertModelForRouter, normalizeModelName } from "./model.js";
@@ -61,7 +62,7 @@ export class LlmClient {
   // messages: [{role, content, tool_calls?, tool_call_id?, name?}]
   // tools: [{type:'function', function:{name, description, parameters}}]
   // onContentDelta: (text) => void  — streamed natural-language tokens
-  async chat({ model, messages, tools, origin, parentSpan, onContentDelta, signal }) {
+  async chat({ model, messages, tools, origin, parentSpan, onContentDelta, signal, operation }) {
     model = normalizeModelName(model);
     // A real (non-mock) router with no API key: refuse rather than forward the
     // placeholder "demo" to a live provider (which returns a confusing 401). This
@@ -119,7 +120,8 @@ export class LlmClient {
       if (hostOf(this.baseUrl) === "api.anthropic.com") {
         headers["anthropic-dangerous-direct-browser-access"] = "true";
       }
-      const resp = await fetch(`${this.baseUrl}/chat/completions`, {
+      if (!operation) throw new Error("Model transport requires an active bounded operation.");
+      const resp = await operation.fetch(`${this.baseUrl}/chat/completions`, {
         method: "POST",
         headers,
         body: JSON.stringify(body),
@@ -131,7 +133,7 @@ export class LlmClient {
       }
 
       const routeKind = resp.headers.get("X-Nsdeploy-LLM-Route") || "";
-      const result = await this._readSse(resp, onContentDelta, span, signal);
+      const result = await operation.read(this._readSse(resp, onContentDelta, span, operation.signal));
       const respMock = isMockResponse(this.mock, routeKind, result.model);
       this.trace?.end(span, {
         finishReason: result.finishReason,
@@ -145,6 +147,7 @@ export class LlmClient {
       });
       return result;
     } catch (err) {
+      operation?.assert();
       const friendlyError = ProviderError.friendly(err, this.baseUrl);
       if (err?.name === "AbortError" && signal?.aborted) {
         this.trace?.end(span, { status: "steered", interrupted: true });

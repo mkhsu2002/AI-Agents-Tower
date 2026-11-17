@@ -12,7 +12,7 @@
       "path": "runtime/engine.js",
       "upstreamPath": "nsdeploy/runtime/engine.js",
       "gitBlob": "1777948ad49b9111742011b24664eeee13792907",
-      "patchedGitBlob": "9c581b5aa2993601bb406281dd411e92ba8afdf5"
+      "patchedGitBlob": "f23a59868c2ae14a0c67abc43aef2f2f4cc39a52"
     },
     {
       "path": "runtime/hocon.js",
@@ -28,7 +28,8 @@
     {
       "path": "runtime/llm.js",
       "upstreamPath": "nsdeploy/runtime/llm.js",
-      "gitBlob": "4ee0d8f4beabdfc222ae57397c8dbbef7cdc8536"
+      "gitBlob": "4ee0d8f4beabdfc222ae57397c8dbbef7cdc8536",
+      "patchedGitBlob": "ca23f8b4e6940968f80819d631599f883f409b44"
     },
     {
       "path": "runtime/sandbox.js",
@@ -43,18 +44,20 @@
     {
       "path": "runtime/remote.js",
       "upstreamPath": "nsdeploy/runtime/remote.js",
-      "gitBlob": "e22f6f10b14475611f72a96ad9c9a25e6c3729bd"
+      "gitBlob": "e22f6f10b14475611f72a96ad9c9a25e6c3729bd",
+      "patchedGitBlob": "f521b1af5d2def5ce83044bc6f46dcdcf492df82"
     },
     {
       "path": "runtime/runner.js",
       "upstreamPath": "nsdeploy/runtime/runner.js",
       "gitBlob": "02db7ebdbcb97a50c099576baa703bcd92817bd6",
-      "patchedGitBlob": "5d744134dfe037c87b3dbb4735ee631fe3512179"
+      "patchedGitBlob": "18e6f1e346469766d920f9c1c12db1c3d2f3ecdd"
     },
     {
       "path": "runtime/mcp.js",
       "upstreamPath": "nsdeploy/runtime/mcp.js",
-      "gitBlob": "73750881b824ba7ea84597763fda1c3526524e2d"
+      "gitBlob": "73750881b824ba7ea84597763fda1c3526524e2d",
+      "patchedGitBlob": "a61c2b826ded0e1d1147ce38984a15643d7d9547"
     },
     {
       "path": "runtime/model.js",
@@ -119,7 +122,7 @@
   ],
   "towerPatch": {
     "date": "2026-11-17",
-    "description": "Local consent and duplicate-agent-name hardening; not an unmodified upstream release.",
+    "description": "Local strict data-only profile, default-deny consent, blocked redirects and bounded cancellable transport; not an unmodified upstream release.",
     "notes": "PATCHES.md"
   }
 }

@@ -1,3 +1,4 @@
+// Tower local patch, 2026-11-17: propagate cancellation to model and MCP requests.
 // runner.js — the AgentRunner intrinsic.
 //
 // Two interchangeable implementations of one agent's LLM tool-calling loop:
@@ -162,7 +163,8 @@ export async function buildToolTable(ctx, spec, chain, parentSpan) {
         }
       }
       const client = await ctx.resolveMcp(ref, parentSpan);
-      for (const t of await client.listTools(parentSpan)) {
+      for (const t of await client.listTools(parentSpan, ctx.operation)) {
+        if (typeof ref === "object" && !ref.tools.includes(t.name)) continue;
         const name = safeName(`mcp_${t.name}`);
         toolByName.set(name, { kind: "mcp", ref, client, mcpName: t.name, requiresApproval });
         toolSchemas.push(schemaFor(name, { description: t.description, parameters: t.inputSchema }));
@@ -280,6 +282,8 @@ export async function executeToolCalls(ctx, calls, parentSpan, chain, { maxConcu
         ctx.trace.end(span, { resultPreview: content.slice(0, 240) });
         results[index] = { ...call, content, slyData: callCtx.slyData };
       } catch (error) {
+        ctx.operation?.assert();
+        if (error.code === "RUNTIME_POLICY") throw error;
         const message = String(error?.message || error);
         const content = `Error from tool '${call.name}': ${message}`;
         ctx.trace.end(span, { status: "error", error: message, resultPreview: content.slice(0, 240) });
@@ -298,6 +302,7 @@ export async function executeToolCalls(ctx, calls, parentSpan, chain, { maxConcu
 }
 
 export async function dispatchToolCall(ctx, entry, args, parentSpan, chain) {
+  ctx.operation?.assert();
   const { trace } = ctx;
 
   if (entry.kind === "agent") {
@@ -346,7 +351,7 @@ export async function dispatchToolCall(ctx, entry, args, parentSpan, chain) {
         return `The user declined to send this request to ${host}. Continue without it.`;
       }
     }
-    return entry.client.callTool(entry.mcpName, args, parentSpan);
+    return entry.client.callTool(entry.mcpName, args, parentSpan, ctx.operation);
   }
 
   if (entry.kind === "link") {
@@ -398,7 +403,7 @@ export async function dispatchToolCall(ctx, entry, args, parentSpan, chain) {
       sly_data: downstreamSly,
       chat_filter: { chat_filter_type: "MINIMAL" },
     };
-    const result = await session.invoke(request, { parentSpan, chain, composition: ctx.composition });
+    const result = await session.invoke(request, { parentSpan, chain, composition: ctx.composition, operation: ctx.operation });
     for (const ref of proposalRefs(result)) ctx.allowedActionRefs?.add(ref);
     return result;
   }
@@ -414,6 +419,7 @@ function agentModel(ctx, spec) {
 // Dispatcher: the LangChain.js runner when enabled, else the dependency-free
 // reference loop. Either way neuro-san-web owns multi-agent orchestration.
 export async function runAgent(ctx, agentName, userText, parentSpan, chain) {
+  ctx.operation?.assert();
   const source = { origin: ctx.displayOrigin, network: ctx.network.name, agent: agentName, invocation: `cruse-${++invocationSequence}` };
   const budgetReason = consumeAgentBudget(ctx.composition);
   if (budgetReason) {
@@ -481,12 +487,13 @@ export async function runAgentManual(ctx, agentName, userText, parentSpan, chain
 
     let finalText = "";
     for (let step = 0; step < maxSteps; step++) {
+      ctx.operation?.assert();
       if (isTopFrontMan) {
         applyPendingSteering(ctx.turnControl, (text) => messages.push({ role: "user", content: text }));
       }
       const onContentDelta = isTopFrontMan ? (t) => ctx.onAnswerDelta?.(t) : undefined;
       const attempt = await runInterruptibleModelCall(isTopFrontMan ? ctx.turnControl : null, (signal) =>
-        llm.chat({ model, messages, tools: toolSchemas, origin, parentSpan: agentSpan, onContentDelta, signal }));
+        llm.chat({ model, messages, tools: toolSchemas, origin, parentSpan: agentSpan, onContentDelta, signal, operation: ctx.operation }));
       if (attempt.interrupted) {
         step -= 1; // steering retries the same model step; it is not an agent step
         continue;

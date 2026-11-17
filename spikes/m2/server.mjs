@@ -29,18 +29,34 @@ function tower(scenario) {
     { name: 'home_builder', function: fn('Prepare and validate portable home text'), instructions: '[BUILDER] Use the read-only validator. Do not claim persistence or publication.', tools: [{ url: `${B}/${scenario}/mcp`, tools: ['validate_home_bundle'] }] },
   ] };
   if (scenario === 'duplicate-front' || scenario === 'duplicate-helper') network.tools.push({ ...network.tools[scenario === 'duplicate-front' ? 0 : 1] });
+  if (scenario === 'unknown-network') network.ownerId = 'unsupported';
+  if (scenario === 'executable-network') network.tools[1].class = 'UntrustedCode';
+  if (scenario === 'bad-invocation') network.tools[1].function.parameters.required = ['undefinedArgument'];
+  if (scenario === 'deep-network') { network.nested = {}; let node = network.nested; for (let i = 0; i < 20; i++) { node.child = {}; node = node.child; } }
+  if (scenario === 'ambiguous-tools') { network.tools.push({ ...network.tools[1], name: 'home-builder' }); network.tools[0].tools.push('home-builder'); }
+  if (scenario === 'response-oversized') network.metadata.description = 'x'.repeat(300000);
+  if (scenario === 'oversized-network') network.metadata.description = 'x'.repeat(140000);
   return network;
 }
 function manifest(scenario, isCaller) {
-  return {
+  const result = {
     networks: [{ name: isCaller ? 'caller' : scenario === 'missing' ? 'another-network' : 'tower-home-builder', front_man: isCaller ? 'caller' : 'reception', hocon: isCaller ? 'caller.network.json' : 'tower.network.json' }],
     llm_router: { base_url: isCaller ? `${A}/router/${scenario}/v1` : `${B}/must-not-run`, mock: true },
     allowed_peers: [B], deployment: { mode: 'static' },
     metadata: { warning: 'MOCK ONLY. No model inference. Local test fixture.' },
   };
+  if (!isCaller) {
+    if (scenario === 'unknown-manifest') result.arbitraryPolicy = true;
+    if (scenario === 'manifest-duplicate') result.networks.push({ ...result.networks[0] });
+    if (scenario === 'front-mismatch') result.networks[0].front_man = 'home_builder';
+    if (scenario === 'cross-artifact') result.networks[0].hocon = `${A}/redirect-target`;
+  }
+  return result;
 }
 async function router(req, res, scenario) {
   const input = await body(req);
+  if (scenario === 'redirect-model') { res.writeHead(307, { Location: `${B}/redirect-target` }); res.end(); return; }
+  if (scenario === 'slow-model') { res.writeHead(200, { 'Content-Type': 'text/event-stream' }); res.write(': waiting\n\n'); return; }
   if (scenario === 'provider-error') return json(res, { error: 'Scripted provider failure, no model called.' }, 503);
   const final = input.messages.at(-1)?.role === 'tool';
   const tool = input.tools?.[0]?.function?.name;
@@ -52,8 +68,10 @@ async function router(req, res, scenario) {
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'X-Nsdeploy-LLM-Route': 'mock' });
   res.end(`data: ${JSON.stringify({ model: 'neuro-san-mock-spike', choices: [{ index: 0, delta, finish_reason: null }] })}\n\ndata: ${JSON.stringify({ model: 'neuro-san-mock-spike', choices: [{ index: 0, delta: {}, finish_reason: !final && tool ? 'tool_calls' : 'stop' }] })}\n\ndata: [DONE]\n\n`);
 }
-async function mcp(req, res) {
+async function mcp(req, res, scenario) {
   const rpc = await body(req);
+  if (scenario === 'redirect-mcp') { res.writeHead(307, { Location: `${A}/redirect-target` }); res.end(); return; }
+  if (scenario === 'slow-mcp' && rpc.method === 'tools/call') { res.writeHead(200, { 'Content-Type': 'application/json' }); res.write('{'); return; }
   if (rpc.method === 'notifications/initialized') { res.writeHead(202); res.end(); return; }
   let result;
   if (rpc.method === 'initialize') result = { protocolVersion: '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'tower-local-spike-validator', version: '0.0.0-spike' } };
@@ -76,10 +94,16 @@ const peer = createHttpServer(async (req, res) => {
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Accept,MCP-Protocol-Version,Mcp-Session-Id');
     }
     if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+    if (resource === 'agent-manifest.json' && ['redirect-manifest', 'redirect-same'].includes(scenario)) { res.writeHead(302, { Location: `${scenario === 'redirect-same' ? B : A}/redirect-target` }); res.end(); return; }
+    if (resource === 'agent-manifest.json' && scenario === 'slow-headers') return;
+    if (resource === 'agent-manifest.json' && scenario === 'slow-manifest') { res.writeHead(200, { 'Content-Type': 'application/json' }); res.write('{'); return; }
     if (resource === 'agent-manifest.json') return json(res, manifest(scenario, false));
+    if (resource === 'tower.network.json' && scenario === 'invalid-encoding') { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(Buffer.from([0xff])); return; }
+    if (resource === 'tower.network.json' && scenario === 'redirect-network') { res.writeHead(302, { Location: `${A}/redirect-target` }); res.end(); return; }
+    if (resource === 'tower.network.json' && ['malformed-network', 'duplicate-json', 'hocon-network'].includes(scenario)) { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(scenario === 'malformed-network' ? '{' : scenario === 'hocon-network' ? 'tools = []' : JSON.stringify(tower(scenario)).replace('"metadata":', '"tools":[],"metadata":')); return; }
     if (resource === 'tower.network.json') return json(res, tower(scenario));
     if (resource === 'links.json') return json(res, {});
-    if (resource === 'mcp' && req.method === 'POST') return await mcp(req, res);
+    if (resource === 'mcp' && req.method === 'POST') return await mcp(req, res, scenario);
     json(res, { error: 'Not a fixture route.' }, 404);
   } catch { json(res, { error: 'Invalid fixture request.' }, 400); }
 });
@@ -95,6 +119,10 @@ const callerServer = createHttpServer(async (req, res) => {
     }
     const route = path.match(/^\/router\/([a-z-]+)\/v1\/chat\/completions$/);
     if (route && req.method === 'POST') return await router(req, res, route[1]);
+    if (['/spikes/m2/safety.js', '/spikes/m2/schema/validators.js'].includes(path)) {
+      res.writeHead(200, { 'Content-Type': 'text/javascript' });
+      return res.end(await readFile(new URL(path.replace('/spikes/m2/', './'), import.meta.url)));
+    }
     const vendor = path.replace('/spikes/m2/vendor/', '');
     if (vendorPaths.has(vendor)) {
       res.writeHead(200, { 'Content-Type': 'text/javascript' });

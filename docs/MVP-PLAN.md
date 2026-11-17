@@ -26,7 +26,7 @@ Proposed named Tower network: `tower-home-builder`, front agent `reception`, del
 5. Capture DevTools/browser trace: origins contacted, network selection, consent, two agent turns, model and action execution, returned structured result. Exclude prompts containing secrets. Show credentials go only to the authorized router, never B or prompts; private context does not cross by default.
 6. Exercise denied consent, missing network, invalid arguments, provider failure, cancellation, timeout, loop/budget exhaustion, subsequent peer/MCP hops and unknown write outcomes. Do not retry an uncertain write blindly.
 
-The [bounded M2 feasibility findings](M2-FEASIBILITY.md) record what the isolated local harness actually verified, including the historical upstream consent/validation gaps. The [local hardening](M2-CONSENT-VALIDATION.md) fixes those three gaps; M2 is not complete.
+The [bounded M2 feasibility findings](M2-FEASIBILITY.md) record what the isolated local harness actually verified, including the historical upstream consent/validation gaps. The [local hardening](M2-CONSENT-VALIDATION.md) fixes those three gaps; the [bounded local runtime profile](M2-RUNTIME-BOUNDARIES.md) adds strict schemas, all-redirect rejection and cancellation. M2 is not complete.
 
 ## Unresolved gates before claiming an agentic website
 

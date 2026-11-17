@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import { Ajv } from 'ajv';
+import standaloneCode from 'ajv/dist/standalone/index.js';
+const emit = (path, text) => { const file = new URL(path, import.meta.url); if (process.argv.includes('--check')) { if (fs.readFileSync(file, 'utf8') !== text) throw new Error('Generated schema drift: ' + path); } else fs.writeFileSync(file, text); };
+const str = (max = 4000) => ({ type: 'string', pattern: `^[\\s\\S]{1,${max}}$` });
+const id = { type: 'string', pattern: '^[A-Za-z][A-Za-z0-9_-]{0,79}$' };
+const obj = (properties, required = Object.keys(properties)) => ({ type: 'object', properties, required, additionalProperties: false });
+const array = (items, maxItems = 24, minItems = 0) => ({ type: 'array', items, minItems, maxItems });
+const arg = obj({ type: { const: 'string' }, description: str(), maxLength: { type: 'integer', minimum: 1, maximum: 65536 } }, ['type']);
+const parameters = obj({ type: { const: 'object' }, properties: { type: 'object', maxProperties: 12, propertyNames: id, additionalProperties: arg }, required: array(id, 12), additionalProperties: { const: false } }, ['type', 'properties']);
+const fn = obj({ description: str(), parameters });
+const ref = { oneOf: [str(2048), obj({ url: str(2048), tools: array(id, 12, 1) })] };
+const agent = obj({ name: id, function: fn, instructions: str(8000), tools: array(ref, 12), llm_config: obj({ model_name: str(128) }), max_steps: { type: 'integer', minimum: 1, maximum: 12 } }, ['name', 'function', 'instructions', 'tools']);
+const network = { $id: 'urn:tower:network:local-1', ...obj({ metadata: obj({ description: str() }), tools: array(agent, 24, 1), llm_config: obj({ model_name: str(128) }), max_steps: { type: 'integer', minimum: 1, maximum: 12 } }, ['metadata', 'tools']) };
+const manifest = { $id: 'urn:tower:manifest:local-1', ...obj({ networks: array(obj({ name: id, front_man: id, hocon: str(2048) }), 8, 1), llm_router: obj({ base_url: str(2048), mock: { type: 'boolean' } }), allowed_peers: array(str(2048), 8), deployment: obj({ mode: { const: 'static' } }), metadata: obj({ warning: str() }) }) };
+const ajv = new Ajv({ strict: true, code: { source: true, esm: true } });
+for (const [name, schema] of Object.entries({ network, manifest })) { emit(`./schema/${name}.schema.json`, JSON.stringify({ $schema: 'http://json-schema.org/draft-07/schema#', ...schema }, null, 2) + '\n'); ajv.addSchema(schema); }
+const code = standaloneCode(ajv, { network: network.$id, manifest: manifest.$id });
+if (/require\(/.test(code)) throw new Error('Standalone validators must have no runtime dependency.');
+emit('./schema/validators.js', '// Generated from application-owned schemas by generate-schema.mjs; do not edit.\n' + code);

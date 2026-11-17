@@ -1,28 +1,27 @@
+// Tower local patch, 2026-11-17: strict bounded artifact loading, no redirects.
+// Original nsdeploy license and attribution retained; see ../PATCHES.md.
 // remote.js — the RemoteNetworkLoader intrinsic: fetch a peer origin's published
 // agent network (manifest + HOCON + coded-tool bundle) and make it runnable
 // locally. This is the "fetch-and-run-locally" cross-origin composition model:
 // there is no agent server — the caller's browser runs the peer's published files.
 
-export async function fetchManifest(originUrl) {
-  const base = originUrl.replace(/\/$/, "");
+import { strictJson, validateManifest, checkedUrl, policyError } from "../../safety.js";
+
+export async function fetchManifest(originUrl, operation) {
+  const base = checkedUrl(originUrl).href.replace(/\/$/, "");
   const url = `${base}/agent-manifest.json`;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error(`manifest fetch ${resp.status} for ${url}`);
-  const manifest = await resp.json();
+  const manifest = validateManifest(strictJson(await fetchText(url, operation)), base);
   return { manifest, base, url };
 }
-
-export async function fetchText(url) {
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error(`fetch ${resp.status} for ${url}`);
-  return resp.text();
+export async function fetchText(url, operation) {
+  if (!operation) throw new Error("Artifact loading requires an active bounded operation.");
+  const response = await operation.fetch(url);
+  if (!response.ok) throw new Error(`Artifact fetch failed with HTTP ${response.status}.`);
+  const bytes = await operation.read(response.arrayBuffer());
+  try { return new TextDecoder('utf-8', { fatal: true }).decode(bytes); }
+  catch { throw policyError('Artifacts must contain valid UTF-8 JSON.'); }
 }
-
-// Resolve a relative path against an origin base.
-export function resolveUrl(base, path) {
-  if (/^https?:\/\//i.test(path)) return path;
-  return base.replace(/\/$/, "") + (path.startsWith("/") ? path : "/" + path);
-}
+export function resolveUrl(base, path) { return checkedUrl(path, `${base.replace(/\/$/, "")}/`).href; }
 
 // Caches compiled peer sessions and enforces cycle + depth limits across hops.
 export class RemoteRegistry {
