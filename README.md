@@ -30,7 +30,7 @@ CHROMIUM_PATH=/usr/bin/chromium npm run test:ui
 
 Start with the [current M0–M5 plan](docs/MVP-PLAN.md), [baseline research](docs/SPEC-BASELINE.md), [HomeBundle contract](docs/HOMEBUNDLE.md), [ADRs](docs/adr/0001-local-draft-stack.md) and [validation evidence](docs/VALIDATION.md). The longer product direction below remains aspirational beyond M1. The earlier P0–P4 list is superseded for execution by M0–M5; MCP work is planned for M2.
 
-A separate [M2 feasibility spike](spikes/m2/README.md) now exercises a pinned official browser runtime, two peer agents and a local MCP validator across two loopback origins. **Its inference is scripted mock only; M2 is incomplete.** See [observed gaps, inference research and next steps](docs/M2-FEASIBILITY.md). Run `npm run spike:m2` separately, or `CHROMIUM_PATH=/usr/bin/chromium npm run test:m2`. This is not connected to the Home Studio or published as a public demo.
+A separate [M2 feasibility spike](spikes/m2/README.md) now exercises a Tower-patched nsdeploy browser runtime, two peer agents and a local MCP validator across two loopback origins. **Its inference is scripted mock only; M2 is incomplete.** Default-deny consent, duplicate-name rejection and separate peer MCP approvals are implemented in the local harness; see [hardening results and remaining blockers](docs/M2-CONSENT-VALIDATION.md) and [historical feasibility research](docs/M2-FEASIBILITY.md). Run `npm run spike:m2` separately, or `CHROMIUM_PATH=/usr/bin/chromium npm run test:m2`. This is not connected to the Home Studio or published as a public demo.
 
 ## 1. Project Status and Boundaries
 

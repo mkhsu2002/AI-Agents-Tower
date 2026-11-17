@@ -1,6 +1,8 @@
-# M2 feasibility findings
+# M2 feasibility findings (historical baseline)
 
 Date: 2026-11-17. M1 baseline commit remains `4eff2a7354eaed106f2bb7f0d3af37f67d80b4dc`. Work is isolated on `spike/m2-runtime-feasibility`. **M2 remains incomplete: no real inference and no deployment.**
+
+> This document records the original spike at `d4eb3ff1a3bbb0c3e82cb799f9e859c7268220ae`. The subsequent [consent and validation hardening](M2-CONSENT-VALIDATION.md) fixes the first three observed gaps in a documented local runtime fork. The original 11-test evidence remains preserved; current source is no longer all unchanged upstream.
 
 ## Decision
 

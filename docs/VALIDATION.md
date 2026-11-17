@@ -44,3 +44,7 @@ See SPEC-BASELINE.md for the immutable best-effort baseline and unresolved autho
 ## Subsequent M2 spike
 
 The original M1 evidence above remains historical. See [M2-FEASIBILITY.md](M2-FEASIBILITY.md) for the separate pinned runtime experiment, scripted-only inference, local MCP and two-origin tests, observed adoption blockers and inference research. M2 is not complete.
+
+## Subsequent consent and network-validation hardening
+
+See [M2-CONSENT-VALIDATION.md](M2-CONSENT-VALIDATION.md) for the local default-deny, duplicate-name and peer-MCP consent fixes, separate current evidence and remaining blockers. Original M1 and spike snapshots remain historical records.

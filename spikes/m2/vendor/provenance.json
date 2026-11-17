@@ -3,11 +3,16 @@
   "commit": "4e4cb36731ae71cbbb905d3fe98f26299ac3b4f2",
   "license": "Apache-2.0",
   "files": [
-    { "path": "LICENSE.txt", "upstreamPath": "LICENSE.txt", "gitBlob": "d9a10c0d8e868ebf8da0b3dc95bb0be634c34bfe" },
+    {
+      "path": "LICENSE.txt",
+      "upstreamPath": "LICENSE.txt",
+      "gitBlob": "d9a10c0d8e868ebf8da0b3dc95bb0be634c34bfe"
+    },
     {
       "path": "runtime/engine.js",
       "upstreamPath": "nsdeploy/runtime/engine.js",
-      "gitBlob": "1777948ad49b9111742011b24664eeee13792907"
+      "gitBlob": "1777948ad49b9111742011b24664eeee13792907",
+      "patchedGitBlob": "9c581b5aa2993601bb406281dd411e92ba8afdf5"
     },
     {
       "path": "runtime/hocon.js",
@@ -17,7 +22,8 @@
     {
       "path": "runtime/kernel.js",
       "upstreamPath": "nsdeploy/runtime/kernel.js",
-      "gitBlob": "34f90bb0d8e0aed71df4f9aa562516960e7f4060"
+      "gitBlob": "34f90bb0d8e0aed71df4f9aa562516960e7f4060",
+      "patchedGitBlob": "74ce8ab5cc2a34e761175d396bf3152d89ee16d9"
     },
     {
       "path": "runtime/llm.js",
@@ -42,7 +48,8 @@
     {
       "path": "runtime/runner.js",
       "upstreamPath": "nsdeploy/runtime/runner.js",
-      "gitBlob": "02db7ebdbcb97a50c099576baa703bcd92817bd6"
+      "gitBlob": "02db7ebdbcb97a50c099576baa703bcd92817bd6",
+      "patchedGitBlob": "5d744134dfe037c87b3dbb4735ee631fe3512179"
     },
     {
       "path": "runtime/mcp.js",
@@ -109,5 +116,10 @@
       "upstreamPath": "nsdeploy/runtime/discovered-actions.js",
       "gitBlob": "9503da0c80a320120be4f909a48205876e108588"
     }
-  ]
+  ],
+  "towerPatch": {
+    "date": "2026-11-17",
+    "description": "Local consent and duplicate-agent-name hardening; not an unmodified upstream release.",
+    "notes": "PATCHES.md"
+  }
 }

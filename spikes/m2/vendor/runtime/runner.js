@@ -8,6 +8,8 @@
 // sandboxed coded tool, REST/toolbox tool, remote fetched-and-run network) executes
 // identically regardless of which loop drives it. The engine selects via ctx.useLangGraph.
 
+// Tower local patch, 2026-11-17: browser-origin peer/MCP consent, explicit allow only.
+// Derived from nsdeploy; original attribution/license retained. See ../PATCHES.md.
 import { ChatMessageType, filterSlyData, allowedDownstreamSly, parseExternalAgent } from "./kernel.js";
 import { actionContext, proposalRefs } from "./actions.js";
 import { parseAgentResponse, agentPresentationContext } from "./cruse.js";
@@ -33,17 +35,17 @@ function hostOfUrl(url) {
   try { return new URL(url).host; } catch { return url; }
 }
 
-// Consent protects a site boundary, not every service call. Local MCP hosts are
-// deliberately exposed through same-origin /_mcp routes and are part of the page
-// the visitor already chose to use. /ext-mcp is the exception: it is a
-// same-origin transport proxy whose destination is an external MCP server.
-export function requiresThirdPartyApproval(ref, baseOrigin) {
+// Resolve references against their publishing base, but compare destinations
+// with the actual browser origin. A peer's own MCP is still external to the
+// visitor's page. /ext-mcp proxies also require consent on the browser origin.
+export function requiresThirdPartyApproval(ref, baseOrigin, browserOrigin = baseOrigin) {
   const raw = typeof ref === "string" ? ref : ref?.url;
   try {
     const base = new URL(baseOrigin);
     const target = new URL(raw, base);
     const externalMcpProxy = /^\/ext-mcp(?:\/|$)/i.test(target.pathname);
-    return externalMcpProxy || target.origin !== base.origin;
+    if (!["http:", "https:"].includes(target.protocol)) return true;
+    return externalMcpProxy || target.origin !== new URL(browserOrigin).origin;
   } catch {
     // Invalid or opaque destinations must never bypass the consent boundary.
     return true;
@@ -142,17 +144,19 @@ export async function buildToolTable(ctx, spec, chain, parentSpan) {
 
     if (c.kind === "mcp") {
       // Discovering third-party MCP tools requires a tools/list call. Gate that
-      // cross-site contact before anything is sent. Same-site services are already
-      // within the page's trust boundary and must not produce an approval prompt.
-      const host = hostOfUrl(typeof ref === "string" ? ref : ref.url);
-      const requiresApproval = requiresThirdPartyApproval(ref, ctx.baseOrigin);
+      // cross-site contact before anything is sent. Only browser-origin services
+      // are within the page's trust boundary; the peer's base is not that origin.
+      const endpoint = new URL(typeof ref === "string" ? ref : ref.url, `${ctx.baseOrigin}/`);
+      const host = endpoint.origin;
+      const requiresApproval = requiresThirdPartyApproval(ref, ctx.baseOrigin, ctx.browserOrigin);
       if (requiresApproval) {
         const decision = await ctx.requestConsent?.({
           kind: "mcp", phase: "discover", peerLabel: "Destination service", peerOrigin: host,
+          url: endpoint.href,
           requestText: "(discover available tools)",
           est: { totalTokens: 0, costText: ctx.mock ? "$0.00 (mock)" : "metadata only" },
         });
-        if (decision === "decline") {
+        if (decision !== "allow") {
           ctx.trace.note("consent", { parent: parentSpan, origin: ctx.displayOrigin, peerOrigin: host, phase: "discover", decision: "declined" });
           continue;
         }
@@ -324,18 +328,20 @@ export async function dispatchToolCall(ctx, entry, args, parentSpan, chain) {
   }
 
   if (entry.kind === "mcp") {
-    if (entry.requiresApproval ?? requiresThirdPartyApproval(entry.ref || entry.client.url, ctx.baseOrigin)) {
+    if (entry.requiresApproval || requiresThirdPartyApproval(entry.ref || entry.client.url, ctx.baseOrigin, ctx.browserOrigin)) {
       // Discovery was approved separately. Confirm the actual third-party call
       // with the payload the user is about to send. Same-site MCP calls skip both
       // prompts because they do not cross the site's trust boundary.
-      const host = hostOfUrl(entry.client.url);
-      const requestText = argsToText(args);
+      const endpoint = new URL(entry.client.url, `${ctx.baseOrigin}/`);
+      const host = endpoint.origin;
+      const requestText = JSON.stringify({ tool: entry.mcpName, arguments: args });
       const decision = await ctx.requestConsent?.({
         kind: "mcp", phase: "call", peerLabel: "Destination service", peerOrigin: host,
+        url: endpoint.href,
         requestText,
         est: { totalTokens: Math.round((requestText.length + 80) / 4), costText: ctx.mock ? "$0.00 (mock)" : null },
       });
-      if (decision === "decline") {
+      if (decision !== "allow") {
         ctx.trace.note("consent", { parent: parentSpan, origin: ctx.displayOrigin, peerOrigin: host, phase: "call", decision: "declined" });
         return `The user declined to send this request to ${host}. Continue without it.`;
       }
@@ -351,8 +357,8 @@ export async function dispatchToolCall(ctx, entry, args, parentSpan, chain) {
 
   if (entry.kind === "remote") {
     const requestText = argsToText(args);
-    const host = hostOfUrl(entry.url);
-    if (requiresThirdPartyApproval(entry.url, ctx.baseOrigin)) {
+    const host = new URL(entry.url, `${ctx.baseOrigin}/`).origin;
+    if (requiresThirdPartyApproval(entry.url, ctx.baseOrigin, ctx.browserOrigin)) {
       // The third-party peer has not been fetched yet, so consent genuinely
       // precedes contact. A network published by this same site stays local.
       const est = {
@@ -362,7 +368,7 @@ export async function dispatchToolCall(ctx, entry, args, parentSpan, chain) {
       const decision = await ctx.requestConsent?.({
         kind: "network", peerLabel: entry.label || host, peerOrigin: host, requestText, est,
       });
-      if (decision === "decline") {
+      if (decision !== "allow") {
         ctx.trace.note("consent", { parent: parentSpan, origin: ctx.displayOrigin, peerOrigin: host, decision: "declined" });
         return `The user declined to contact ${host}. Proceed without it and note that to the user.`;
       }

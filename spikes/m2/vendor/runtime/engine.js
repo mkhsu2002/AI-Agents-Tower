@@ -1,3 +1,5 @@
+// Tower local patch, 2026-11-17: default-deny consent and browser-origin context.
+// Derived from nsdeploy; original attribution/license retained. See ../PATCHES.md.
 // engine.js — top-level orchestration: load a published network from an origin,
 // compile it (HOCON -> filter chain -> validate -> AgentNetwork), and run it. Owns
 // the intrinsics (LLM client, sandbox, trace) and implements resolveRemote, the
@@ -105,9 +107,8 @@ export class Engine {
     this.top = null; // {network, base, bundleUrl, manifest, llm}
     this.agentRunner = null; // set by enableLangChain(); neuro-san-web owns the loop
     this.history = []; // top-level conversation turns ([{role,content}]) across runs
-    this.consent = new Map(); // peerOrigin -> "always" (remembered approvals)
     this.consentTail = Promise.resolve(); // serialize modal decisions for parallel tools
-    this.onConsent = null; // UI hook: async (info) => "allow"|"always"|"decline"
+    this.onConsent = null; // UI hook: async (info) => "allow"|"decline"; no remembered grants
     this.onLinkRequired = null; // UI hook: async ({reference,...}) => peer URL|null
     this.runtimeAllowedPeers = new Set(); // user-entered, validated link origins
     this.streamSequence = 0;
@@ -124,15 +125,17 @@ export class Engine {
     this.actionSubmissions.clear();
   }
 
-  // Ask the user to approve contacting another hosted network. Remembers
-  // "always" per origin; defaults to allow when no UI hook is attached (headless).
+  // Only explicit approval permits this contact. Hook errors, cancellation,
+  // absent UI and unsupported decisions all fail closed. Grants are not cached.
   async requestConsent(info) {
     const decide = async () => {
-      if (this.consent.get(info.peerOrigin) === "always") return "allow";
-      if (typeof this.onConsent !== "function") return "allow";
-      const decision = await this.onConsent(info);
-      if (decision === "always") { this.consent.set(info.peerOrigin, "always"); return "allow"; }
-      return decision || "allow";
+      if (typeof this.onConsent !== "function") return "decline";
+      try {
+        return await this.onConsent(info) === "allow" ? "allow" : "decline";
+      } catch {
+        this.trace.note("consent_error", { decision: "declined", reason: "Consent interface unavailable." });
+        return "decline";
+      }
     };
     const pending = this.consentTail.then(decide, decide);
     this.consentTail = pending.then(() => undefined, () => undefined);
@@ -343,6 +346,8 @@ export class Engine {
       manifest,
       actions: this.actions,
       baseOrigin: base,
+      // A peer's publishing base does not become the visitor's browser origin.
+      browserOrigin: typeof location !== "undefined" ? location.origin : new URL(self.originUrl).origin,
       displayOrigin: hostOf(base),
       codedToolBundleUrl: bundleUrl,
       codedToolIntegrity: integrity || null,

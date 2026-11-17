@@ -1,3 +1,5 @@
+// Tower local patch, 2026-11-17: reject duplicate/invalid agent names before indexing.
+// Derived from nsdeploy; original attribution/license retained. See ../PATCHES.md.
 // kernel.js — the pure, framework-free orchestration logic.
 //
 // This module is the browser-side reference for what the plan calls the
@@ -177,8 +179,13 @@ export class AgentNetwork {
     this.links = { ...(this.config.links || {}) };
     this.linkLabels = { ...(this.config.link_labels || {}) };
     this.specMap = new Map();
+    if (!Array.isArray(this.config.tools)) throw new Error("Network tools must be an array.");
     for (const agent of this.config.tools || []) {
-      if (agent && typeof agent.name === "string") this.specMap.set(agent.name, agent);
+      if (!agent || typeof agent.name !== "string" || !agent.name.trim() || agent.name !== agent.name.trim()) {
+        throw new Error("Every agent must have a non-empty name without surrounding whitespace.");
+      }
+      if (this.specMap.has(agent.name)) throw new Error("Duplicate agent names are not allowed.");
+      this.specMap.set(agent.name, agent);
     }
   }
 

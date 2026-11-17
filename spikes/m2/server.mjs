@@ -19,13 +19,17 @@ async function body(req) {
 }
 const fn = description => ({ description, parameters: { type: 'object', properties: { request: { type: 'string' } }, required: ['request'] } });
 function caller(scenario) {
-  return { metadata: { description: 'Local scripted caller fixture' }, max_steps: 4, llm_config: { model_name: 'neuro-san-mock-spike' }, tools: [{ name: 'caller', function: fn('Caller fixture'), instructions: '[CALLER] Delegate to the Tower network. This is a scripted test.', tools: [`${B}/${scenario}/tower-home-builder`] }] };
+  const network = { metadata: { description: 'Local scripted caller fixture' }, max_steps: 4, llm_config: { model_name: 'neuro-san-mock-spike' }, tools: [{ name: 'caller', function: fn('Caller fixture'), instructions: '[CALLER] Delegate to the Tower network. This is a scripted test.', tools: [`${B}/${scenario}/tower-home-builder`] }] };
+  if (scenario === 'duplicate-top') network.tools.push({ ...network.tools[0] });
+  return network;
 }
 function tower(scenario) {
-  return { metadata: { description: 'Local two-agent Tower feasibility fixture, not a released network' }, max_steps: 4, llm_config: { model_name: 'neuro-san-mock-spike' }, tools: [
+  const network = { metadata: { description: 'Local two-agent Tower feasibility fixture, not a released network' }, max_steps: 4, llm_config: { model_name: 'neuro-san-mock-spike' }, tools: [
     { name: 'reception', function: fn('Organize the home request'), instructions: '[RECEPTION] Delegate the request to home_builder and return its validation result.', tools: [scenario === 'invalid' ? 'missing_builder' : 'home_builder'] },
     { name: 'home_builder', function: fn('Prepare and validate portable home text'), instructions: '[BUILDER] Use the read-only validator. Do not claim persistence or publication.', tools: [{ url: `${B}/${scenario}/mcp`, tools: ['validate_home_bundle'] }] },
   ] };
+  if (scenario === 'duplicate-front' || scenario === 'duplicate-helper') network.tools.push({ ...network.tools[scenario === 'duplicate-front' ? 0 : 1] });
+  return network;
 }
 function manifest(scenario, isCaller) {
   return {

@@ -8,7 +8,7 @@ This is an independent AI Agents Tower project for the Cognizant Open Agentic We
 | --- | --- | --- | --- |
 | M0 | Pin specification evidence, runtime assumptions and risks; choose minimal stack | Source URLs, commit/blob evidence, ADRs and explicit unresolved gates | Documented; historical baseline confirmation remains open |
 | M1 | HomeBundle v0.1, deterministic validation, text editor/preview, JSON file/paste import and download | Automated round-trips, rejection cases, script text safety, interrupted reads, reload and mobile checks | Implemented locally; see VALIDATION.md |
-| M2 | Actual browser agent network with reception/planning and home-builder agents; real model plus MCP or registered local action | Browser trace shows two agents collaborating, real inference, typed action validation and errors; second-origin caller test below | Local feasibility spike only: official Engine + two peer agents + MCP with scripted inference; real model and product integration remain open |
+| M2 | Actual browser agent network with reception/planning and home-builder agents; real model plus MCP or registered local action | Browser trace shows two agents collaborating, real inference, typed action validation and errors; second-origin caller test below | Local feasibility spike only: Tower-patched nsdeploy Engine + two peer agents + separately approved MCP with scripted inference; real model and product integration remain open |
 | M3 | Private persistence, authentication, tenant isolation, idempotency and revision conflicts | Two actual clients; denied cross-tenant access; durable receipts; retry and unknown-outcome recovery | Planned; no backend/database/session |
 | M4 | Separate explicit public snapshots, unpublish and interoperability | Private updates never change public snapshots; reviewed publish scope; withdrawal and cache behavior; export/reimport | Planned; no public content or publish controls |
 | M5 | English submission and reproducible evidence | Working public website, screenshots, browser video under two minutes, test instructions, cost model and conformance matrix | Planned; deployment requires later authorization |
@@ -26,7 +26,7 @@ Proposed named Tower network: `tower-home-builder`, front agent `reception`, del
 5. Capture DevTools/browser trace: origins contacted, network selection, consent, two agent turns, model and action execution, returned structured result. Exclude prompts containing secrets. Show credentials go only to the authorized router, never B or prompts; private context does not cross by default.
 6. Exercise denied consent, missing network, invalid arguments, provider failure, cancellation, timeout, loop/budget exhaustion, subsequent peer/MCP hops and unknown write outcomes. Do not retry an uncertain write blindly.
 
-The [bounded M2 feasibility findings](M2-FEASIBILITY.md) record what the isolated local harness actually verified, including upstream consent/validation gaps. M2 is not complete.
+The [bounded M2 feasibility findings](M2-FEASIBILITY.md) record what the isolated local harness actually verified, including the historical upstream consent/validation gaps. The [local hardening](M2-CONSENT-VALIDATION.md) fixes those three gaps; M2 is not complete.
 
 ## Unresolved gates before claiming an agentic website
 

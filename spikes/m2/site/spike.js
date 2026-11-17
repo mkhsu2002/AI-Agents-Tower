@@ -8,7 +8,7 @@ const engine = new Engine({ originUrl: `${location.origin}/caller/${scenario}`, 
 engine.onConsent = info => new Promise(resolve => {
   consentRequests.push({ kind: info.kind, phase: info.phase || 'call', peerOrigin: info.peerOrigin });
   const panel = document.querySelector('#consent');
-  document.querySelector('#request').textContent = JSON.stringify({ origin: info.peerOrigin, purpose: info.kind, phase: info.phase || 'call', request: info.requestText, inference: 'SCRIPTED MOCK ONLY' }, null, 2);
+  document.querySelector('#request').textContent = JSON.stringify({ origin: info.peerOrigin, purpose: info.kind, endpoint: info.url, phase: info.phase || 'call', request: info.requestText, inference: 'SCRIPTED MOCK ONLY' }, null, 2);
   panel.hidden = false;
   function finish(decision) { panel.hidden = true; resolve(decision); }
   document.querySelector('#allow').onclick = () => finish('allow');
