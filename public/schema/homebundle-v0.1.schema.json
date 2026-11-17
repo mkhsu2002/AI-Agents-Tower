@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:ai-agents-tower:homebundle:0.1",
+  "title": "HomeBundle v0.1",
+  "description": "Portable text content only. No identity, authorization, persistence or publication authority. JSON input and canonical export must each fit 65536 UTF-8 bytes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "displayName", "introduction", "blocks"],
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "displayName": { "type": "string", "minLength": 1, "maxLength": 80, "pattern": "\\S" },
+    "introduction": { "type": "string", "minLength": 1, "maxLength": 2000, "pattern": "\\S" },
+    "blocks": {
+      "type": "array", "maxItems": 12,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["type", "title", "text"],
+        "properties": {
+          "type": { "const": "text" },
+          "title": { "type": "string", "minLength": 1, "maxLength": 120, "pattern": "\\S" },
+          "text": { "type": "string", "minLength": 1, "maxLength": 4000, "pattern": "\\S" }
+        }
+      }
+    },
+    "theme": { "type": "string", "enum": ["paper", "midnight", "sage"] }
+  }
+}

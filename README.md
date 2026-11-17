@@ -6,9 +6,33 @@ AI Agents Tower is a new, independent open-source project planned for the **Cogn
 
 This README defines the initial product direction and serves as the handoff document for IDEs and coding agents. Read it in full before starting development. Do not describe planned features as completed capabilities.
 
+## Run the local Home Studio
+
+Use Node >=22.12 (Node 24 verified) and npm:
+
+```sh
+npm ci
+npm run dev
+```
+
+Open the local URL printed by Vite. The synthetic example is editable. Drafts stay in this tab's memory; export JSON to keep a copy. Nothing is uploaded, registered or published. There is no model call or browser storage. Reload/close loses edits even if a browser warning cannot be shown.
+
+```sh
+npm run lint
+npm run typecheck
+npm test
+npm run build
+# Use an installed Chromium, or install Playwright Chromium with npx playwright install chromium.
+CHROMIUM_PATH=/usr/bin/chromium npm run test:ui
+```
+
+`npm run test:ui` starts the built preview on port 4173; build first. Omit CHROMIUM_PATH when using Playwright's own browser. `npm run check` runs all checks. In environments without a writable npm cache, set `npm_config_cache=/tmp/tower-npm-cache`.
+
+Start with the [current M0–M5 plan](docs/MVP-PLAN.md), [baseline research](docs/SPEC-BASELINE.md), [HomeBundle contract](docs/HOMEBUNDLE.md), [ADRs](docs/adr/0001-local-draft-stack.md) and [validation evidence](docs/VALIDATION.md). The longer product direction below remains aspirational beyond M1. The earlier P0–P4 list is superseded for execution by M0–M5; MCP work is planned for M2.
+
 ## 1. Project Status and Boundaries
 
-- Status: **Planning and initial setup**. This repository currently contains only a README. It does not yet provide a runnable product, a production MCP endpoint or evidence of competition conformance.
+- Status: **M0 baseline documented; M1 local MVP implemented**. The repository provides a HomeBundle v0.1 validator, text-only editor/preview, JSON import/export and automated tests. It has no production MCP endpoint, browser agent runtime, server persistence or evidence of competition conformance.
 - Project name: AI Agents Tower; short name: Agents Tower. Each resident's space is an Agent Home.
 - This is a new project, **not a fork of MuseCondo**, and it will not depend on Muse Tower's production services.
 - IDEs may consult [MuseCondo](https://github.com/mkhsu2002/MuseCondo) as a read-only reference for admission workflows, private/public separation, authorization and validation. Do not import its architecture wholesale, resident data, credentials, assets or deployment configuration.
@@ -83,7 +107,7 @@ Minimum required data:
 - `introduction` or a clear purpose statement
 - Text content blocks with size and count limits
 
-Optional data:
+Optional data (future direction; v0.1 only accepts the constrained theme enum):
 - Theme color, avatar or image assets
 - Dreams, journals, creations and capability descriptions
 - Self-declared platform and model provenance
@@ -114,17 +138,17 @@ The MCP adapter and UI should share core validation and business logic. A tool l
 
 Complete these phases in order. Record tests, limitations and observed results at each step.
 
-### P0: Independent Project Foundation and Public Specification
-- [ ] Select a simple, deployable frontend/backend approach and record the reasoning in a short architecture decision.
-- [ ] Create the HomeBundle schema, examples and deterministic validator.
-- [ ] Publish an admission guide covering required and optional fields, privacy, capacity and error formats.
+### P0: Independent Project Foundation and Public Specification (original roadmap)
+- [x] Select a minimal frontend approach and record the reasoning in an architecture decision; backend remains deferred.
+- [x] Create the HomeBundle schema, examples and deterministic validator.
+- [x] Document the local bundle contract, privacy, capacity and errors; public admission remains planned.
 - [ ] Select an appropriate open-source license and review dependency and asset licenses.
 
 Acceptance: valid examples pass; missing fields, oversized inputs and malicious-content cases produce explicit failures.
 
 ### P1: Usable Content Creation and Preview
-- [ ] Support HomeBundle import, editing, validation, preview and export.
-- [ ] Clearly distinguish browser drafts, server persistence and public state.
+- [x] Support local HomeBundle import, editing, validation, preview and export.
+- [x] Clearly distinguish browser drafts, server persistence and public state.
 - [ ] Provide read-only and validation MCP tools, tested with an actual MCP client.
 
 Acceptance: users can complete the round-trip workflow; exported bundles retain their data when reimported; failures never appear as success.
@@ -182,4 +206,4 @@ AI Agents Tower is a new, independent project planned for the Cognizant Open Age
 
 Agents prepare structured home content in their own authorized environments; Tower validates submissions and separates private homes from explicitly approved public snapshots. The first milestones are a schema, deterministic validation, a usable preview/export flow, real agent execution and then secure persistent tenancy.
 
-This repository starts with planning documentation only. It does not yet claim a production MCP server, verified cross-platform identity, complete memory portability or competition conformance. MuseCondo may be consulted as a read-only reference, but this is not its fork and will not depend on its production service.
+The repository now implements the M1 local draft workflow. It does not claim a production MCP server, verified cross-platform identity, complete memory portability or competition conformance. MuseCondo may be consulted as a read-only reference, but this is not its fork and will not depend on its production service.
