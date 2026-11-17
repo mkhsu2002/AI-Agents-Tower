@@ -1,0 +1,206 @@
+{
+  "recordedAt": "2026-11-17T07:24:11.061Z",
+  "scope": "Local scripted feasibility only; no real inference or deployment",
+  "node": "v24.22.1",
+  "chromium": "Chromium 156.0.8078.79 built on Debian GNU/Linux 13 (trixie)",
+  "upstreamCommit": "4e4cb36731ae71cbbb905d3fe98f26299ac3b4f2",
+  "sourceHashes": {
+    "server.mjs": "e38617a4239b5d09c387a8f870b69f2c08d9fcc2a31067af701036e82c1ec8a9",
+    "site/spike.js": "444a6259e3876eb8cbf88319470f0df4ca4a57cf360e58ee7b614a720dfccfdd",
+    "site/index.html": "646f832208655c3bd5ecbb6521dbf12e3178ad982467948fa829649ee88ef313",
+    "tests/runtime.spec.ts": "c0660aec38c6651c0388969e9abffd3a36681ea2b282448238923d1c43b93f07"
+  },
+  "stats": {
+    "startTime": "2026-11-17T07:24:11.061Z",
+    "duration": 12096.447,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "official runtime runs two peer agents inside caller browser and calls real local validator with mock inference",
+      "status": "passed"
+    },
+    {
+      "title": "denying network consent makes zero requests to peer",
+      "status": "passed"
+    },
+    {
+      "title": "missing peer fails explicitly before peer model execution",
+      "status": "passed"
+    },
+    {
+      "title": "invalid peer fails explicitly before peer model execution",
+      "status": "passed"
+    },
+    {
+      "title": "no-cors peer fails explicitly before peer model execution",
+      "status": "passed"
+    },
+    {
+      "title": "invalid generated bundle is rejected by shared deterministic validator",
+      "status": "passed"
+    },
+    {
+      "title": "scripted provider failure stays a failure with no peer contact",
+      "status": "passed"
+    },
+    {
+      "title": "synthetic router canary goes only to caller router, never peer artifacts, MCP or prompts",
+      "status": "passed"
+    },
+    {
+      "title": "runtime characterization: no consent hook defaults to allow; duplicate names are not rejected",
+      "status": "passed"
+    },
+    {
+      "title": "runtime characterization: keyless non-mock local inference is rejected before HTTP",
+      "status": "passed"
+    },
+    {
+      "title": "runtime budget primitives stop exhausted invocation, remote count and deadline",
+      "status": "passed"
+    }
+  ],
+  "webgpu": {
+    "api": true,
+    "adapter": false,
+    "realInference": "not-attempted"
+  },
+  "traceSummary": [
+    {
+      "phase": "start",
+      "kind": "agent",
+      "origin": "127.0.0.1:4180",
+      "agent": "caller",
+      "network": "caller",
+      "status": "running"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4180",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "remote_fetch",
+      "origin": "127.0.0.1:4180",
+      "peerOrigin": "127.0.0.1:4181",
+      "network": "tower-home-builder",
+      "status": "ok"
+    },
+    {
+      "phase": "start",
+      "kind": "agent",
+      "origin": "127.0.0.1:4181",
+      "agent": "reception",
+      "network": "tower-home-builder",
+      "status": "running"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4181",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "start",
+      "kind": "agent",
+      "origin": "127.0.0.1:4181",
+      "agent": "home_builder",
+      "network": "tower-home-builder",
+      "status": "running"
+    },
+    {
+      "phase": "end",
+      "kind": "mcp_call",
+      "peerOrigin": "127.0.0.1:4181",
+      "method": "initialize",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "mcp_call",
+      "peerOrigin": "127.0.0.1:4181",
+      "method": "notifications/initialized",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "mcp_call",
+      "peerOrigin": "127.0.0.1:4181",
+      "method": "tools/list",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4181",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "mcp_call",
+      "peerOrigin": "127.0.0.1:4181",
+      "method": "tools/call",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4181",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4181",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    },
+    {
+      "phase": "end",
+      "kind": "model_call",
+      "origin": "127.0.0.1:4180",
+      "model": "neuro-san-mock-spike",
+      "mock": true,
+      "verifiedReal": false,
+      "routerHost": "127.0.0.1:4180",
+      "respModel": "neuro-san-mock-spike",
+      "routeKind": "mock",
+      "status": "ok"
+    }
+  ]
+}

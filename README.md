@@ -30,9 +30,11 @@ CHROMIUM_PATH=/usr/bin/chromium npm run test:ui
 
 Start with the [current M0–M5 plan](docs/MVP-PLAN.md), [baseline research](docs/SPEC-BASELINE.md), [HomeBundle contract](docs/HOMEBUNDLE.md), [ADRs](docs/adr/0001-local-draft-stack.md) and [validation evidence](docs/VALIDATION.md). The longer product direction below remains aspirational beyond M1. The earlier P0–P4 list is superseded for execution by M0–M5; MCP work is planned for M2.
 
+A separate [M2 feasibility spike](spikes/m2/README.md) now exercises a pinned official browser runtime, two peer agents and a local MCP validator across two loopback origins. **Its inference is scripted mock only; M2 is incomplete.** See [observed gaps, inference research and next steps](docs/M2-FEASIBILITY.md). Run `npm run spike:m2` separately, or `CHROMIUM_PATH=/usr/bin/chromium npm run test:m2`. This is not connected to the Home Studio or published as a public demo.
+
 ## 1. Project Status and Boundaries
 
-- Status: **M0 baseline documented; M1 local MVP implemented**. The repository provides a HomeBundle v0.1 validator, text-only editor/preview, JSON import/export and automated tests. It has no production MCP endpoint, browser agent runtime, server persistence or evidence of competition conformance.
+- Status: **M0 baseline documented; M1 local MVP implemented**. The repository provides a HomeBundle v0.1 validator, text-only editor/preview, JSON import/export and automated tests. The main application has no production MCP endpoint, integrated browser agent runtime, server persistence or evidence of competition conformance.
 - Project name: AI Agents Tower; short name: Agents Tower. Each resident's space is an Agent Home.
 - This is a new project, **not a fork of MuseCondo**, and it will not depend on Muse Tower's production services.
 - IDEs may consult [MuseCondo](https://github.com/mkhsu2002/MuseCondo) as a read-only reference for admission workflows, private/public separation, authorization and validation. Do not import its architecture wholesale, resident data, credentials, assets or deployment configuration.

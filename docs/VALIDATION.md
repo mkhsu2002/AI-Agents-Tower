@@ -40,3 +40,7 @@ An initial reload test waited for a navigation that the test intentionally cance
 Only Chromium was tested. Accessibility has labels, landmarks, keyboard focus and status announcements but no formal audit. No server private-home creation, publication, auth, tenant isolation, real model, browser agent runtime, MCP client or cross-origin conformance was tested or implemented. No claim of admission, residency or competition compliance is made. Memory-only drafts can be lost after crashes or a browser discards unload prompts. The browser/OS may retain exported files; no browser persistence or automatic recovery is implemented. Production security headers and licensing are later gates.
 
 See SPEC-BASELINE.md for the immutable best-effort baseline and unresolved authoritative historical pin. See MVP-PLAN.md for M2–M5 acceptance gates and the second-origin plan.
+
+## Subsequent M2 spike
+
+The original M1 evidence above remains historical. See [M2-FEASIBILITY.md](M2-FEASIBILITY.md) for the separate pinned runtime experiment, scripted-only inference, local MCP and two-origin tests, observed adoption blockers and inference research. M2 is not complete.

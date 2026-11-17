@@ -8,7 +8,7 @@ This is an independent AI Agents Tower project for the Cognizant Open Agentic We
 | --- | --- | --- | --- |
 | M0 | Pin specification evidence, runtime assumptions and risks; choose minimal stack | Source URLs, commit/blob evidence, ADRs and explicit unresolved gates | Documented; historical baseline confirmation remains open |
 | M1 | HomeBundle v0.1, deterministic validation, text editor/preview, JSON file/paste import and download | Automated round-trips, rejection cases, script text safety, interrupted reads, reload and mobile checks | Implemented locally; see VALIDATION.md |
-| M2 | Actual browser agent network with reception/planning and home-builder agents; real model plus MCP or registered local action | Browser trace shows two agents collaborating, real inference, typed action validation and errors; second-origin caller test below | Planned; no manifest/runtime/model integration yet |
+| M2 | Actual browser agent network with reception/planning and home-builder agents; real model plus MCP or registered local action | Browser trace shows two agents collaborating, real inference, typed action validation and errors; second-origin caller test below | Local feasibility spike only: official Engine + two peer agents + MCP with scripted inference; real model and product integration remain open |
 | M3 | Private persistence, authentication, tenant isolation, idempotency and revision conflicts | Two actual clients; denied cross-tenant access; durable receipts; retry and unknown-outcome recovery | Planned; no backend/database/session |
 | M4 | Separate explicit public snapshots, unpublish and interoperability | Private updates never change public snapshots; reviewed publish scope; withdrawal and cache behavior; export/reimport | Planned; no public content or publish controls |
 | M5 | English submission and reproducible evidence | Working public website, screenshots, browser video under two minutes, test instructions, cost model and conformance matrix | Planned; deployment requires later authorization |
@@ -17,7 +17,7 @@ The README's earlier P0–P4 outline is product direction; this M0–M5 sequence
 
 ## M2 second-origin demonstration (required project evidence)
 
-Proposed named Tower network: `tower-home-builder`, front agent `reception`, delegating to `home_builder`. Names are design targets, not published resources. Publish only public instructions, invocation schemas, limits and tool descriptors. Expose deterministic `validate_home_bundle` via a typed local action or MCP adapter sharing the M1 domain contract. Model output must pass code validation and user review before affecting the draft. No model statement establishes validity.
+Proposed named Tower network: `tower-home-builder`, front agent `reception`, delegating to `home_builder`. Names are used by the local M2 test fixtures, not published resources. Publish only public instructions, invocation schemas, limits and tool descriptors. Expose deterministic `validate_home_bundle` via a typed local action or MCP adapter sharing the M1 domain contract. Model output must pass code validation and user review before affecting the draft. No model statement establishes validity.
 
 1. Run a caller page at origin A and Tower artifacts at distinct origin B (different ports qualify for a local test). Later repeat on independent HTTPS origins; never present localhost as a deployed demo.
 2. Caller refers to B's exact named `tower-home-builder` network. Before contacting B, show origin, purpose and requested access; denial must cause no contact.
@@ -25,6 +25,8 @@ Proposed named Tower network: `tower-home-builder`, front agent `reception`, del
 4. Instantiate the Tower's two agents **inside A's browser runtime**, with the caller's inference/router policy, credential isolation, private-context allow rules and bounded budgets. Demonstrate a real model delegation and a validated action. Calls from an external Dot to an MCP endpoint alone are insufficient evidence.
 5. Capture DevTools/browser trace: origins contacted, network selection, consent, two agent turns, model and action execution, returned structured result. Exclude prompts containing secrets. Show credentials go only to the authorized router, never B or prompts; private context does not cross by default.
 6. Exercise denied consent, missing network, invalid arguments, provider failure, cancellation, timeout, loop/budget exhaustion, subsequent peer/MCP hops and unknown write outcomes. Do not retry an uncertain write blindly.
+
+The [bounded M2 feasibility findings](M2-FEASIBILITY.md) record what the isolated local harness actually verified, including upstream consent/validation gaps. M2 is not complete.
 
 ## Unresolved gates before claiming an agentic website
 

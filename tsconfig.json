@@ -5,5 +5,5 @@
     "noEmit": true, "allowImportingTsExtensions": true, "resolveJsonModule": true,
     "verbatimModuleSyntax": true, "skipLibCheck": true, "types": ["node"]
   },
-  "include": ["src", "tests", "playwright.config.ts"]
+  "include": ["src", "tests", "playwright.config.ts", "spikes/m2/**/*.ts"]
 }
