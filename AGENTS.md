@@ -8,9 +8,9 @@ The owner has authorized this workflow for every completed task stage:
 
 1. Update README.md with the implemented outcome, applicable validation results, known limitations and next steps. Link detailed evidence where helpful; distinguish implemented behavior from plans and mock inference from real inference.
 2. Run checks appropriate to the change. For documentation-only changes, review the diff and run `git diff --check`; do not invent fresh application test results.
-3. Commit the stage and push the current feature branch to origin automatically. Set its upstream when needed. This standing authorization supersedes earlier task-specific instructions to keep completed stages local without pushing.
+3. Work on main, commit the stage and push main to origin automatically. Set its upstream when needed. This standing owner authorization supersedes earlier local-only/no-push instructions and the former feature-branch workflow.
 4. Verify that the remote branch points to the intended commit. Report the branch, commit, verification results and any blockers.
 
-Use feature branches for implementation. Do not force-push, overwrite others' work, merge into main, create releases, publish a site or deploy without separate authorization. If pushing fails, preserve the local commit and report the actual failure; do not claim the stage was synchronized.
+Use main for implementation and stage completion as requested by the owner. Fetch and integrate remote changes without overwriting others' work. Never force-push. Releases and deployment require task-specific authorization; the owner's current request authorizes the initial Home Studio deployment. If pushing fails, preserve the local commit and report the actual failure; do not claim the stage was synchronized.
 
 Keep credentials and private user content out of commits and logs. Preserve upstream licenses and attribution. No paid services or new credentials are authorized by the automatic-push workflow.
