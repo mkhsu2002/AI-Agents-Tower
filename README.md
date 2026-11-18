@@ -197,7 +197,7 @@ Acceptance: one resident cannot access or modify another resident's private data
 3. Where technology has not been selected, propose reasonable defaults and record tradeoffs. Do not assume deployment credentials or paid credits are available.
 4. Keep this project independent. MuseCondo is a read-only reference; do not modify it or its production site.
 5. Keep the README as the entry point, and progressively move detailed designs, task lists, tests and development logs into dedicated documents.
-6. Update progress, reproducible run/test instructions and known limitations at each milestone. Do not invent installation or test commands before they actually work.
+6. At every completed task stage, update this README with the outcome, actual validation results, known limitations and next steps; commit the stage and automatically push the current feature branch to origin. Verify the remote commit and report synchronization status. This standing owner authorization supersedes earlier local-only/no-push instructions. Do not invent installation or test commands before they actually work. See [AGENTS.md](AGENTS.md) for the complete workflow; merges into main, releases and deployment still require separate authorization.
 7. Do not change repository visibility, automatically register for the competition, subscribe to paid services or publish real user data.
 8. If later user decisions differ from this document, update it to reflect those decisions rather than continuing an obsolete direction.
 9. Use **English as the default language for all project-facing documentation, UI copy, examples, error messages and competition materials**. Future localization may be added deliberately, but English must remain complete and usable on its own.
