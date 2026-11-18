@@ -7,7 +7,7 @@ async function settings(page: Page, scenario: string, extra = {}) {
 async function run(page: Page, brief = 'A quiet library for agents') {
   await page.getByLabel('Your brief').fill(brief);
   await page.locator('#agent-approve').check();
-  await page.getByRole('button', { name: 'Generate mock proposal' }).click();
+  await page.getByRole('button', { name: 'Create a draft' }).click();
 }
 test.beforeEach(async ({ page }) => { await page.goto('/'); });
 test('two mock roles produce a validated proposal, review/apply/edit/export round-trip without content writes', async ({ page, context }) => {
@@ -17,11 +17,11 @@ test('two mock roles produce a validated proposal, review/apply/edit/export roun
   await settings(page, 'success');
   const brief = '<script>window.pwned=1</script> A calm library';
   await run(page, brief);
-  await expect(page.locator('#agent-status')).toContainText('Mock proposal validated. Review');
+  await expect(page.locator('#agent-status')).toContainText('Draft ready. Review');
   await expect(page.getByLabel('Display name')).toHaveValue('Atlas');
   await expect(page.locator('#agent-result')).toContainText(brief);
   await expect(page.locator('#agent-result script')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Use proposal in editor' }).click();
+  await page.getByRole('button', { name: 'Apply draft' }).click();
   await expect(page.locator('#preview')).toContainText(brief);
   await expect(page.locator('#preview script')).toHaveCount(0);
   await page.getByLabel('Display name').fill('Reviewed library');
@@ -41,13 +41,13 @@ test('default-deny and invalid/oversized brief contact no network and preserve d
   await expect(page.locator('#agent-approve')).not.toBeChecked();
   for (const [brief, error] of [[' ', 'Enter a brief'], ['x'.repeat(1501), '1500 Unicode'], ['Valid', 'Permission declined']]) {
     await page.getByLabel('Your brief').fill(brief);
-    await page.getByRole('button', { name: 'Generate mock proposal' }).click();
+    await page.getByRole('button', { name: 'Create a draft' }).click();
     await expect(page.locator('#agent-status')).toContainText(error!);
     await expect(page.locator('#agent-proposal')).toBeHidden();
   }
   expect(requests).toEqual([]); await expect(page.getByLabel('Display name')).toHaveValue('Atlas');
 });
-for (const [scenario, message] of [['model-error', 'mock model failed'], ['tool-error', 'builder'], ['invalid-bundle', 'failed validation'], ['slow-model', 'deadline exceeded']]) {
+for (const [scenario, message] of [['model-error', 'Draft generation failed'], ['tool-error', 'Home builder'], ['invalid-bundle', 'failed validation'], ['slow-model', 'deadline exceeded']]) {
   test(`${scenario} is an explicit failure, retains edits, then restart succeeds`, async ({ page }) => {
     await settings(page, scenario!, scenario === 'slow-model' ? { timeoutMs: 250 } : {});
     await page.getByLabel('Display name').fill('Keep my draft');
@@ -74,12 +74,12 @@ test('intervening edits and imports are guarded; source changes revoke consent; 
   await settings(page, 'success', { delayMs: 150 }); await run(page);
   await page.getByLabel('Display name').fill('Edited while running');
   await expect(page.locator('#agent-proposal')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Use proposal in editor' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Apply draft' })).toBeDisabled();
   await expect(page.getByLabel('Display name')).toHaveValue('Edited while running');
-  await page.getByRole('button', { name: 'Discard proposal' }).click();
+  await page.getByRole('button', { name: 'Discard draft' }).click();
   await run(page); await expect(page.locator('#agent-proposal')).toBeVisible();
   await page.getByLabel('Display name').fill('Edited after proposal');
-  await page.getByRole('button', { name: 'Use proposal in editor' }).click();
+  await page.getByRole('button', { name: 'Apply draft' }).click();
   await expect(page.getByLabel('Display name')).toHaveValue('Edited after proposal');
   await page.getByText('Public network source', { exact: true }).click();
   await page.getByLabel('Network URL').fill('http://127.0.0.1:4182/agents/tower-home-builder');
@@ -97,7 +97,7 @@ test('second origin loads exact named network in caller browser after approval, 
   page.on('request', r => { if (r.url().startsWith('http://127.0.0.1:4182')) requests.push({ url: r.url(), method: r.method(), body: r.postData(), headers: r.headers() }); });
   await settings(page, 'success'); await peerSource(page, 'agents');
   await page.getByLabel('Your brief').fill('A private local brief');
-  await page.getByRole('button', { name: 'Generate mock proposal' }).click();
+  await page.getByRole('button', { name: 'Create a draft' }).click();
   await expect(page.locator('#agent-status')).toContainText('Permission declined'); expect(requests).toEqual([]);
   await run(page, 'A private local brief');
   await expect(page.locator('#agent-proposal')).toBeVisible();
@@ -119,7 +119,7 @@ test('peer MCP discovery requires separate consent; deny/cancel never contact it
   await settings(page, 'success'); await peerSource(page, 'mcp'); await run(page);
   await expect(page.locator('#agent-contact')).toBeVisible();
   await expect(page.locator('#agent-contact-details')).toContainText('http://127.0.0.1:4182');
-  await page.getByRole('button', { name: 'Deny this contact' }).click();
+  await page.getByRole('button', { name: 'Deny connection' }).click();
   await expect(page.locator('#agent-status')).toContainText('Generation stopped');
   await expect(page.locator('#agent-proposal')).toBeHidden(); expect(mcp).toEqual([]);
   await run(page); await expect(page.locator('#agent-contact')).toBeVisible();
@@ -130,7 +130,7 @@ test('peer MCP discovery requires separate consent; deny/cancel never contact it
 test('configuration failure and cancelled preparation do not contact a network; retry is explicit', async ({ page }) => {
   const network: string[] = []; page.on('request', r => { if (r.url().includes('/agents/')) network.push(r.url()); });
   await settings(page, 'unknown'); await run(page);
-  await expect(page.locator('#agent-status')).toContainText('Invalid mock configuration'); expect(network).toEqual([]);
+  await expect(page.locator('#agent-status')).toContainText('Generation settings are invalid'); expect(network).toEqual([]);
   let release!: () => void;
   const waiting = new Promise<void>(resolve => { release = resolve; });
   await page.route('**/development/mock-settings.json', async route => { await waiting; await route.fulfill({ json: { mode: 'mock', scenario: 'success', timeoutMs: 5000, delayMs: 5 } }).catch(() => {}); });
@@ -144,7 +144,7 @@ test('importing a different draft after generation prevents stale proposal repla
   await settings(page, 'success'); await run(page); await expect(page.locator('#agent-proposal')).toBeVisible();
   await page.getByLabel('Bundle JSON').fill(JSON.stringify({ schemaVersion: '0.1', displayName: 'New imported draft', introduction: 'Imported brief', blocks: [] }));
   await page.getByRole('button', { name: 'Replace draft with JSON' }).click();
-  await page.getByRole('button', { name: 'Use proposal in editor' }).click();
+  await page.getByRole('button', { name: 'Apply draft' }).click();
   await expect(page.locator('#agent-status')).toContainText('no edits were replaced');
   await expect(page.getByLabel('Display name')).toHaveValue('New imported draft');
 });

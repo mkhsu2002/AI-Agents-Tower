@@ -27,3 +27,13 @@
 - Public browser navigation was attempted with system Chromium and failed at the environment tunnel (`net::ERR_TUNNEL_CONNECTION_FAILED`); online UI behavior could not be verified. READY and successful local tests are recorded separately. No credentials or security changes were introduced.
 - Updated README, deployment instructions and matrix to describe the integrated mock app rather than the old M1-only deployment. This final documentation stage uses diff review and git diff --check; no unnecessary application retest is claimed.
 - No decision is required to use the mock draft workflow. A real default inference route still needs a separately authorized provider/local-model plan with demonstrable zero paid fallback and judging capacity. Full-profile and historical-version questions need official clarification; a deployed independent HTTPS demo and final submission evidence remain future gates.
+
+## 2026-11-18 — public product copy review
+
+- Read current README, AGENTS and latest integration records. Started on clean main, synchronized with origin/main at 519d598; no existing changes were overwritten.
+- Rewrote the full Home Studio surface: headline/subtitle, brief instructions, actions, permission wording, role/status messages, proposal review/apply, editor/preview, import/export, default example and page metadata. Product copy targets the enduring public goal and available user actions.
+- Consolidated simulated-execution and memory-only data status in the footer. Removed repeated development badges, disclaimer paragraphs and a selector with no usable alternative. Retained precise authorization, replacement/conflict and failure information at the relevant action. No false save/publish/real-inference behavior was introduced.
+- Proposal review now renders safe text headings/paragraphs with textContent instead of requiring users to inspect raw JSON. Import/export contracts and execution safety remain unchanged.
+- Updated existing browser assertions for new labels and footer information. Final results: lint, typecheck, 12 unit tests, production build and all 24 Studio browser tests passed. An initial assertion used the wrong capitalization for a tool error; the resulting duplicate error phrasing was also shortened before the final successful full run.
+- Visually reviewed desktop and mobile output; no horizontal overflow. Evidence: docs/evidence/public-copy-desktop.png and public-copy-mobile.png. Existing runtime safety code was unchanged; no fresh result is claimed for the separate 51-case runtime suite.
+- Updated README and standing public-copy instructions in AGENTS.md. Commit/push uses authorized main workflow and the existing Git-linked deployment. No new dependency, service, credentials or paid action.

@@ -8,9 +8,9 @@ This README defines the initial product direction and serves as the handoff docu
 
 ## View the deployed Home Studio
 
-Open **https://ai-agents-tower.vercel.app/**. Vercel reports the integrated application commit `d2d3da6` production deployment as READY (checked 2026-11-18). The latest application adds a mock-only two-agent draft proposal flow to the M1 text editor/preview. Check the current deployment record below; no sign-up, real model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
+Open **https://ai-agents-tower.vercel.app/**. The existing Vercel project automatically deploys main; [deployment records](docs/DEPLOYMENT.md) distinguish platform status from public browser verification. The latest application adds a mock-only two-agent draft proposal flow to the M1 text editor/preview. Check the current deployment record below; no sign-up, real model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
 
-To try the mock flow: enter Your brief, check the explicit origin approval and select Generate mock proposal; review it, choose Use proposal in editor, then edit and Download JSON. You can also edit/import directly without agents. See the [deployment guide and verification status](docs/DEPLOYMENT.md). The deployment build succeeded, but this execution environment could not reach the public URL through its network proxy or cloud-browser adapter, so online UI verification remains pending. The [local integration screenshot](docs/evidence/studio-agents-local-round-trip.png) shows the tested built UI and is not an online screenshot.
+To try the mock flow: enter Your brief, check the explicit origin approval and select Create a draft; review it, choose Apply draft, then edit and Download JSON. You can also edit/import directly without agents. See the [deployment guide and verification status](docs/DEPLOYMENT.md). The deployment build succeeded, but this execution environment could not reach the public URL through its network proxy or cloud-browser adapter, so online UI verification remains pending. The [local integration screenshot](docs/evidence/studio-agents-local-round-trip.png) shows the tested built UI and is not an online screenshot.
 
 ## Run the local Home Studio
 
@@ -21,7 +21,7 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. The synthetic example is editable. Drafts stay in this tab's memory; export JSON to keep a copy. Nothing is uploaded, registered or published. There is no real model request or browser storage. Use the clearly labelled mock agents to stage a proposal, then explicitly apply it to the editor. Reload/close loses edits even if a browser warning cannot be shown.
+Open the local URL printed by Vite. The synthetic example is editable. Drafts stay in this tab's memory; export JSON to keep a copy. Nothing is uploaded, registered or published. There is no real model request or browser storage. Use the agent flow to stage a proposal (the current execution mode is stated in the page footer), then explicitly apply it to the editor. Reload/close loses edits even if a browser warning cannot be shown.
 
 ```sh
 npm run lint
@@ -221,3 +221,9 @@ The repository now implements the M1 local draft workflow. It does not claim a p
 The 2026-11-18 integration connects brief → reception/planning → Home builder → deterministic validation → explicit proposal review/apply → edit/preview/export. Inference is visibly mock only. Run approval is default-deny; refused contacts, failures, deadlines and cancellation stop without replacing drafts. Editor revision guards protect concurrent edits/imports. See [integration details and tests](docs/STUDIO-AGENTS.md), [conformance matrix](docs/CONFORMANCE-MATRIX.md) and [development log](docs/DEVELOPMENT-LOG.md). The public network is a restricted development JSON profile, not a full conformance claim. Next gates are tested free reviewer inference, an integrated grounded capability and a deployed independent-origin demonstration. No account, database or publication was added.
 
 Fresh local validation for this checkpoint: lint, typecheck and build passed; 12 unit tests, 24 Studio browser tests (including the original 8 M1 tests) and 51 runtime browser tests passed. [Local integration screenshot](docs/evidence/studio-agents-local-round-trip.png) is development evidence, not an online visit. Production deployment metadata and reachability checks are tracked separately in [DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+## Public copy review — 2026-11-18
+
+The Home Studio now leads with **Build a home for your AI agent.** Public headings, instructions, buttons, statuses, default content and metadata describe the user task rather than development milestones. Repeated mock/AI disclaimers and the unavailable inference selector were removed from the main flow; the footer accurately states simulated responses and memory-only drafts. Permission scope, draft replacement, validation errors and conflicts remain explicit where acted on. Proposals are reviewed as safe text content rather than raw JSON. English copy guidance is recorded in AGENTS.md.
+
+Fresh checks: lint, typecheck, 12 unit tests, build and 24 Studio browser tests passed. Desktop and mobile screenshots were visually reviewed: [desktop](docs/evidence/public-copy-desktop.png), [mobile](docs/evidence/public-copy-mobile.png). Existing runtime safety behavior was not changed; the separate 51-case runtime suite was not rerun for this copy/presentation stage. Real inference, persistence and publication remain future work. Main push uses the existing automatic deployment; public UI verification remains a separate check.

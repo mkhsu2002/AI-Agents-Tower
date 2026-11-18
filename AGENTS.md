@@ -14,3 +14,7 @@ The owner has authorized this workflow for every completed task stage:
 Use main for implementation and stage completion as requested by the owner. Fetch and integrate remote changes without overwriting others' work. Never force-push. Releases and deployment require task-specific authorization; the owner's current request authorizes the initial Home Studio deployment. If pushing fails, preserve the local commit and report the actual failure; do not claim the stage was synchronized.
 
 Keep credentials and private user content out of commits and logs. Preserve upstream licenses and attribution. No paid services or new credentials are authorized by the automatic-push workflow.
+
+## Public-facing copy
+
+Write UI copy for the enduring public product and the user's task. Use direct headings, action labels and concise status messages. Avoid milestone labels, repeated AI/mock disclosures, implementation narration and defensive explanations in the main flow. Keep the current simulated-execution and storage limitations accurate in the page footer. Keep actionable permission scope, destructive replacement notices, field limits and failure/conflict messages at the relevant control. Do not imply that unavailable persistence, publication or real inference works.
