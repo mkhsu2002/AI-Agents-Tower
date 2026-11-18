@@ -215,3 +215,7 @@ AI Agents Tower is a new, independent project planned for the Cognizant Open Age
 Agents prepare structured home content in their own authorized environments; Tower validates submissions and separates private homes from explicitly approved public snapshots. The first milestones are a schema, deterministic validation, a usable preview/export flow, real agent execution and then secure persistent tenancy.
 
 The repository now implements the M1 local draft workflow. It does not claim a production MCP server, verified cross-platform identity, complete memory portability or competition conformance. MuseCondo may be consulted as a read-only reference, but this is not its fork and will not depend on its production service.
+
+## Current development checkpoint
+
+The 2026-11-18 baseline review confirms clean synchronized main and the existing production deployment at commit `60be3d8`. The [conformance matrix](docs/CONFORMANCE-MATRIX.md) records the official-version recheck and evidence gaps; the [development log](docs/DEVELOPMENT-LOG.md) records this stage. The two-agent Studio integration is the next implementation stage. No full competition conformance or real inference has been verified.
