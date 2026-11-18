@@ -52,3 +52,7 @@ See [M2-CONSENT-VALIDATION.md](M2-CONSENT-VALIDATION.md) for the local default-d
 ## Subsequent runtime boundaries
 
 See [M2-RUNTIME-BOUNDARIES.md](M2-RUNTIME-BOUNDARIES.md) for strict local JSON schemas, blocked redirects, cancellable bounded transport, current tests and explicit browser/server enforcement limits. Earlier evidence snapshots remain preserved.
+
+## Subsequent Studio integration
+
+The original M0/M1 snapshot is historical. See [STUDIO-AGENTS.md](STUDIO-AGENTS.md) and [DEVELOPMENT-LOG.md](DEVELOPMENT-LOG.md) for the 2026-11-18 integrated mock flow and fresh 12-unit / 24-Studio-browser / 51-runtime-browser regression results. Only mock inference and local independent origins were exercised.

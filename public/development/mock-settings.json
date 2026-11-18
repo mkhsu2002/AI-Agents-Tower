@@ -1,0 +1,1 @@
+{ "mode": "mock", "scenario": "success", "timeoutMs": 10000, "delayMs": 120 }

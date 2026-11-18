@@ -92,6 +92,9 @@ export class Engine {
     this.trace = trace || new TraceBus();
     this.timeoutMs = arguments[0]?.timeoutMs ?? 10000;
     this.operation = null;
+    this.networkName = arguments[0]?.networkName;
+    this.modelAdapter = arguments[0]?.modelAdapter;
+    if (this.modelAdapter && (this.modelAdapter.mock !== true || typeof this.modelAdapter.chat !== "function")) throw new Error("Only an explicitly mock custom adapter is enabled in this profile.");
     this.sandboxWorkerUrl = sandboxWorkerUrl || "/runtime/sandbox-worker.js";
     this.byokKey = byokKey || "";
     this.routerOverride = routerOverride || "";
@@ -169,7 +172,8 @@ export class Engine {
     const span = this.trace.start("compile", { origin: hostOf(this.originUrl), what: "top network" });
     try {
       const { manifest, base } = await fetchManifest(this.originUrl, this.operation);
-      const entry = manifest.networks[0];
+      const entry = this.networkName ? manifest.networks.find(item => item.name === this.networkName) : manifest.networks[0];
+      if (!entry) throw new Error("The requested named network is not published by this manifest.");
       // Set manifest early so resolveRemote/resolveMcp policy checks have it.
       this.top = { manifest, base };
       const { network, bundleUrl, integrity, llm, validation: v } = await this._compile(base, manifest, entry, { isTop: true });
@@ -228,7 +232,7 @@ export class Engine {
       routerBase = selected.baseUrl;
       mock = selected.mock;
     }
-    const llm = new LlmClient({ baseUrl: routerBase, apiKey: this.byokKey, trace: this.trace, mock });
+    const llm = this.modelAdapter || new LlmClient({ baseUrl: routerBase, apiKey: this.byokKey, trace: this.trace, mock });
     return { network, bundleUrl, integrity, llm, hoconUrl, validation };
   }
 

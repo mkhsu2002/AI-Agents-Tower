@@ -12,7 +12,7 @@
       "path": "runtime/engine.js",
       "upstreamPath": "nsdeploy/runtime/engine.js",
       "gitBlob": "1777948ad49b9111742011b24664eeee13792907",
-      "patchedGitBlob": "f23a59868c2ae14a0c67abc43aef2f2f4cc39a52"
+      "patchedGitBlob": "a6efa8ba60ef1f379c06785258ff2216a3a43e07"
     },
     {
       "path": "runtime/hocon.js",
@@ -121,7 +121,7 @@
     }
   ],
   "towerPatch": {
-    "date": "2026-11-17",
+    "date": "2026-11-18",
     "description": "Local strict data-only profile, default-deny consent, blocked redirects and bounded cancellable transport; not an unmodified upstream release.",
     "notes": "PATCHES.md"
   }

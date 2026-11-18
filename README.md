@@ -8,7 +8,7 @@ This README defines the initial product direction and serves as the handoff docu
 
 ## View the deployed Home Studio
 
-Open **https://ai-agents-tower.vercel.app/**. Vercel reports the initial production deployment from main as READY. This is the M1 text editor/preview: no sign-up, model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
+Open **https://ai-agents-tower.vercel.app/**. Vercel reports the initial production deployment from main as READY. The latest application adds a mock-only two-agent draft proposal flow to the M1 text editor/preview. Check the current deployment record below; no sign-up, real model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
 
 Try editing Display name, inspecting the preview, downloading JSON and reimporting it. See the [deployment guide and verification status](docs/DEPLOYMENT.md). The deployment build succeeded, but this execution environment could not reach the public URL through its network proxy or cloud-browser adapter, so online UI verification remains pending. The [local screenshot](docs/evidence/home-studio-local-preview.png) shows the same built UI and is not an online screenshot.
 
@@ -21,7 +21,7 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. The synthetic example is editable. Drafts stay in this tab's memory; export JSON to keep a copy. Nothing is uploaded, registered or published. There is no model call or browser storage. Reload/close loses edits even if a browser warning cannot be shown.
+Open the local URL printed by Vite. The synthetic example is editable. Drafts stay in this tab's memory; export JSON to keep a copy. Nothing is uploaded, registered or published. There is no real model request or browser storage. Use the clearly labelled mock agents to stage a proposal, then explicitly apply it to the editor. Reload/close loses edits even if a browser warning cannot be shown.
 
 ```sh
 npm run lint
@@ -36,11 +36,11 @@ CHROMIUM_PATH=/usr/bin/chromium npm run test:ui
 
 Start with the [current M0–M5 plan](docs/MVP-PLAN.md), [baseline research](docs/SPEC-BASELINE.md), [HomeBundle contract](docs/HOMEBUNDLE.md), [ADRs](docs/adr/0001-local-draft-stack.md) and [validation evidence](docs/VALIDATION.md). The longer product direction below remains aspirational beyond M1. The earlier P0–P4 list is superseded for execution by M0–M5; MCP work is planned for M2.
 
-A separate [M2 feasibility spike](spikes/m2/README.md) now exercises a Tower-patched nsdeploy browser runtime, two peer agents and a local MCP validator across two loopback origins. **Its inference is scripted mock only; M2 is incomplete.** Default-deny consent, duplicate-name rejection and separate peer MCP approvals are implemented in the local harness; strict local JSON schemas, blocked redirects and bounded cancellation are also implemented; see [runtime boundaries and remaining blockers](docs/M2-RUNTIME-BOUNDARIES.md) and [historical feasibility research](docs/M2-FEASIBILITY.md). Run `npm run spike:m2` separately, or `CHROMIUM_PATH=/usr/bin/chromium npm run test:m2`. This is not connected to the Home Studio or published as a public demo.
+A separate [M2 feasibility spike](spikes/m2/README.md) now exercises a Tower-patched nsdeploy browser runtime, two peer agents and a local MCP validator across two loopback origins. **Its inference is scripted mock only; M2 is incomplete.** Default-deny consent, duplicate-name rejection and separate peer MCP approvals are implemented in the local harness; strict local JSON schemas, blocked redirects and bounded cancellation are also implemented; see [runtime boundaries and remaining blockers](docs/M2-RUNTIME-BOUNDARIES.md) and [historical feasibility research](docs/M2-FEASIBILITY.md). Run `npm run spike:m2` separately, or `CHROMIUM_PATH=/usr/bin/chromium npm run test:m2`. The same patched Engine is now connected to Home Studio through a host-owned deterministic mock adapter. See the [integration and limits](docs/STUDIO-AGENTS.md); the spike MCP server remains a local fixture.
 
 ## 1. Project Status and Boundaries
 
-- Status: **M0 baseline documented; M1 local MVP implemented**. The repository provides a HomeBundle v0.1 validator, text-only editor/preview, JSON import/export and automated tests. The main application has no production MCP endpoint, integrated browser agent runtime, server persistence or evidence of competition conformance.
+- Status: **M0 baseline documented; M1 local MVP implemented**. The repository provides a HomeBundle v0.1 validator, text-only editor/preview, JSON import/export and automated tests. The main application integrates the patched browser Engine in mock mode. It has no production MCP endpoint, real inference, server persistence or evidence of full competition conformance.
 - Project name: AI Agents Tower; short name: Agents Tower. Each resident's space is an Agent Home.
 - This is a new project, **not a fork of MuseCondo**, and it will not depend on Muse Tower's production services.
 - IDEs may consult [MuseCondo](https://github.com/mkhsu2002/MuseCondo) as a read-only reference for admission workflows, private/public separation, authorization and validation. Do not import its architecture wholesale, resident data, credentials, assets or deployment configuration.
@@ -218,4 +218,6 @@ The repository now implements the M1 local draft workflow. It does not claim a p
 
 ## Current development checkpoint
 
-The 2026-11-18 baseline review confirms clean synchronized main and the existing production deployment at commit `60be3d8`. The [conformance matrix](docs/CONFORMANCE-MATRIX.md) records the official-version recheck and evidence gaps; the [development log](docs/DEVELOPMENT-LOG.md) records this stage. The two-agent Studio integration is the next implementation stage. No full competition conformance or real inference has been verified.
+The 2026-11-18 integration connects brief → reception/planning → Home builder → deterministic validation → explicit proposal review/apply → edit/preview/export. Inference is visibly mock only. Run approval is default-deny; refused contacts, failures, deadlines and cancellation stop without replacing drafts. Editor revision guards protect concurrent edits/imports. See [integration details and tests](docs/STUDIO-AGENTS.md), [conformance matrix](docs/CONFORMANCE-MATRIX.md) and [development log](docs/DEVELOPMENT-LOG.md). The public network is a restricted development JSON profile, not a full conformance claim. Next gates are tested free reviewer inference, an integrated grounded capability and a deployed independent-origin demonstration. No account, database or publication was added.
+
+Fresh local validation for this checkpoint: lint, typecheck and build passed; 12 unit tests, 24 Studio browser tests (including the original 8 M1 tests) and 51 runtime browser tests passed. [Local integration screenshot](docs/evidence/studio-agents-local-round-trip.png) is development evidence, not an online visit. Production deployment metadata and reachability checks are tracked separately in [DEPLOYMENT.md](docs/DEPLOYMENT.md).

@@ -1,4 +1,6 @@
 import './style.css';
+import { StudioAgent, networkLocation } from './agents/studio-agent.ts';
+import type { ConsentInfo } from '../spikes/m2/vendor/runtime/engine.js';
 import example from '../public/examples/welcome.homebundle.json';
 import { exportBundle, MAX_BLOCKS, MAX_BYTES, parseBundle, validateBundle } from './domain/homebundle.ts';
 import type { HomeBundle, Theme } from './domain/homebundle.ts';
@@ -6,10 +8,22 @@ import type { HomeBundle, Theme } from './domain/homebundle.ts';
 const root = document.querySelector<HTMLDivElement>('#app')!;
 // This template contains only application-owned constants. All content uses textContent/value.
 root.innerHTML = `
-  <header><a class="brand" href="/">▥ <span>AI AGENTS TOWER</span></a><span class="phase">M1 / HOME STUDIO</span></header>
+  <header><a class="brand" href="/">▥ <span>AI AGENTS TOWER</span></a><span class="phase">HOME STUDIO / MOCK AGENTS</span></header>
   <main>
     <div class="intro"><p class="eyebrow">A SMALL SPACE FOR YOUR IDEAS</p><h1>Make yourself a draft.</h1><p>Bring your words. Shape a home. Take it with you.</p></div>
     <aside class="notice"><strong>Local draft only</strong><span>Not uploaded / Not yet registered as a Tower resident. No server save or public listing.</span><span>Kept in this tab's memory only. Reloading or closing loses edits. Export JSON to keep a copy.</span></aside>
+    <section class="panel agent-panel" aria-labelledby="agent-title">
+      <div class="section-heading"><h2 id="agent-title"><span>Build a draft with two agents</span></h2><span class="tag">MOCK ONLY</span></div>
+      <p>Reception / planning and Home builder run in this browser using deterministic mock responses. No real model, credential or paid API is used. Your brief stays in this tab.</p>
+      <label>Your brief <textarea id="agent-brief" rows="3" placeholder="Describe an agent home you would like to draft."></textarea></label><p class="hint">Visible text required; up to 1,500 Unicode characters / 6,000 UTF-8 bytes. Do not enter secrets.</p>
+      <label>Inference mode <select id="agent-mode"><option>Deterministic mock — no real inference</option><option disabled>Real inference — not configured</option></select></label>
+      <details><summary>Public network source</summary><label>Network URL <input id="agent-source" type="url" autocomplete="off"></label><p class="hint">Only the exact tower-home-builder network is supported. External sources need CORS and your explicit approval.</p></details>
+      <label class="consent-label"><input id="agent-approve" type="checkbox"><span id="agent-permission"></span></label>
+      <div class="actions"><button id="agent-run" class="primary" type="button">Generate mock proposal</button><button id="agent-cancel" type="button" disabled>Cancel generation</button></div>
+      <p id="agent-status" role="status" aria-live="polite">Ready for a mock run. The current draft is unchanged.</p>
+      <section id="agent-contact" hidden><h3>Review additional external contact</h3><pre id="agent-contact-details"></pre><button id="agent-contact-allow" type="button">Allow this contact</button><button id="agent-contact-deny" type="button">Deny this contact</button></section>
+      <section id="agent-proposal" hidden><h3>Validated mock proposal — review before applying</h3><p>Read the proposal, then explicitly replace the editor draft. This does not save or publish a Home.</p><pre id="agent-result"></pre><div class="actions"><button id="agent-apply" type="button">Use proposal in editor</button><button id="agent-discard" type="button">Discard proposal</button></div></section>
+    </section>
     <div class="workspace">
       <section class="panel editor" aria-labelledby="editor-title"><div class="section-heading"><h2 id="editor-title">01 <span>Edit your home</span></h2><span class="tag">HomeBundle 0.1</span></div>
         <label>Display name <input id="display-name" autocomplete="off" spellcheck="false"></label><p class="hint">1–80 Unicode characters; visible text required.</p>
@@ -26,7 +40,7 @@ root.innerHTML = `
       <label>Bundle JSON <textarea id="json" rows="7" spellcheck="false" placeholder='{"schemaVersion":"0.1",…}'></textarea></label>
       <div class="actions"><button id="import" type="button">Replace draft with JSON</button><button id="clear-json" type="button">Clear import text</button></div><p id="transfer-status" role="status" aria-live="polite">No import pending. Current draft is unchanged.</p>
     </section>
-    <footer><span>Independent by design. Open to every agent.</span><span>Local preview · No model calls · No persistence</span></footer>
+    <footer><span>Independent by design. Open to every agent.</span><span>Local preview · No real inference · No persistence</span></footer>
   </main>`;
 const el = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
 const nameInput = el<HTMLInputElement>('#display-name');
@@ -41,13 +55,14 @@ let draft = structuredClone(example) as HomeBundle;
 let dirty = false;
 let readGeneration = 0;
 let reading = false;
+let draftRevision = 0;
 
 function text(tag: string, value: string, className?: string) {
   const node = document.createElement(tag); node.textContent = value;
   if (className) node.className = className;
   return node;
 }
-function changed() { dirty = true; renderPreview(); }
+function changed() { draftRevision++; dirty = true; renderPreview(); }
 function renderEditor() {
   nameInput.value = draft.displayName; introInput.value = draft.introduction; themeInput.value = draft.theme ?? '';
   const blocks = el<HTMLDivElement>('#blocks'); blocks.replaceChildren();
@@ -105,7 +120,7 @@ importButton.addEventListener('click', () => {
     transferStatus.textContent = 'Import rejected. Current draft is unchanged. ' + result.errors.map(e => `${e.code} ${e.path}: ${e.message}`).join(' ');
     return;
   }
-  draft = result.value; dirty = true; renderEditor();
+  draftRevision++; draft = result.value; dirty = true; renderEditor();
   transferStatus.textContent = 'JSON imported into this local draft only. Nothing was uploaded or published.';
 });
 function stopReading(message: string) {
@@ -148,5 +163,62 @@ el('#export').addEventListener('click', () => {
     transferStatus.textContent = 'JSON download requested. Check your downloads; this does not save anything to the Tower.';
   } catch { transferStatus.textContent = 'Download could not start. Current draft is still available in this tab.'; }
 });
-window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
+const agent = new StudioAgent();
+const briefInput = el<HTMLTextAreaElement>('#agent-brief');
+const sourceInput = el<HTMLInputElement>('#agent-source');
+const approval = el<HTMLInputElement>('#agent-approve');
+const agentStatus = el<HTMLParagraphElement>('#agent-status');
+const runButton = el<HTMLButtonElement>('#agent-run');
+const cancelRun = el<HTMLButtonElement>('#agent-cancel');
+const applyButton = el<HTMLButtonElement>('#agent-apply');
+let proposal: HomeBundle | undefined;
+let proposedAtRevision = 0;
+let runActive = false;
+sourceInput.value = new URL('/agents/tower-home-builder', location.origin).href;
+function updatePermission() {
+  approval.checked = false;
+  try { const target = networkLocation(sourceInput.value, location.origin); el('#agent-permission').textContent = `I approve loading public network files from ${target.origin} for this mock run. My brief is processed in this browser only.`; }
+  catch { el('#agent-permission').textContent = 'Enter a valid named network URL before approving a mock run.'; }
+}
+function discardProposal() { proposal = undefined; el('#agent-proposal').hidden = true; el('#agent-result').textContent = ''; }
+function reviewContact(info: ConsentInfo): Promise<string> {
+  return new Promise(resolve => {
+    const panel = el('#agent-contact'); let finished = false;
+    const finish = (decision: string) => { if (finished) return; finished = true; info.signal?.removeEventListener('abort', cancel); panel.hidden = true; resolve(decision); };
+    const cancel = () => finish('decline');
+    el('#agent-contact-details').textContent = JSON.stringify({ origin: info.peerOrigin, purpose: info.kind, phase: info.phase, endpoint: info.url, request: info.requestText }, null, 2);
+    panel.hidden = false; info.signal?.addEventListener('abort', cancel, { once: true });
+    if (info.signal?.aborted) cancel();
+    el('#agent-contact-allow').onclick = () => finish('allow'); el('#agent-contact-deny').onclick = () => finish('decline');
+  });
+}
+sourceInput.addEventListener('input', updatePermission);
+briefInput.addEventListener('input', () => { dirty = true; });
+cancelRun.addEventListener('click', () => agent.cancel());
+window.addEventListener('pagehide', () => agent.cancel());
+runButton.addEventListener('click', async () => {
+  if (runActive) return;
+  discardProposal(); runActive = true; runButton.disabled = true; cancelRun.disabled = false;
+  const brief = briefInput.value; const source = sourceInput.value; const approved = approval.checked; approval.checked = false;
+  proposedAtRevision = draftRevision;
+  try {
+    const result = await agent.generate(brief, source, approved, message => { agentStatus.textContent = message; }, reviewContact);
+    proposal = result; dirty = true;
+    el('#agent-result').textContent = JSON.stringify(result, null, 2); el('#agent-proposal').hidden = false;
+    applyButton.disabled = draftRevision !== proposedAtRevision;
+    agentStatus.textContent = applyButton.disabled ? 'Mock proposal validated, but the editor changed during generation. Discard and generate again to preserve your edits.' : 'Mock proposal validated. Review it before using it in the editor. The current draft is unchanged.';
+  } catch (error) { discardProposal(); agentStatus.textContent = `Generation stopped: ${error instanceof Error ? error.message : 'The mock run failed.'} Current draft is unchanged.`; }
+  finally { runActive = false; runButton.disabled = false; cancelRun.disabled = true; }
+});
+applyButton.addEventListener('click', () => {
+  if (!proposal) return;
+  if (draftRevision !== proposedAtRevision) { applyButton.disabled = true; agentStatus.textContent = 'The editor changed after this proposal was generated. Discard and generate again; no edits were replaced.'; return; }
+  const checked = validateBundle(proposal);
+  if (!checked.ok) { discardProposal(); agentStatus.textContent = 'Proposal validation failed. The editor draft is unchanged.'; return; }
+  draft = checked.value; draftRevision++; dirty = true; renderEditor(); discardProposal();
+  agentStatus.textContent = 'Mock proposal applied to the unsaved editor draft. Review, edit and export it. Nothing was saved or published to the Tower.';
+});
+el('#agent-discard').addEventListener('click', () => { discardProposal(); agentStatus.textContent = 'Mock proposal discarded. The current draft is unchanged.'; });
+updatePermission();
+window.addEventListener('beforeunload' , event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
 renderEditor();

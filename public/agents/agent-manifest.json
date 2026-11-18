@@ -1,0 +1,7 @@
+{
+  "networks": [{ "name": "tower-home-builder", "front_man": "reception", "hocon": "tower-home-builder.network.json" }],
+  "llm_router": { "base_url": "browser://mock", "mock": true },
+  "allowed_peers": [],
+  "deployment": { "mode": "static" },
+  "metadata": { "warning": "DEVELOPMENT MOCK ONLY. browser://mock is a local extension, not a working real inference route or conformance claim." }
+}

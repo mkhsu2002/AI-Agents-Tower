@@ -32,7 +32,7 @@ export function validateManifest(value, base) {
     if (checkedUrl(entry.hocon, `${base}/`).origin !== checkedUrl(base).origin) throw policyError('Network artifacts must stay on their authorized publishing origin.');
   }
   for (const peer of value.allowed_peers) if (checkedUrl(peer).origin !== peer) throw policyError('Peer policy must list exact origins.');
-  checkedUrl(value.llm_router.base_url);
+  if (!(value.llm_router.mock === true && value.llm_router.base_url === "browser://mock")) checkedUrl(value.llm_router.base_url);
   return value;
 }
 export function validateDefinition(value) {
