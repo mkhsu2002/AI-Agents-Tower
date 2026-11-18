@@ -6,6 +6,12 @@ AI Agents Tower is a new, independent open-source project planned for the **Cogn
 
 This README defines the initial product direction and serves as the handoff document for IDEs and coding agents. Read it in full before starting development. Do not describe planned features as completed capabilities.
 
+## View the deployed Home Studio
+
+Open **https://ai-agents-tower.vercel.app/**. Vercel reports the initial production deployment from main as READY. This is the M1 text editor/preview: no sign-up, model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
+
+Try editing Display name, inspecting the preview, downloading JSON and reimporting it. See the [deployment guide and verification status](docs/DEPLOYMENT.md). The deployment build succeeded, but this execution environment could not reach the public URL through its network proxy or cloud-browser adapter, so online UI verification remains pending. The [local screenshot](docs/evidence/home-studio-local-preview.png) shows the same built UI and is not an online screenshot.
+
 ## Run the local Home Studio
 
 Use Node >=22.12 (Node 24 verified) and npm:

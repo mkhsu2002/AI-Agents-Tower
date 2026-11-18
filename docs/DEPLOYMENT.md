@@ -30,3 +30,16 @@ The checked-in vercel.json records framework/build/output settings. Only the gen
 Build success alone is not proof that the page is reachable. Record the actual deployment status, URL and browser verification separately. A preview is a UI review link; it does not establish competition conformance or free judging inference availability.
 
 Official setup reference: https://vercel.com/docs/frameworks/frontend/vite
+
+## Initial deployment result
+
+- Project: ai-agents-tower, linked to mkhsu2002/AI-Agents-Tower, production branch main.
+- Workspace: the owner's existing Vercel Hobby workspace; no plan upgrade, paid service or new credential was created.
+- Production URL returned by Vercel: https://ai-agents-tower.vercel.app/
+- Initial source commit: 69b656331fd87aff54fd9ced4c3bb10b5d5e15ac.
+- Initial deployment: dpl_e6Tmp4ts1SimwaQqL9m6UtsqyaN4; target production; READY with no alias error.
+- Local verification in this stage: npm run build passed and produced the same M1 JS/CSS hashes. Documentation diff checks passed. The existing 51 runtime tests and 8+8 M1 tests are historical validation; they were not rerun for these deployment configuration/docs changes.
+- Online UI verification: blocked in this execution environment. Headless Chromium returned ERR_TUNNEL_CONNECTION_FAILED. The cloud browser could not read its requirements and did not navigate to the site. The web fetch path also could not access the URL. No login/protection/network setting was weakened to work around these errors.
+- The local screenshot at docs/evidence/home-studio-local-preview.png is the same built UI, not proof of an online visit. The owner should open the production URL and perform the steps above. A site availability or product failure cannot be inferred solely from these environment errors.
+
+The Git-linked project now automatically builds main pushes. Later documentation commits may create a subsequent deployment of the same application assets. Use Vercel's deployment view for the current source commit/state; do not assume that a Git push itself proves successful deployment.
