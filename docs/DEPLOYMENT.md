@@ -43,3 +43,18 @@ Official setup reference: https://vercel.com/docs/frameworks/frontend/vite
 - The local screenshot at docs/evidence/home-studio-local-preview.png is the same built UI, not proof of an online visit. The owner should open the production URL and perform the steps above. A site availability or product failure cannot be inferred solely from these environment errors.
 
 The Git-linked project now automatically builds main pushes. Later documentation commits may create a subsequent deployment of the same application assets. Use Vercel's deployment view for the current source commit/state; do not assume that a Git push itself proves successful deployment.
+
+
+## Studio integration deployment checkpoint — 2026-11-18
+
+This section supersedes the initial application/version description above; the initial result remains historical.
+
+- Application source: `d2d3da6a23bfef598eb43e1069afe594482cffc5`, pushed to main and verified against origin/main.
+- Existing Git-linked automatic production deployment: `dpl_6enJWAjtUm5HeyiHgrszinxrfr1F`, Vercel state **READY**. No direct deploy API, new service, environment variable, credential or plan change was used.
+- Public alias: https://ai-agents-tower.vercel.app/ ; deployment URL: https://ai-agents-tower-p8opizqrc-mkhsus-projects.vercel.app/ . The public alias is the intended entry point; deployment-specific protection has not been changed.
+- Application now includes the two-role deterministic mock proposal flow and static development network artifacts. The local MCP fixture is not deployed. Real inference, identity, private persistence and public residency remain unavailable.
+- Fresh local checks before push: lint, typecheck, build, 12 unit, 24 Studio browser and 51 runtime browser tests passed. Only local loopback cross-origin tests were executed.
+- Public browser check after the push: system Chromium navigation to the public alias failed with `net::ERR_TUNNEL_CONNECTION_FAILED`. It could not inspect the page or exercise the public mock flow. READY is platform metadata, **not** online functionality verification. No protection bypass/share token or network/security weakening was used.
+- Subsequent documentation-only main commits can create additional deployments with the same client assets; the source above is the verified application checkpoint, not an assertion that no later build exists.
+
+When the page is reachable, enter a synthetic brief, approve the displayed origin, select Generate mock proposal, review/apply, edit and download JSON. Refusing origin approval must leave the current draft unchanged. A successfully validated mock proposal is still an unsaved browser draft, not real inference or a saved Home.

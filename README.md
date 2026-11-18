@@ -8,9 +8,9 @@ This README defines the initial product direction and serves as the handoff docu
 
 ## View the deployed Home Studio
 
-Open **https://ai-agents-tower.vercel.app/**. Vercel reports the initial production deployment from main as READY. The latest application adds a mock-only two-agent draft proposal flow to the M1 text editor/preview. Check the current deployment record below; no sign-up, real model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
+Open **https://ai-agents-tower.vercel.app/**. Vercel reports the integrated application commit `d2d3da6` production deployment as READY (checked 2026-11-18). The latest application adds a mock-only two-agent draft proposal flow to the M1 text editor/preview. Check the current deployment record below; no sign-up, real model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
 
-Try editing Display name, inspecting the preview, downloading JSON and reimporting it. See the [deployment guide and verification status](docs/DEPLOYMENT.md). The deployment build succeeded, but this execution environment could not reach the public URL through its network proxy or cloud-browser adapter, so online UI verification remains pending. The [local screenshot](docs/evidence/home-studio-local-preview.png) shows the same built UI and is not an online screenshot.
+To try the mock flow: enter Your brief, check the explicit origin approval and select Generate mock proposal; review it, choose Use proposal in editor, then edit and Download JSON. You can also edit/import directly without agents. See the [deployment guide and verification status](docs/DEPLOYMENT.md). The deployment build succeeded, but this execution environment could not reach the public URL through its network proxy or cloud-browser adapter, so online UI verification remains pending. The [local integration screenshot](docs/evidence/studio-agents-local-round-trip.png) shows the tested built UI and is not an online screenshot.
 
 ## Run the local Home Studio
 

@@ -10,7 +10,7 @@ Rechecked 2026-11-18. This is engineering evidence, **not a conformance declarat
 
 | Source area | Requirement / check | Current bounded status | Evidence or next verification |
 | --- | --- | --- | --- |
-| Rules §4 | Public browser product and access for reviewers | Partial | Vercel main `60be3d8` reported READY; environment blocked public UI checks. READY alone is not functionality evidence. |
+| Rules §4 | Public browser product and access for reviewers | Partial | Integrated application `d2d3da6` reported production READY on 2026-11-18; environment blocked public UI checks. READY alone is not functionality evidence. |
 | Spec §2, §6 | Portable two-agent network in canonical data model | Partial | Two agents execute in local spike; local-1 JSON is deliberately restricted. Publish/review artifacts against full Neuro SAN model; JSON existence alone is insufficient. |
 | Spec §3.1 | Browser execution and collaboration | Partial | 51-case runtime suite plus integrated Studio mock workflow; inference is scripted. No real-model collaboration verified. |
 | Spec §3.1, §6 | Grounded MCP or registered site capability | Partial | Real local read-only MCP transport in isolated spike. Studio currently only has host validation; integrated capability and real-model proof remain open. |
