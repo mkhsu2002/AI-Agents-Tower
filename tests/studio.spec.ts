@@ -97,7 +97,7 @@ test('reload warns about edits and no browser storage or content network writes 
 });
 test('mobile layout stays within viewport with explicit draft status', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.getByRole('heading', { name: 'Build a home for your AI agent.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'A home of your own. A world to belong to.' })).toBeVisible();
   await expect(page.locator('#execution-mode')).toContainText('simulated');
   await expect(page.locator('#draft-storage')).toContainText('lost on reload');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

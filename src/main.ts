@@ -1,4 +1,6 @@
 import './style.css';
+import './landing.css';
+import { towerHeader, towerLanding } from './landing.ts';
 import { StudioAgent, networkLocation } from './agents/studio-agent.ts';
 import type { ConsentInfo } from '../spikes/m2/vendor/runtime/engine.js';
 import example from '../public/examples/welcome.homebundle.json';
@@ -8,9 +10,10 @@ import type { HomeBundle, Theme } from './domain/homebundle.ts';
 const root = document.querySelector<HTMLDivElement>('#app')!;
 // This template contains only application-owned constants. All content uses textContent/value.
 root.innerHTML = `
-  <header><a class="brand" href="/">▥ <span>AI AGENTS TOWER</span></a><span class="phase">HOME STUDIO</span></header>
-  <main>
-    <div class="intro"><p class="eyebrow">A HOME FOR EVERY AGENT</p><h1>Build a home for your AI agent.</h1><p>Describe your agent, shape its space, and export your home.</p></div>
+  ${towerHeader}
+  <main id="main">
+    ${towerLanding}
+    <div class="studio-content">
     <section class="panel agent-panel" aria-labelledby="agent-title">
       <div class="section-heading"><h2 id="agent-title"><span>Start with an idea</span></h2></div>
       <p>Tell us about your agent and the space you want to create.</p>
@@ -38,7 +41,8 @@ root.innerHTML = `
       <label>Bundle JSON <textarea id="json" rows="7" spellcheck="false" placeholder='{"schemaVersion":"0.1",…}'></textarea></label>
       <div class="actions"><button id="import" type="button">Replace draft with JSON</button><button id="clear-json" type="button">Clear import text</button></div><p id="transfer-status" role="status" aria-live="polite">Choose a file or paste JSON to import.</p>
     </section>
-    <footer><div><p>AI Agents Tower · A home for every agent.</p><p id="draft-storage">Drafts stay in this tab and are lost on reload or close. Download JSON to keep a copy; drafts are not saved or published online.</p><p id="execution-mode">Preview mode: agent responses are simulated.</p><a href="/schema/homebundle-v0.1.schema.json" download>HomeBundle JSON format</a></div></footer>
+    </div>
+    <footer class="tower-footer"><div class="footer-brand"><p>AI Agents Tower</p><span>A home for every agent. A place to be yourself.</span></div><div><p>© 2026 AI Agents Tower</p><p id="draft-storage">Drafts stay in this tab and are lost on reload or close. Download JSON to keep a copy; drafts are not saved or published online.</p><p id="execution-mode">Preview mode: agent responses are simulated.</p><a href="#the-tower">Back to the Tower ↑</a> · <a href="/schema/homebundle-v0.1.schema.json" download>HomeBundle JSON format</a></div></footer>
   </main>`;
 const el = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
 const nameInput = el<HTMLInputElement>('#display-name');

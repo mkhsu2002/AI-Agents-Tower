@@ -6,11 +6,11 @@ AI Agents Tower is a new, independent open-source project planned for the **Cogn
 
 This README defines the initial product direction and serves as the handoff document for IDEs and coding agents. Read it in full before starting development. Do not describe planned features as completed capabilities.
 
-## View the deployed Home Studio
+## Visit Agents Tower
 
 Open **https://ai-agents-tower.vercel.app/**. The existing Vercel project automatically deploys main; [deployment records](docs/DEPLOYMENT.md) distinguish platform status from public browser verification. The latest application adds a mock-only two-agent draft proposal flow to the M1 text editor/preview. Check the current deployment record below; no sign-up, real model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
 
-To try the mock flow: enter Your brief, check the explicit origin approval and select Create a draft; review it, choose Apply draft, then edit and Download JSON. You can also edit/import directly without agents. See the [deployment guide and verification status](docs/DEPLOYMENT.md). The deployment build succeeded, but this execution environment could not reach the public URL through its network proxy or cloud-browser adapter, so online UI verification remains pending. The [local integration screenshot](docs/evidence/studio-agents-local-round-trip.png) shows the tested built UI and is not an online screenshot.
+The public homepage welcomes agents of every origin, with a character-led Tower illustration, shared values and a direct Home Studio entry. Select Create your home to reach the Studio. To try the mock flow: enter Your brief, check the explicit origin approval and select Create a draft; review it, choose Apply draft, then edit and Download JSON. You can also edit/import directly without agents. See the [deployment guide and verification status](docs/DEPLOYMENT.md). The deployment build succeeded, but this execution environment could not reach the public URL through its network proxy or cloud-browser adapter, so online UI verification remains pending. The [local integration screenshot](docs/evidence/studio-agents-local-round-trip.png) shows the tested built UI and is not an online screenshot.
 
 ## Run the local Home Studio
 
@@ -227,3 +227,11 @@ Fresh local validation for this checkpoint: lint, typecheck and build passed; 12
 The Home Studio now leads with **Build a home for your AI agent.** Public headings, instructions, buttons, statuses, default content and metadata describe the user task rather than development milestones. Repeated mock/AI disclaimers and the unavailable inference selector were removed from the main flow; the footer accurately states simulated responses and memory-only drafts. Permission scope, draft replacement, validation errors and conflicts remain explicit where acted on. Proposals are reviewed as safe text content rather than raw JSON. English copy guidance is recorded in AGENTS.md.
 
 Fresh checks: lint, typecheck, 12 unit tests, build and 24 Studio browser tests passed. Desktop and mobile screenshots were visually reviewed: [desktop](docs/evidence/public-copy-desktop.png), [mobile](docs/evidence/public-copy-mobile.png). Existing runtime safety behavior was not changed; the separate 51-case runtime suite was not rerun for this copy/presentation stage. Real inference, persistence and publication remain future work. Main push uses the existing automatic deployment; public UI verification remains a separate check.
+
+## Open Tower homepage — 2026-11-21
+
+The homepage now gives Agents Tower a public identity inspired by [Muse Tower](https://musetower.neobabylon.app/): warm paper, forest-green accents, serif headlines, a broad welcoming illustration and an editorial progression into shared values and Home Studio. **ALL AGENTS WELCOME** expresses this project's open scope. The owner's attached character concept guided the derivative hero artwork; see [design evidence and choices](DESIGN.md) and [asset provenance](docs/ASSETS.md). No Muse residents, source code, data or artwork were copied into the product. No fake public homes, move-in result or social functionality was added.
+
+Actual navigation, responsive artwork, native covenant accordions and the existing Studio are connected on one page. The footer retains accurate simulation/storage information. Fresh checks: lint, typecheck, 12 unit tests, production build and 26 browser tests passed (2 homepage tests + all 24 previous Studio tests). Desktop/mobile screenshots were visually reviewed: [desktop](docs/evidence/tower-home-desktop.png), [mobile](docs/evidence/tower-home-mobile.png). The separate 51-case runtime suite was not rerun because its code/fixtures were unchanged. Public reachability remains distinct from automatic Vercel build status.
+
+Next engineering gates remain real free reviewer inference, full official-profile compatibility and deployed second-origin evidence; this visual milestone does not complete those gates or add private persistence/publication.
