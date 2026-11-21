@@ -32,7 +32,7 @@ export function networkLocation(input: string, callerOrigin: string): { base: st
   return { name, base: new URL('./', url).href.replace(/\/$/, ''), origin: url.origin };
 }
 export class StudioAgent {
-  lastReceipt?: { action: string; status: string; result?: Record<string, unknown>; mode: 'mock' | 'reviewer' };
+  lastReceipt?: { action: string; status: string; result?: Record<string, unknown>; mode: 'mock' | 'reviewer'; inferenceUsage?: { calls: number; inputTokens: number; outputTokens: number } };
   private engine?: Engine; private preparation?: Operation; private active = false; private sequence = 0;
   cancel() { this.sequence++; this.engine?.cancel(); this.preparation?.cancel(); }
   async generate(brief: string, source: string, approved: boolean, progress: Progress, consent: (info: ConsentInfo) => Promise<string>, mode: 'mock' | 'reviewer' = 'mock'): Promise<HomeBundle> {
@@ -91,7 +91,7 @@ export class StudioAgent {
       const parsed = parseBundle(output.text);
       if (!parsed.ok) throw new Error('Generated bundle failed validation. ' + parsed.errors.map(issue => `${issue.code} ${issue.path}: ${issue.message}`).join(' '));
       if (!execution.bundle || receipts[0].result?.valid !== true) throw new Error('Validation did not confirm the generated draft.');
-      this.lastReceipt = { ...receipts[0], mode };
+      this.lastReceipt = { ...receipts[0], mode, ...(adapter.usageTotals?.calls === 3 ? { inferenceUsage: adapter.usageTotals } : {}) };
       progress('Draft validated.');
       return parsed.value;
     } catch (error) {

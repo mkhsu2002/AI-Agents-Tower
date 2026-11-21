@@ -1,6 +1,10 @@
 # T03: real inference preparation
 
-**Current provider direction: Meta Model API, by owner instruction.** See [Meta gateway, verified scope and account gates](META-REVIEWER-GATEWAY.md). OpenRouter research below is historical and is not an active fallback. No provider account, credential, balance read or model call occurred. The offline Meta gateway and disabled production handler are implemented; actual Tower-only credit entitlement remains unverified.
+**Current provider direction: Meta Model API, by owner instruction.** See [Meta gateway and verified scope](META-REVIEWER-GATEWAY.md). OpenRouter research below is historical and is not an active fallback. No provider account, credential, balance read or model call occurred. The bounded Pages gateway is implemented, pending the TOWER_RUNTIME D1 binding and a real provider acceptance run. Account balance/expiry tracking is not a project implementation gate.
+
+## Historical transport preparation
+
+The following observations describe the earlier transport checkpoint; the current Pages gateway and binding steps are in META-REVIEWER-GATEWAY.md and CLOUDFLARE-PAGES.md.
 
 Implemented a keyless OpenAI-compatible transport adapter in src/agents/keyless-inference.ts. It accepts only an exact host-approved origin/model/endpoint, has no credential field/header, bounds requests and outputs, supports text and declared tool calls, rejects truncation/malformed results/unknown tools/redirects, propagates cancellation and deadlines, and never retries automatically.
 
@@ -10,7 +14,7 @@ Four contract tests use actual local HTTP with scripted responses. They are **no
 
 Verified transport cases: exact origin/no credentials, JSON text/tools, output limits, malformed/oversized output, unknown tools, incomplete response, service error, redirects with zero target contact, cancellation and deadline. At this checkpoint lint/typecheck and all 24 domain/adapter/capability unit tests passed. Broader subsequent server-core tests are recorded separately.
 
-## Reviewer wiring and provider research — 2026-11-21
+## Historical transport and provider research — 2026-11-21
 
 The adapter is now connected to a **disabled-by-default restricted reviewer path**; see [REVIEWER-DEMO.md](REVIEWER-DEMO.md). Normal Simulation remains deterministic and independent. Scripted enabled-service fixtures test the transport through the real browser loop and validation dispatcher, not real inference. There is no deployed model gateway. The earlier statement that Engine injection is universally mock-only is historical; a trusted same-origin host-only adapter extension is now tested.
 

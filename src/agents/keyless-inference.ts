@@ -1,4 +1,4 @@
-// Bounded transport and shared completion decoder; public live inference remains disabled.
+// Bounded transport and shared completion decoder; the host controls live availability.
 import { checkedUrl, strictJson } from '../../spikes/m2/safety.js';
 import type { Completion, ModelAdapter, ModelRequest } from './model.ts';
 const object = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
@@ -42,5 +42,7 @@ export function decodeCompletion(doc: unknown, tools: ModelRequest['tools'], mod
     return { id: call.id, type: 'function', function: { name: call.function.name, arguments: call.function.arguments } };
   });
   if ((choice.finish_reason === 'tool_calls') !== (toolCalls.length > 0)) throw new Error('Inference completion state does not match its tool calls.');
-  return { content, toolCalls, finishReason: String(choice.finish_reason), model: typeof doc.model === 'string' ? doc.model : model, usage: null };
+  let usage: Completion['usage'] = null;
+  if (object(doc.usage) && Number.isSafeInteger(doc.usage.prompt_tokens) && Number(doc.usage.prompt_tokens) >= 0 && Number.isSafeInteger(doc.usage.completion_tokens) && Number(doc.usage.completion_tokens) >= 0) usage = { inputTokens: Number(doc.usage.prompt_tokens), outputTokens: Number(doc.usage.completion_tokens) };
+  return { content, toolCalls, finishReason: String(choice.finish_reason), model: typeof doc.model === 'string' ? doc.model : model, usage };
 }

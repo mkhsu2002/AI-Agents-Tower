@@ -16,7 +16,7 @@ Baseline checked 2026-11-18; current-version delta rechecked 2026-11-21 (see RUN
 | Spec §3.1, §6 | Grounded MCP or registered site capability | Partial | Real local read-only MCP transport in isolated spike. Studio now executes a host-registered read-only validation action via runtime receipts (T02); portable capability discovery and real-model proof remain open. |
 | Spec §3.2, §6 | Exact named peer loaded in caller browser after approval | Partial | Two loopback origins in spike, no deployed second-origin evidence. Studio 4173→4182 exact named loading and refusal tests now pass; independently hosted HTTPS origins remain open. |
 | Spec §3.3–3.4 | Manifest, network files, origin policies and CORS | Partial | Fixture routes work locally; Studio bundles the patched Engine and serves static development manifest/network files; local 4173→4182 loading/CORS negative tests pass. Real router, deployed HTTPS interoperability and full profile remain open. |
-| Spec §4, §6 | Working default inference; optional BYOK | Not implemented | No authorized real provider route or reviewer capacity verified. No credential UI/registration permitted in this stage. |
+| Spec §4, §6 | Working default inference; optional BYOK | Partial | Bounded Pages Meta gateway and shared D1 quota/session adapter implemented; scripted fixtures and local workerd/D1 admission tested. Production D1 binding, real inference, portable live-router metadata and judging capacity remain unverified. No visitor credential UI. |
 | Spec §4, §6 | Caller router and key isolation | Partial | Synthetic key routing tests only. No real credential or live provider evidence; never infer that a mock label proves real inference. |
 | Spec §2.1, §5, §6 | Private-context filtering | Partial | Synthetic undeclared context denied in local peer tests. Full schema/allow-rule interoperability remains unverified. |
 | Spec §3.1, §5 | Reject invalid/ambiguous networks | Partial | Local profile rejects unknown/executable data, duplicate keys/names and unsafe destinations. Full-profile acceptance/rejection coverage is not established. |
@@ -49,7 +49,7 @@ Current Profile 0.3 path commit a0ceda34e4f2e653223e13e63282abc9b60eaf7c changes
 
 T02 now requires actual registered-action execution receipts in the Studio; this replaces the older host-validation-only limitation. T03 has a disabled keyless transport preparation tested against scripted local HTTP, not actual weights. T04 has a separately served caller package and local browser evidence, not deployed independent HTTPS. T05 production navigation failed at the tunnel before interaction. T06/T07 have a local server-only SQLite/authenticator-boundary core, not deployed authentication/private/public Home services. T08 drafts/inventory/mock footage exist; license, actual inference, judging capacity and final submission remain unverified. No success badge is substituted for these gates.
 
-## Restricted reviewer checkpoint — 2026-11-21
+## Historical restricted reviewer checkpoint — 2026-11-21
 
 Re-read the official [rules](https://cognizant-agenticweb.devpost.com/rules) and the [immutable Profile 0.2 file](https://github.com/cognizant-ai-labs/agentic-web/blob/fd872b9221aeb8ff762b75a5badbf84b23c133cc/docs/worldwide_agentic_web_mvp_spec.md). The rules still require the submission-start specification and free judging access. The historical branch reconstruction remains an inference, not organizer-certified pinning. Profile 0.3 does not silently replace it.
 
@@ -65,10 +65,14 @@ Re-read the official [rules](https://cognizant-agenticweb.devpost.com/rules) and
 
 See REVIEWER-DEMO.md for exact shipped state and future gateway policy. No new full-conformance or P0-complete claim is made.
 
-## Meta gateway preparation checkpoint — 2026-11-21
+## Historical Meta gateway preparation checkpoint — 2026-11-21
 
 Owner selected Meta Model API instead of OpenRouter. [META-REVIEWER-GATEWAY.md](META-REVIEWER-GATEWAY.md) pins the read-only Muse reference and official protocol/pricing sources. Offline Request/Response fixtures now enforce server-owned synthetic prompts and three stages, bounded tickets/steps and a trusted Tower-only free-run reservation boundary. Browser tests reuse the real validation action/receipt and review/apply separation. This strengthens local safety evidence only. The production handler is hard disabled; no model, credit balance, account entitlement, expiry, overage protection, judging-period capacity or deployed independent HTTPS run was verified. Model API usage is metered even if free credits offset it. No competition requirement is closed merely by the gateway's existence; P0/full conformance remain incomplete.
 
 Cloudflare public checkpoint (2026-11-21): a successful Git-linked Pages check and fresh HTTP 200 homepages at the Pages/custom hostnames are now recorded; status remains false and reviewer API 503. The custom domain is reachable from the readback source. Public browser interaction is still unverified because navigation failed with ERR_TUNNEL_CONNECTION_FAILED. No real inference or independent second-site composition requirement is closed by these two hostnames. Evidence: cloudflare-public-readback.json and DEPLOYMENT.md.
 
 Saved-secret checkpoint (2026-11-21): Pages-only configuration presence diagnostics and an injected server HTTP sender are implemented/tested. Neither is inference evidence. Public enabled/connectionVerified/trialReady remain false, and actual credit/expiry/quota authority is unverified. Only a successful authorized provider trial can advance the real-model requirement; a configured key does not do so.
+
+## Public-demo resource checkpoint — 2026-11-21
+
+The fixed Atlas gateway now uses atomic D1 admission (60 reserved calls/day), single-use steps and shared cancellation; tests remain scripted and local. This advances the technical implementation, not conformance. The host-only live adapter does not establish portable default-router interoperability. No actual Meta inference or independent second HTTPS live composition has passed. Operational quota/session storage is separate from M3/M4 Home persistence.

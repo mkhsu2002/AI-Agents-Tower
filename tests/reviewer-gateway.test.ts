@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createOfflineReviewerGateway, LIMITS, META_ENDPOINT, META_MODEL } from '../server/reviewer-gateway.ts';
-import type { FreeRunReservation } from '../server/reviewer-gateway.ts';
+import type { RunBudgetReservation } from '../server/reviewer-gateway.ts';
 import disabled from '../api/reviewer.ts';
 import { fixtureProvider } from './reviewer-provider-fixture.ts';
 const origin = 'http://127.0.0.1:4173';
@@ -45,10 +45,10 @@ test('unknown fields, duplicate keys, missing consent, private input, origins an
     assert.equal(f.calls.length, 0);
   } finally { g.dispose(); }
 });
-test('unknown, expired, wrong-project or overage-enabled free quota never dispatches a model', async () => {
-  for (const patch of [null, { overageDisabled: false }, { expiresAt: 0 }, { project: 'muse-tower' }, { calls: 2 }]) {
+test('missing, expired, wrong-project or insufficient execution budgets never dispatch a model', async () => {
+  for (const patch of [null, { inputTokensPerCall: 0 }, { expiresAt: 0 }, { project: 'muse-tower' }, { calls: 2 }]) {
     const f = fixtureProvider(origin);
-    f.setReservation(patch === null ? null : { project: 'ai-agents-tower', syntheticOnly: true, calls: 3, expiresAt: Date.now() + 60000, overageDisabled: true, ...patch } as FreeRunReservation);
+    f.setReservation(patch === null ? null : { project: 'ai-agents-tower', syntheticOnly: true, calls: 3, expiresAt: Date.now() + 60000, inputTokensPerCall: 8192, outputTokens: 2304, ...patch } as RunBudgetReservation);
     const g = createOfflineReviewerGateway({ origin, provider: f.provider });
     assert.equal((await g.handle(req('start', { consent: true }))).status, 503); assert.equal(f.calls.length, 0); g.dispose();
   }
@@ -72,7 +72,7 @@ test('session expiry, duplicate/out-of-order steps, run caps and cancellation re
     assert.equal((await g.handle(req('v1/chat/completions', { ticket, step: 1 }))).status, 409);
     const expired = await start(g); clock += 60001;
     assert.equal((await g.handle(req('v1/chat/completions', { ticket: expired, step: 0 }))).status, 409);
-    f.setReservation({ project: 'ai-agents-tower', syntheticOnly: true, calls: 3, expiresAt: clock + 60000, overageDisabled: true });
+    f.setReservation({ project: 'ai-agents-tower', syntheticOnly: true, calls: 3, expiresAt: clock + 60000, inputTokensPerCall: 8192, outputTokens: 2304 });
     const cancelled = await start(g);
     assert.equal((await g.handle(req('cancel', { ticket: cancelled }))).status, 200);
     assert.equal((await g.handle(req('v1/chat/completions', { ticket: cancelled, step: 0 }))).status, 409);
@@ -97,7 +97,7 @@ test('pending dispatch obeys request abort, explicit cancel and deadline; duplic
 
 test('concurrent quota reservation cannot exceed session capacity and stalled request bodies release slots', async () => {
   const f = fixtureProvider(origin); let release!: () => void; const waiting = new Promise<void>(resolve => { release = resolve; });
-  const reserve = f.provider.reserveFreeRun; f.provider.reserveFreeRun = async limits => { await waiting; return reserve(limits); };
+  const reserve = f.provider.reserveRunBudget; f.provider.reserveRunBudget = async limits => { await waiting; return reserve(limits); };
   const g = createOfflineReviewerGateway({ origin, provider: f.provider, timeoutMs: 100 });
   try {
     const one = g.handle(req('start', { consent: true })); const two = g.handle(req('start', { consent: true }));

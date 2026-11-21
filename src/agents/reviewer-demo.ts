@@ -23,7 +23,9 @@ export async function reviewerAdapter(operation: Operation, origin: string): Pro
     // Best effort remote cancellation, bounded independently after the turn signal aborts.
     void fetch(new URL('/api/reviewer/cancel', origin).href, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket }), credentials: 'omit', redirect: 'error', signal: AbortSignal.timeout(1000) }).catch(() => {});
   };
+  const usageTotals = { calls: 0, inputTokens: 0, outputTokens: 0 };
   return {
+    get usageTotals() { return { ...usageTotals }; },
     mode: 'real', mock: false, baseUrl: origin,
     async chat({ messages, tools, operation: turn }) {
       turn.assert();
@@ -36,7 +38,7 @@ export async function reviewerAdapter(operation: Operation, origin: string): Pro
         const data: unknown = strictJson(await turn.read(response.text()));
         if (!object(data) || data.step !== step + 1) throw new Error('Invalid demo response sequence.');
         const result = decodeCompletion(data, tools, 'muse-spark-1.3');
-        turn.assert(); step++; if (step === 3) stopped = true;
+        turn.assert(); if (result.usage) { usageTotals.calls++; usageTotals.inputTokens += result.usage.inputTokens; usageTotals.outputTokens += result.usage.outputTokens; } step++; if (step === 3) stopped = true;
         return result;
       } catch (error) { cancel(); throw error; }
       finally { active = false; turn.signal.removeEventListener('abort', cancel); }

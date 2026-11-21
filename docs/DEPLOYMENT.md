@@ -100,3 +100,9 @@ Primary URLs, production test default, default independent-caller source and sha
 ## Meta binding presence confirmed — 2026-11-21
 
 Cloudflare Pages check succeeded for application 0ec985ca58f920fa0e10ccaeff656731f813e08d, deployment 54af4471-df9b-4f1f-afc5-1e1ab5ba4d57. Fresh GET https://1st-tower.neobabylon.app/api/reviewer/readiness returned HTTP 200 with credentialConfigured true; enabled, connectionVerified and trialReady all remain false. Static status remains false and reviewer start remains 503. This confirms the Production runtime can see a nonempty named Secret, not its value, validity, model health, credits or spend authority. No provider request occurred. See evidence/meta-binding-readback.json. A following documentation-only commit preserves the result without changing that application code.
+
+## Public fixed-demo gateway preparation — 2026-11-21
+
+Cloudflare now has an edge-compatible gateway gated by both META_API_KEY and TOWER_RUNTIME D1 bindings. Vercel/static builds remain disabled. Owner setup is limited to a dedicated Production D1 binding and redeployment; model secrets remain server-only. D1 coordinates 20 starts / 60 reserved calls per UTC admission day and single-use origin-bound execution state, not private Home storage.
+
+Fresh local checks: lint/typecheck/build, 71 unit, 42 Studio browser, 52 runtime browser and one independent local caller test passed. Wrangler compiled the Functions and actual local workerd/D1 verified consent denial, admission, cancellation and quota exhaustion without any provider call. Fixtures are not real inference. Production deployment/readback is recorded after push; a configured/READY deployment does not verify Meta, public interaction or competition conformance.

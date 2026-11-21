@@ -1,7 +1,9 @@
 // All enabled-service responses below are SCRIPTED FIXTURES, not model inference.
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { createOfflineReviewerGateway } from '../server/reviewer-gateway.ts';
+import { createLiveReviewer } from '../server/live-reviewer.ts';
+import { sqliteRuntime } from './d1-fixture.ts';
+import { META_ENDPOINT } from '../server/meta-policy.ts';
 import { fixtureProvider } from './reviewer-provider-fixture.ts';
 import { REVIEWER_BRIEF, REVIEWER_PROTOCOL } from '../src/agents/reviewer-contract.ts';
 async function selectDemo(page: Page) {
@@ -18,13 +20,14 @@ async function scriptedService(page: Page, failure?: number | 'invalid' | 'refus
   const calls: { headers: Record<string, string>; body: string }[] = [];
   const origin = new URL(page.url()).origin;
   const f = fixtureProvider(origin, failure);
-  const gateway = createOfflineReviewerGateway({ origin, provider: f.provider });
-  page.on('close', () => gateway.dispose());
+  const storage = sqliteRuntime();
+  const gateway = createLiveReviewer({ transport: async (_url, init) => f.provider.send({ endpoint: META_ENDPOINT, redirect: 'error', signal: init?.signal as AbortSignal, body: JSON.parse(String(init?.body)) }) });
+  page.on('close', () => storage.close());
   await page.route('**/reviewer/status.json', route => route.fulfill({ json: { enabled: true, protocol: REVIEWER_PROTOCOL } }));
   await page.route('**/api/reviewer/**', async route => {
     const request = route.request();
     if (request.url().endsWith('/v1/chat/completions')) calls.push({ headers: request.headers(), body: request.postData() || '' });
-    const response = await gateway.handle(new Request(request.url(), { method: request.method(), headers: request.headers(), body: request.postData() }));
+    const response = await gateway(new Request(request.url(), { method: request.method(), headers: request.headers(), body: request.postData() }), { META_API_KEY: 'SYNTHETIC-NOT-REAL', TOWER_RUNTIME: storage.db });
     await route.fulfill({ status: response.status, headers: Object.fromEntries(response.headers), body: await response.text() }).catch(() => {});
   });
   return calls;
@@ -46,6 +49,8 @@ test('scripted gateway keyless three-call collaboration produces a real local va
   await start(page);
   await expect(page.locator('#agent-proposal')).toBeVisible();
   expect(calls).toHaveLength(3);
+  await expect(page.locator('#agent-receipt')).toContainText('inferenceUsage');
+  await expect(page.locator('#agent-receipt')).toContainText('450');
   for (const call of calls) { expect(call.headers.authorization).toBeUndefined(); expect(call.headers.cookie).toBeUndefined(); expect(call.body).not.toContain('Private editor sentinel'); expect(Object.keys(JSON.parse(call.body)).sort()).toEqual(['step', 'ticket']); }
   await expect(page.getByLabel('Display name')).toHaveValue('Private editor sentinel');
   await expect(page.locator('#agent-receipt')).toContainText('succeeded');

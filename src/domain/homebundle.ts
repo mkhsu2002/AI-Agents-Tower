@@ -1,5 +1,4 @@
-import { Ajv } from 'ajv';
-import schema from '../../public/schema/homebundle-v0.1.schema.json' with { type: 'json' };
+import validate from './homebundle-validator.js';
 
 export const MAX_BYTES = 65_536;
 export const MAX_BLOCKS = 12;
@@ -11,7 +10,6 @@ export interface HomeBundle {
 }
 export interface Issue { code: string; path: string; message: string }
 export type Result<T> = { ok: true; value: T } | { ok: false; errors: Issue[] };
-const validate = new Ajv({ allErrors: true, strict: true }).compile<HomeBundle>(schema);
 const size = (text: string) => new TextEncoder().encode(text).length;
 const fail = (code: string, message: string): Result<never> => ({ ok: false, errors: [{ code, path: '/', message }] });
 

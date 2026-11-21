@@ -10,11 +10,11 @@ export { META_ENDPOINT, META_MODEL } from './meta-policy.ts';
 export const LIMITS = Object.freeze({ starts: 3, calls: 9, sessions: 2, requests: 4, bodyBytes: 512, outputBytes: 32768, inputTokens: 8192, lifetimeMs: 60000 });
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 const size = (v: string) => new TextEncoder().encode(v).length;
-export interface FreeRunReservation { project: 'ai-agents-tower'; syntheticOnly: true; calls: 3; expiresAt: number; overageDisabled: true }
+export interface RunBudgetReservation { project: 'ai-agents-tower'; syntheticOnly: true; calls: 3; expiresAt: number; inputTokensPerCall: 8192, outputTokens: 2304 }
 export interface ProviderRequest { endpoint: typeof META_ENDPOINT; body: Record<string, unknown>; signal: AbortSignal; redirect: 'error' }
 export interface OfflineProvider {
   // Trusted server-side atomic reservation. A boolean from the client is never evidence of quota.
-  reserveFreeRun(limits: { calls: 3; inputTokensPerCall: 8192; outputTokens: 2304 }): Promise<FreeRunReservation | null>;
+  reserveRunBudget(limits: { calls: 3; inputTokensPerCall: 8192; outputTokens: 2304 }): Promise<RunBudgetReservation | null>;
   send(request: ProviderRequest): Promise<Response>;
 }
 interface Session { timer?: ReturnType<typeof setTimeout>; step: number; expires: number; busy: boolean; operation?: Operation; builder?: string }
@@ -67,8 +67,8 @@ export function createOfflineReviewerGateway(options: { origin: string; provider
           if (starts >= LIMITS.starts || sessions.size + pendingStarts >= LIMITS.sessions) reject(429, 'Reviewer run limit reached.');
           starts++; // Failed starts consume the local budget too; no retry loophole.
           pendingStarts++;
-          let grant; try { grant = await operation.wait(provider.reserveFreeRun({ calls: 3, inputTokensPerCall: 8192, outputTokens: 2304 })); } finally { pendingStarts--; }
-          if (!grant || grant.project !== 'ai-agents-tower' || grant.syntheticOnly !== true || grant.calls !== 3 || grant.overageDisabled !== true || !Number.isFinite(grant.expiresAt) || grant.expiresAt <= now()) reject(503, 'Tower-only free quota and overage protection are not confirmed.');
+          let grant; try { grant = await operation.wait(provider.reserveRunBudget({ calls: 3, inputTokensPerCall: 8192, outputTokens: 2304 })); } finally { pendingStarts--; }
+          if (!grant || grant.project !== 'ai-agents-tower' || grant.syntheticOnly !== true || grant.calls !== 3 || grant.inputTokensPerCall !== 8192 || grant.outputTokens !== 2304 || !Number.isFinite(grant.expiresAt) || grant.expiresAt <= now()) reject(503, 'A bounded Tower execution allowance is required.');
           ticket = randomBytes(24).toString('hex');
           const expires = Math.min(now() + LIMITS.lifetimeMs, grant.expiresAt);
           const runTicket = ticket; const timer = setTimeout(() => drop(runTicket), expires - now()); timer.unref();

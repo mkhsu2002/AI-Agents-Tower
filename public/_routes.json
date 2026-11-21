@@ -1,5 +1,9 @@
 {
   "version": 1,
-  "include": ["/api/reviewer", "/api/reviewer/*"],
+  "include": [
+    "/api/reviewer",
+    "/api/reviewer/*",
+    "/reviewer/status.json"
+  ],
   "exclude": []
 }

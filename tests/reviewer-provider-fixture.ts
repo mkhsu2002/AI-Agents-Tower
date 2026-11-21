@@ -1,13 +1,13 @@
 // Scripted Meta Responses protocol fixture; no network, key, credit balance or inference.
 import { META_MODEL } from '../server/reviewer-gateway.ts';
-import type { FreeRunReservation, OfflineProvider, ProviderRequest } from '../server/reviewer-gateway.ts';
+import type { RunBudgetReservation, OfflineProvider, ProviderRequest } from '../server/reviewer-gateway.ts';
 import { REVIEWER_BRIEF } from '../src/agents/reviewer-contract.ts';
 import { actionPresentation } from '../src/agents/validation-action.ts';
 export function fixtureProvider(origin: string, failure?: number | 'invalid' | 'refused' | 'wrong-model' | 'redirect' | 'huge') {
   const calls: ProviderRequest[] = [];
-  let reservation: FreeRunReservation | null = { project: 'ai-agents-tower', syntheticOnly: true, calls: 3, expiresAt: Date.now() + 60000, overageDisabled: true };
+  let reservation: RunBudgetReservation | null = { project: 'ai-agents-tower', syntheticOnly: true, calls: 3, expiresAt: Date.now() + 60000, inputTokensPerCall: 8192, outputTokens: 2304 };
   const provider: OfflineProvider = {
-    async reserveFreeRun() { return reservation; },
+    async reserveRunBudget() { return reservation; },
     async send(request) {
       calls.push(request);
       if (typeof failure === 'number') return new Response('Private upstream details', { status: failure });
@@ -24,5 +24,5 @@ export function fixtureProvider(origin: string, failure?: number | 'invalid' | '
       return Response.json({ id: 'SCRIPTED-NOT-INFERENCE', model: failure === 'wrong-model' ? 'unapproved-model' : META_MODEL, status: 'completed', output, usage: { input_tokens: 120, output_tokens: 150 } });
     },
   };
-  return { calls, provider, setReservation(value: FreeRunReservation | null) { reservation = value; } };
+  return { calls, provider, setReservation(value: RunBudgetReservation | null) { reservation = value; } };
 }

@@ -1,9 +1,9 @@
 import { actionPresentation } from './validation-action.ts';
 import type { Operation } from '../../spikes/m2/safety.js';
 export interface Message { role: string; content?: string | null; name?: string }
-export interface Completion { content: string; toolCalls: { id: string; type: 'function'; function: { name: string; arguments: string } }[]; finishReason: string; model: string; usage: null }
+export interface Completion { content: string; toolCalls: { id: string; type: 'function'; function: { name: string; arguments: string } }[]; finishReason: string; model: string; usage: { inputTokens: number; outputTokens: number } | null }
 export interface ModelRequest { messages: Message[]; tools: { function: { name: string } }[]; operation: Operation }
-export interface ModelAdapter { mode: 'mock' | 'real'; mock: boolean; baseUrl: string; chat(request: ModelRequest): Promise<Completion> }
+export interface ModelAdapter { mode: 'mock' | 'real'; mock: boolean; baseUrl: string; usageTotals?: { calls: number; inputTokens: number; outputTokens: number }; chat(request: ModelRequest): Promise<Completion> }
 export interface MockSettings { mode: 'mock'; scenario: 'success' | 'model-error' | 'tool-error' | 'invalid-bundle' | 'slow-model' | 'invalid-action-args' | 'action-error' | 'action-denied' | 'slow-validation' | 'missing-action' | 'substituted-action'; timeoutMs: number; delayMs: number }
 export function validateSettings(input: unknown): MockSettings {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Generation settings are invalid. Try again.');
