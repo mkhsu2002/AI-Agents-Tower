@@ -74,6 +74,31 @@ export function normalizePresentation(value, prefix = "component") {
   return { presentation: components.length ? { version: 1, components } : null, issues };
 }
 
+// Tower patch: recognize a complete leading JSON object/array without interpreting
+// protocol-looking text, braces or backticks inside its quoted string values.
+function leadingJson(input) {
+  const initial = input.trimStart();
+  if (initial[0] !== "{" && initial[0] !== "[") return null;
+  let depth = 0, quoted = false, escaped = false;
+  for (let i = 0; i < initial.length; i++) {
+    const c = initial[i];
+    if (quoted) {
+      if (escaped) escaped = false;
+      else if (c === "\\") escaped = true;
+      else if (c === '"') quoted = false;
+    } else if (c === '"') quoted = true;
+    else if (c === "{" || c === "[") depth++;
+    else if (c === "}" || c === "]") {
+      if (--depth === 0) {
+        const head = initial.slice(0, i + 1);
+        try { return { head, value: JSON.parse(head), rest: initial.slice(i + 1), consumed: input.length - initial.length + i + 1 }; }
+        catch { return null; }
+      }
+    }
+  }
+  return null;
+}
+
 // Preserve AAOSA metadata for parent agents, while exposing its human answer to
 // the UI. Handle presentation fences inside Response as well as outside it.
 export function parseAgentResponse(raw, source = {}) {
@@ -81,16 +106,47 @@ export function parseAgentResponse(raw, source = {}) {
   const proposals = [];
   const issues = [];
   let protocol;
-  const strip = (input) => input.replace(/```(cruse-ui|json)\s*([\s\S]*?)```/gi, (full, label, body) => {
-    const value = parseJson(body.trim());
-    if (label.toLowerCase() === "json" && !isPresentation(value)) return full;
-    if (value && isPresentation(value)) proposals.push(value);
-    else issues.push("The presentation could not be parsed.");
-    return "";
-  }).replace(/```cruse-ui[\s\S]*$/i, () => { issues.push("The presentation was incomplete."); return ""; }).trim();
+  const strip = (input) => {
+    const initial = leadingJson(input);
+    // Never repair a malformed JSON-shaped response by deleting apparent fences.
+    if (!initial && input.trimStart().startsWith("{")) return input.trim();
+    const head = initial && !isPresentation(initial.value) ? initial.head : "";
+    const rest = head ? initial.rest : input;
+    const openings = /```(cruse-ui|json)\s*/gi;
+    const parts = []; let cursor = 0, opening;
+    while ((opening = openings.exec(rest))) {
+      const start = openings.lastIndex;
+      const body = leadingJson(rest.slice(start));
+      const close = body && /^\s*```/.exec(body.rest);
+      let end, value;
+      if (close) {
+        end = start + body.consumed + close[0].length;
+        value = body.value;
+      } else {
+        const closing = rest.indexOf("```", start);
+        if (closing < 0) {
+          parts.push(rest.slice(cursor, opening.index));
+          issues.push("The presentation was incomplete."); cursor = rest.length; break;
+        }
+        end = closing + 3; value = parseJson(rest.slice(start, closing).trim());
+      }
+      if (opening[1].toLowerCase() === "json" && !isPresentation(value)) parts.push(rest.slice(cursor, end));
+      else {
+        parts.push(rest.slice(cursor, opening.index));
+        if (value && isPresentation(value)) proposals.push(value);
+        else issues.push("The presentation could not be parsed.");
+      }
+      cursor = end; openings.lastIndex = end;
+    }
+    parts.push(rest.slice(cursor));
+    return [head, parts.join("").trim()].filter(Boolean).join("\n");
+  };
 
   const unwrap = (input) => {
-    const plain = input.replace(/<\/?tool_(?:response|call)>/gi, "").trim();
+    // Unwrap a complete protocol envelope, never tags embedded in JSON strings.
+    let plain = input.trim();
+    const envelope = plain.match(/^<(tool_response|tool_call)>\s*([\s\S]*?)\s*<\/\1>$/i);
+    if (envelope) plain = envelope[2].trim();
     const match = plain.match(/^```(?:json)?\s*([\s\S]*?)```$/i);
     const doc = parseJson(match ? match[1] : plain);
     if (object(doc) && doc.Mode !== undefined && (doc.Name !== undefined || doc.Inquiry !== undefined)) {

@@ -67,7 +67,8 @@
     {
       "path": "runtime/cruse.js",
       "upstreamPath": "nsdeploy/runtime/cruse.js",
-      "gitBlob": "cd40f56185dcd3b728e7e668afc1db0c8dabe025"
+      "gitBlob": "cd40f56185dcd3b728e7e668afc1db0c8dabe025",
+      "patchedGitBlob": "b157cab3f17a11718be9770c38f9362d8541a5cc"
     },
     {
       "path": "runtime/execution-stream.js",
@@ -121,7 +122,7 @@
     }
   ],
   "towerPatch": {
-    "date": "2026-11-18",
+    "date": "2026-11-21",
     "description": "Local strict data-only profile, default-deny consent, blocked redirects and bounded cancellable transport; not an unmodified upstream release.",
     "notes": "PATCHES.md"
   }

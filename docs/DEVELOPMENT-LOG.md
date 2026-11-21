@@ -94,3 +94,12 @@ Implemented a server-only SQLite domain reference with a mandatory trusted authe
 - Confirmed node:sqlite/server code is absent from the client build. Generated artifacts are excluded from lint/Git; production source remains checked. Project dependencies were not expanded.
 - The one attempted public round-trip failed before interaction at ERR_TUNNEL_CONNECTION_FAILED; other prepared production cases were not run. Cloud Browser tab creation also failed. These are explicit failed/blocked checks, not green tests.
 - T01–T08 status now distinguishes implemented software/local evidence from actual external acceptance gates. Full P0/P1 is not declared complete. No product replanning, credentials, service creation, project license, additional deployment/origin or final publication was invented.
+
+## Literal JSON/protocol-marker preservation
+
+- Reproduced parseAgentResponse changing literal tool_response tags inside a valid HomeBundle JSON string. This violated content preservation even though script execution was already blocked.
+- Patched the attributed parser to preserve opaque JSON, recognize fenced presentation JSON with quote/escape-aware boundaries, unwrap only complete outer protocol envelopes, and leave malformed JSON-shaped data unrepaired for host rejection. An initial focused test also exposed inner backticks prematurely closing a real presentation fence; the final parser handles that case.
+- Added three unit tests plus a full Studio agent/action round-trip test. Updated source provenance to seven recorded Tower patches, without changing the upstream baseline SHA or license.
+- This is a runtime/content fix, not real inference, private persistence activation, publication or conformance certification. Final validation follows below.
+
+Literal-preservation final verification: lint/typecheck/build and all 36 unit / 34 Studio browser / 51 runtime browser tests passed; independent-caller browser check also passed on the final parser. Restored the ignored interop package to its public HTTPS source. The earlier mock development clip remains preserved separately; no final/real video claim. All production/auth/model/license gates remain unchanged.

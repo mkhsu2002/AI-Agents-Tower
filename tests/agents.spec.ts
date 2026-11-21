@@ -165,3 +165,11 @@ test('cancel during a pending validation action aborts and a fresh run succeeds'
   await expect(page.locator('#agent-proposal')).toBeHidden();
   await settings(page, 'success'); await run(page); await expect(page.locator('#agent-proposal')).toBeVisible();
 });
+test('literal tool-envelope tags and presentation fences survive the agent/action round-trip', async ({ page }) => {
+  await settings(page, 'success');
+  const brief = '<tool_response>Keep this</tool_response> <tool_call>literal</tool_call> ```cruse-ui null```';
+  await run(page, brief); await expect(page.locator('#agent-proposal')).toBeVisible();
+  await expect(page.locator('#agent-result')).toContainText(brief);
+  await page.getByRole('button', { name: 'Apply draft' }).click();
+  await expect(page.getByLabel('Introduction', { exact: true })).toHaveValue(brief);
+});

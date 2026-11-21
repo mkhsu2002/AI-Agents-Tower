@@ -267,3 +267,9 @@ A server-only SQLite reference core implements owner-scoped private homes, durab
 The authorized sequence has delivered T01 compatibility reconciliation, T02 native validation receipts, a disabled T03 keyless transport, T04 independent caller packaging, T05 production test tooling, T06/T07 local durable private/public domain cores and T08 draft evidence tools. [Task-by-task status](docs/TASKS.md) explicitly marks production/model/auth/license/browser gates instead of claiming all P0/P1 complete.
 
 Latest local checks: lint/typecheck/build passed; 33 unit, 33 Studio browser, 51 runtime browser, 1 independent-caller browser and 1 mock recording test passed. The public round-trip attempt failed before UI with ERR_TUNNEL_CONNECTION_FAILED, and the other production cases are unrun; no real inference, production authentication or public/private persistence is implied by local passes. The 8.28-second silent MOCK footage is development evidence only. No new account, service, credential, paid route, license grant, remote origin or public submission was created.
+
+## Literal content preservation fix
+
+A reproduced upstream parser bug removed tool-envelope tags from ordinary JSON string content. The Tower patch now treats complete leading JSON as opaque data, recognizes presentation-fence boundaries outside quoted JSON strings and unwraps only complete outer protocol envelopes. Malformed JSON-shaped output is preserved for explicit rejection instead of being silently repaired. Focused unit and full agent/action round-trip tests cover literal tags/backticks. Attribution and the seventh recorded runtime patch are preserved; this does not enable arbitrary HTML or scripts.
+
+Literal-preservation checkpoint: lint/typecheck/build, all 36 unit and 34 Studio browser tests passed; the 51 runtime browser tests and independent-caller browser test were rerun against the final parser and passed. Production interaction remains blocked as recorded above.
