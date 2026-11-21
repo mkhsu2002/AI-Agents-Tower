@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-21",
+  "applicationCommit": "b11f65d2e351c18afa59f141d92f8d59332cd050",
+  "remoteMainVerified": true,
+  "reproduction": {
+    "wrangler": "2.20.2",
+    "esbuild": "0.16.3",
+    "before": [
+      "Unrecognized target environment ES2023",
+      "Expected semicolon but found with at server/reviewer-turn.ts JSON import attributes"
+    ],
+    "after": "Functions compile successfully with neither diagnostic",
+    "exactRemoteWranglerVersion": "not provided"
+  },
+  "fix": [
+    "ES2022 syntax target; existing library types retained",
+    "Generated JavaScript exports source schema without JSON import attributes"
+  ],
+  "freshChecks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 71,
+    "studioBrowserTests": 42,
+    "functionsCompilation": [
+      "Wrangler 2.20.2 passed",
+      "Wrangler 4.166.0 passed"
+    ]
+  },
+  "cloudflare": {
+    "conclusion": "success",
+    "deployment": "c88ccf37-e681-4cd1-b99d-6a317bead92a"
+  },
+  "publicReadback": [
+    {
+      "url": "https://1st-tower.neobabylon.app/reviewer/status.json",
+      "httpStatus": 200,
+      "body": {
+        "enabled": false
+      }
+    },
+    {
+      "url": "https://1st-tower.neobabylon.app/api/reviewer/readiness",
+      "httpStatus": 200,
+      "body": {
+        "enabled": false,
+        "credentialConfigured": true,
+        "connectionVerified": false,
+        "model": "muse-spark-1.3",
+        "trialReady": false
+      }
+    }
+  ],
+  "realInferenceVerified": false,
+  "publicInteractionVerified": false,
+  "next": "Owner Production TOWER_RUNTIME D1 binding and redeploy, then bounded actual model acceptance"
+}
