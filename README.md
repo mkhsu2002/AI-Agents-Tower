@@ -22,6 +22,8 @@ P0 remains incomplete. Local checks passed: lint/typecheck/build, 51 unit tests,
 
 Public readback for application `c5e4f321e45bca97c452111b6ab05a7199e8cf6d`: Vercel production READY, homepage and disabled reviewer status both HTTP 200. Normal public reviewer interaction failed before UI with `ERR_TUNNEL_CONNECTION_FAILED`; no online interaction or real-inference pass is claimed. See [readback evidence](docs/evidence/reviewer-deployment-readback.json).
 
+Latest Meta preparation deployment: application `98c90dea7a4862c384e1d42931d713b41c470b18` reached production READY. Fresh public GETs verified homepage 200, reviewer status `false` and gateway-start 503 with the disabled error. Normal public browser navigation still failed before interaction with `ERR_TUNNEL_CONNECTION_FAILED`. No public POST or real-model acceptance is claimed. See [current evidence](docs/evidence/meta-reviewer-preparation.json).
+
 ## Run the local Home Studio
 
 Use Node >=22.12 (Node 24 verified) and npm:

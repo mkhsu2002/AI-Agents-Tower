@@ -1,0 +1,45 @@
+{
+  "checkedDateUTC": "2026-11-21",
+  "applicationCommit": "98c90dea7a4862c384e1d42931d713b41c470b18",
+  "deploymentId": "dpl_H9iDLvYxhjsewheSqoDjXbMjdXmW",
+  "platformState": "READY",
+  "productionAlias": "https://ai-agents-tower.vercel.app/",
+  "referenceOnlyMuseCommit": "26f884fdf3247fbaf6767d113641d1f6c3fe8aa4",
+  "localChecks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 51,
+    "studioBrowserTests": 42,
+    "runtimeBrowserTests": 52,
+    "independentLocalCallerTests": 1,
+    "providerMode": "SCRIPTED OFFLINE FIXTURE ONLY",
+    "runtimeRerunReason": "Initial parallel output cleanup caused two trace-close ENOENT failures; isolated Studio output, then all 52 passed."
+  },
+  "publicReadback": {
+    "method": "Fresh public Firecrawl GET extraction, maxAge 0, no credentials or bypass",
+    "homepageStatus": 200,
+    "homepageDemoEntryPresent": true,
+    "statusFileStatus": 200,
+    "statusFileBody": { "enabled": false },
+    "gatewayGetURL": "https://ai-agents-tower.vercel.app/api/reviewer/start",
+    "gatewayGetStatus": 503,
+    "gatewayGetBody": { "error": "Live reviewer inference is disabled." },
+    "publicPostAcceptance": "not performed",
+    "publicBrowserAttempt": "One normal production reviewer test failed at page.goto with ERR_TUNNEL_CONNECTION_FAILED before interaction."
+  },
+  "openRouter": { "publicDocsReadOnly": true, "implemented": false, "callsMade": false, "spendIncurred": false, "activeFallback": false },
+  "meta": {
+    "protocolPrepared": "Meta Model API Responses, muse-spark-1.3 Standard",
+    "realCallsMade": false,
+    "credentialsReadCreatedOrTransferred": false,
+    "museProductionEndpointOrQuotaReused": false,
+    "currentFreeBalance": "unknown; owner reports credits remain",
+    "expiry": "unknown",
+    "judgingPeriodCoverage": "unknown",
+    "providerOverageDisabled": "unverified",
+    "existingTowerSpecificBinding": "unverified"
+  },
+  "p0Complete": false,
+  "secondIndependentHTTPSOriginVerified": false
+}
