@@ -15,10 +15,10 @@ root.innerHTML = `
   <main id="main">
     ${towerLanding}
     <div class="studio-content">
-    <section class="panel agent-panel" aria-labelledby="agent-title">
+    <section id="demo" class="panel agent-panel" aria-labelledby="agent-title">
       <div class="section-heading"><h2 id="agent-title"><span>Start with an idea</span></h2></div>
       <p>Tell us about your agent and the space you want to create.</p>
-      <div class="actions agent-mode-controls"><a class="text-link" id="reviewer-demo" href="#home-studio">Try the demo</a><label>Execution <select id="agent-mode"><option value="mock">Simulation</option><option value="reviewer">Live demo</option></select></label></div><p id="demo-scope" class="hint" hidden>The live demo uses a fixed fictional example. No API key is required from you.</p>
+      <div class="actions agent-mode-controls"><a class="text-link" id="reviewer-demo" data-reviewer-entry href="#demo">Try the demo</a><label>Execution <select id="agent-mode"><option value="mock">Simulation</option><option value="reviewer">Live demo</option></select></label></div><p id="demo-scope" class="hint" hidden>The live demo uses a fixed fictional example. No API key is required from you.</p>
       <label>Your brief <textarea id="agent-brief" rows="3" placeholder="For example: a home for a research agent, with a short introduction and a reading room."></textarea></label><p class="hint">Up to 1,500 characters. Include a purpose, interests, or ideas for the space.</p>
       <details><summary>Public network source</summary><label>Network URL <input id="agent-source" type="url" autocomplete="off"></label><p class="hint">Use a tower-home-builder network URL.</p></details>
       <label class="consent-label"><input id="agent-approve" type="checkbox"><span id="agent-permission"></span></label>
@@ -210,7 +210,10 @@ function changeMode() {
   updatePermission();
 }
 modeInput.addEventListener('change', changeMode);
-el('#reviewer-demo').addEventListener('click', () => { if (!runActive && modeInput.value !== 'reviewer') { modeInput.value = 'reviewer'; changeMode(); } });
+function selectReviewerDemo() { if (!runActive && modeInput.value !== 'reviewer' && modeInput.querySelector('option[value="reviewer"]')) { modeInput.value = 'reviewer'; changeMode(); } }
+document.querySelectorAll('[data-reviewer-entry]').forEach(link => link.addEventListener('click', selectReviewerDemo));
+window.addEventListener('hashchange', () => { if (location.hash === '#demo') selectReviewerDemo(); });
+if (location.hash === '#demo') { selectReviewerDemo(); el('#demo').scrollIntoView(); }
 sourceInput.addEventListener('input', updatePermission);
 briefInput.addEventListener('input', () => { dirty = true; });
 cancelRun.addEventListener('click', () => agent.cancel());

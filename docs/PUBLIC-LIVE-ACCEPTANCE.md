@@ -25,7 +25,7 @@ The same review/apply/edit/export assertions are exercised by explicitly scripte
 
 ## Manual acceptance
 
-1. Open the public site and choose Try the demo. Execution should show Live demo and the fixed fictional Atlas brief.
+1. Open https://1st-tower.neobabylon.app/#demo directly, or use the homepage Try the demo button. Execution should show Live demo and the fixed fictional Atlas brief.
 2. Give the displayed consent and select Create a draft once. Watch Reception and Home builder status. If it fails, retain the displayed code/message and stop; do not repeatedly restart.
 3. Review the proposal and Validation receipt: status succeeded, result valid true, three usage-reported calls. The editor must not change before Apply.
 4. Apply, edit, preview, Download JSON and reimport. This creates no private Home, account, resident identity or publication.

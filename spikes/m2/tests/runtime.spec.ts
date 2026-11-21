@@ -315,3 +315,20 @@ test('live adapter injection requires explicit trusted caller origin; network me
   })()`);
   expect(results).toEqual(['rejected','rejected','rejected','rejected','rejected','accepted']);
 });
+
+for (const scenario of ['call-extra', 'call-type', 'call-malformed', 'call-duplicate', 'call-array', 'call-oversized', 'call-unknown', 'call-batch']) {
+  test(`invalid invocation ${scenario} fails before peer contact or downstream execution`, async ({ page }) => {
+    const peer: string[] = []; page.on('request', r => { if (new URL(r.url()).origin === B) peer.push(r.url()); });
+    await start(page, scenario); await finish(page);
+    await expect(page.locator('#status')).toContainText('Mock run failed');
+    await expect(page.locator('#consent')).toBeHidden(); expect(peer).toEqual([]);
+  });
+}
+test('argument text conversion preserves empty values and multiple declared fields', async ({ page }) => {
+  await page.goto('/');
+  const result = await page.evaluate(async () => {
+    const path = '/spikes/m2/vendor/runtime/' + 'runner.js'; const { argsToText } = await import(path);
+    return [argsToText({ request: '' }), argsToText({ request: 'a', style: 'b' }), argsToText({ input: '' })];
+  });
+  expect(result).toEqual(['', '{"request":"a","style":"b"}', '']);
+});

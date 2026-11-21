@@ -51,7 +51,7 @@
       "path": "runtime/runner.js",
       "upstreamPath": "nsdeploy/runtime/runner.js",
       "gitBlob": "02db7ebdbcb97a50c099576baa703bcd92817bd6",
-      "patchedGitBlob": "18e6f1e346469766d920f9c1c12db1c3d2f3ecdd"
+      "patchedGitBlob": "deb052da0d7c8ca25143a8f44cfec98779f4ab71"
     },
     {
       "path": "runtime/mcp.js",

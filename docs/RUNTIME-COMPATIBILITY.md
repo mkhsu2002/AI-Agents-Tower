@@ -23,3 +23,7 @@ The corrected [Neuro SAN reference](https://github.com/cognizant-ai-lab/neuro-sa
 | browser://mock router | Mock-only development extension | Rejected without explicit mock label; no real inference claim |
 
 Curated boundary tests prevent unsupported fields from being silently stripped or represented as accepted. They do not validate the complete official schema. Real default inference, portable registered capabilities, deployed peer execution and organizer-confirmed baseline remain separate gates.
+
+## Invocation enforcement checkpoint — 2026-11-21
+
+The existing flat string-parameter profile is now enforced on selected tool calls, not merely advertised to the model. Strict JSON parsing rejects duplicate/malformed/nonobject/oversized arguments; no raw-text fallback occurs. Whole batches reject undeclared fields, wrong types, missing required values, unsupported schema keywords, unknown tools and duplicate IDs before any sibling dispatch. Single empty request/input strings and multiple declared fields are preserved. Runtime browser negatives verify zero peer contact for invalid caller invocations. This improves enforcement consistency; it does not add general JSON Schema, commondefs, typed/nested parameters, max_iterations, temperature or arbitrary HOCON support. Those compatibility gaps remain explicit.

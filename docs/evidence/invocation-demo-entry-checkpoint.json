@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-21",
+  "baseCommit": "c96ccc4908b2fc32f13e2b959971f30f874a3188",
+  "ownerFeedback": "The demo link was not visible on the homepage.",
+  "demoEntry": "https://1st-tower.neobabylon.app/#demo",
+  "implemented": [
+    "Homepage demo CTA and deep/hash/reload selection",
+    "Consent remains unchecked; no automatic model call",
+    "Whole-batch invocation validation before dispatch",
+    "Malformed/duplicate/oversized/unknown arguments rejected without text fallback",
+    "Empty and multiple declared values preserved",
+    "Independent caller strips all live links and forces Simulation even at #demo"
+  ],
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 76,
+    "studioBrowserTests": 44,
+    "runtimeBrowserTests": 61,
+    "cloudflareCallerBrowserTests": 3,
+    "finalLandingRegression": 3,
+    "vendorProvenance": "15 unchanged upstream files; 7 recorded patches; original license/blobs preserved"
+  },
+  "inferenceInTests": "scripted only",
+  "assistantRealProviderRequest": false,
+  "ownerLiveResult": "not yet reported",
+  "fullConformanceClaimed": false
+}

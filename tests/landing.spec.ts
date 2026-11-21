@@ -27,3 +27,16 @@ test('mobile navigation, artwork and Studio remain readable without horizontal o
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'test-results/tower-home-mobile.png', fullPage: true });
 });
+
+test('homepage demo entry and direct demo link select live example without consent or model contact', async ({ page }) => {
+  const posts: string[] = []; page.on('request', r => { if (r.method() !== 'GET') posts.push(r.url()); });
+  await page.goto('/'); await expect(page.locator('#hero-demo')).toBeInViewport();
+  await page.locator('#hero-demo').click(); await expect(page.locator('#agent-mode')).toHaveValue('reviewer');
+  await expect(page.locator('#agent-approve')).not.toBeChecked(); await expect(page.locator('#agent-run')).toBeInViewport();
+  expect(posts).toEqual([]);
+  await page.goto('/'); await expect(page.locator('#agent-mode')).toHaveValue('mock');
+  await page.goto('/#demo'); await expect(page.locator('#agent-mode')).toHaveValue('reviewer');
+  await page.reload(); await expect(page.locator('#agent-mode')).toHaveValue('reviewer');
+  await expect(page.locator('#agent-approve')).not.toBeChecked(); await expect(page.locator('#agent-run')).toBeInViewport();
+  expect(posts).toEqual([]);
+});

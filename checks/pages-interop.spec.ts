@@ -25,8 +25,9 @@ test('independent caller owns its runtime, contacts no peer before consent, and 
   const files = await readdir('artifacts/interop-caller');
   for (const name of ['agents', 'reviewer', '_routes.json', '_headers', '_worker.js']) expect(files).not.toContain(name);
   expect(await readFile('artifacts/interop-caller/INTEROP-README.txt', 'utf8')).toContain('MOCK ONLY');
-  await page.goto('/'); await expect(page.locator('#interop-notice')).toContainText(source);
-  await expect(page.locator('#reviewer-demo')).toHaveCount(0);
+  await page.goto('/#demo'); await expect(page.locator('#interop-notice')).toContainText(source);
+  await expect(page.locator('#reviewer-demo')).toHaveCount(0); await expect(page.locator('#hero-demo')).toHaveCount(0);
+  await expect(page.locator('#agent-mode')).toHaveValue('mock');
   expect(await page.locator('#agent-mode option').allTextContents()).toEqual(['Simulation']);
   const requests: { url: string; method: string; body: string | null; credentials: boolean }[] = [];
   page.on('request', r => requests.push({ url: r.url(), method: r.method(), body: r.postData(), credentials: !!r.headers().authorization || !!r.headers().cookie }));

@@ -12,6 +12,10 @@ After the owner redeployed Production bindings, fresh public readiness returned 
 
 The static public manifest/network/schema now carry explicit CORS/JSON/nosniff rules. Function origin/credential behavior remains separate. A dedicated credential-free local workerd/caller check passes all three cases, including browser credential refusal and M1 round-trip; the existing Vite caller regression also passes. Caller packaging is Simulation-only and carries no backend or Tower network copy. No second site was deployed. Cloudflare deployed fdbf8fbc83a4640176c405d59994b2d5b7e62b24 successfully (724dadc9-f9e7-4113-8b6b-b8546df97d02), with local/origin main SHA matched. Fresh manifest/network GETs returned HTTP 200 and application/json; charset=utf-8. Readiness remained enabled/credentialConfigured/trialReady true and connectionVerified false. The extraction tool does not expose full CORS response headers; local header tests and public body/MIME readback are not a public cross-origin browser pass.
 
+## Demo discovery and invocation enforcement — 2026-11-21
+
+Homepage demo CTA and #demo direct/hash/reload entry select the fictional live example without automatic consent/model calls. Caller packaging strips both demo links and remains Simulation-only. Browser runtime strictly validates an entire tool-call batch before any downstream execution; invalid JSON is not converted into text and multiple/empty argument values are preserved. Fresh lint/typecheck/build, 76 unit, 44 Studio, 61 runtime and 3 Cloudflare caller tests passed, with a final 3-case landing rerun after hash-navigation handling. Production deployment/readback follows push. Owner still supplies the normal-path model result; no assistant real-model call occurred.
+
 ## Historical deployment records
 
 ### First Home Studio deployment

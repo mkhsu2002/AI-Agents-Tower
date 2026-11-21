@@ -17,14 +17,15 @@ import { parseAgentResponse, agentPresentationContext } from "./cruse.js";
 import { applyPendingSteering, runInterruptibleModelCall } from "./turn-control.js";
 import { assertModelForRouter, effectiveModel } from "./model.js";
 
+import { parseInvocation, validateCallBatch } from '../../invocation.js';
+
 let invocationSequence = 0;
 
 export function argsToText(args) {
   if (args == null) return "";
   if (typeof args === "string") return args;
-  if (args.request) return String(args.request);
-  if (args.input) return String(args.input);
-  if (args.input_string) return String(args.input_string);
+  const keys = Object.keys(args);
+  if (keys.length === 1 && ["request", "input", "input_string"].includes(keys[0]) && typeof args[keys[0]] === "string") return args[keys[0]];
   return JSON.stringify(args);
 }
 
@@ -199,6 +200,7 @@ export async function buildToolTable(ctx, spec, chain, parentSpan) {
       toolSchemas.push(schemaFor(name, c.spec.function));
     }
   }
+  for (const tool of toolSchemas) toolByName.get(tool.function.name).parameters = tool.function.parameters;
   return { toolByName, toolSchemas };
 }
 
@@ -250,6 +252,7 @@ function changed(a, b) {
 // merged back in call order so a faster tool cannot create nondeterministic state.
 // A tool can opt out with parallel_safe=false. Non-GET REST calls are serialized.
 export async function executeToolCalls(ctx, calls, parentSpan, chain, { maxConcurrency = 4 } = {}) {
+  validateCallBatch(calls); // Validate every sibling before any dispatch or new peer contact.
   if (!calls.length) return [];
   if (!ctx.slyData) ctx.slyData = {};
   const initialSly = { ...(ctx.slyData || {}) };
@@ -509,9 +512,7 @@ export async function runAgentManual(ctx, agentName, userText, parentSpan, chain
       }
       messages.push({ role: "assistant", content: res.content || null, tool_calls: res.toolCalls });
       const calls = res.toolCalls.map((tc) => {
-        let args = {};
-        try { args = tc.function.arguments ? JSON.parse(tc.function.arguments) : {}; }
-        catch { args = { request: tc.function.arguments }; }
+        const args = parseInvocation(tc.function.arguments);
         return { id: tc.id, name: tc.function.name, args, entry: toolByName.get(tc.function.name) };
       });
       const toolResults = await executeToolCalls(ctx, calls, agentSpan, chain);

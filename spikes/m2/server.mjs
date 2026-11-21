@@ -62,9 +62,20 @@ async function router(req, res, scenario) {
   const tool = input.tools?.[0]?.function?.name;
   const isBuilder = input.messages[0]?.content?.includes('[BUILDER]');
   const args = isBuilder ? { bundleJson: scenario === 'invalid-bundle' ? '{"schemaVersion":"9"}' : JSON.stringify(example) } : { request: 'Validate a synthetic local HomeBundle.' };
+  let encodedArgs = JSON.stringify(args); let callName = tool;
+  if (!final && tool) {
+    if (scenario === 'call-extra') encodedArgs = JSON.stringify({ ...args, unexpected: 'not declared' });
+    if (scenario === 'call-type') encodedArgs = '{"request":123}';
+    if (scenario === 'call-malformed') encodedArgs = '{';
+    if (scenario === 'call-duplicate') encodedArgs = '{"request":"a","request":"b"}';
+    if (scenario === 'call-array') encodedArgs = '[]';
+    if (scenario === 'call-oversized') encodedArgs = JSON.stringify({ request: 'x'.repeat(65537) });
+    if (scenario === 'call-unknown') callName = 'unknown_tool';
+  }
   const delta = !final && tool
-    ? { tool_calls: [{ index: 0, id: `fixture_${tool}`, type: 'function', function: { name: tool, arguments: JSON.stringify(args) } }] }
+    ? { tool_calls: [{ index: 0, id: `fixture_${tool}`, type: 'function', function: { name: callName, arguments: encodedArgs } }] }
     : { content: `MOCK ONLY — scripted result: ${input.messages.at(-1)?.content ?? 'No tool result'}` };
+  if (scenario === 'call-batch' && delta.tool_calls) delta.tool_calls.push({ index: 1, id: 'fixture_invalid_sibling', type: 'function', function: { name: callName, arguments: '{"request":123}' } });
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'X-Nsdeploy-LLM-Route': 'mock' });
   res.end(`data: ${JSON.stringify({ model: 'neuro-san-mock-spike', choices: [{ index: 0, delta, finish_reason: null }] })}\n\ndata: ${JSON.stringify({ model: 'neuro-san-mock-spike', choices: [{ index: 0, delta: {}, finish_reason: !final && tool ? 'tool_calls' : 'stop' }] })}\n\ndata: [DONE]\n\n`);
 }
@@ -119,7 +130,7 @@ const callerServer = createHttpServer(async (req, res) => {
     }
     const route = path.match(/^\/router\/([a-z-]+)\/v1\/chat\/completions$/);
     if (route && req.method === 'POST') return await router(req, res, route[1]);
-    if (['/spikes/m2/safety.js', '/spikes/m2/schema/validators.js'].includes(path)) {
+    if (['/spikes/m2/safety.js', '/spikes/m2/invocation.js', '/spikes/m2/schema/validators.js'].includes(path)) {
       res.writeHead(200, { 'Content-Type': 'text/javascript' });
       return res.end(await readFile(new URL(path.replace('/spikes/m2/', './'), import.meta.url)));
     }

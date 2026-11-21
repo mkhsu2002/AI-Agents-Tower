@@ -10,6 +10,10 @@ This README defines the initial product direction and serves as the handoff docu
 
 Open **https://1st-tower.neobabylon.app/** (Pages fallback: **https://ai-agents-tower.pages.dev/**). The owner configured Pages Git integration on main. Existing Vercel hosting is retained. Drafts remain in tab memory; review and explicitly apply a proposal, then edit, preview and export JSON. No private Home, account or public residency is created.
 
+## Try the live example
+
+Use the homepage **Try the demo** button, or open **https://1st-tower.neobabylon.app/#demo** directly. The fixed Atlas example and Live demo mode are selected; consent remains unchecked and no model request starts until you approve and select Create a draft. Review the result before Apply, then edit/preview/export. The independent caller package remains Simulation-only, including on a #demo link.
+
 ## Public model demo — 2026-11-21
 
 The Cloudflare server gateway is implemented for the fixed fictional Atlas example, with **Reception → Home builder → Reception**, fresh consent and no visitor API key. Simulation remains a separate mode and never substitutes for a failed live request. The server pins Meta Model API / muse-spark-1.3, reconstructs all prompts and tools, validates returned HomeBundle/action text, and requires the browser's actual validation receipt before review/apply/export. Successful receipts include provider-reported token totals; fixtures are not real inference evidence.
@@ -33,6 +37,12 @@ Public network/schema files now have explicit Cloudflare CORS/MIME rules, with n
 Run `CHROMIUM_PATH=/usr/bin/chromium npm run test:pages:interop`; the public-source package is restored automatically. Fresh stage checks: lint/typecheck/build, 72 unit tests, 3 Cloudflare-backed cross-origin browser tests and the existing 1 independent-caller regression passed. The earlier 43 Studio/52 runtime results remain prior-stage evidence; application runtime/UI source did not change here. See [policy, reproduction and specification interpretation](docs/PUBLIC-ARTIFACT-POLICY.md). Cloudflare successfully deployed application `fdbf8fbc83a4640176c405d59994b2d5b7e62b24` (724dadc9-f9e7-4113-8b6b-b8546df97d02); fresh public manifest/network reads returned HTTP 200 with JSON UTF-8 MIME, and the live configuration remained enabled. Public browser/header-level CORS acceptance is still separate from this body/MIME readback.
 
 A separate HTTPS deployment is Tower's requested acceptance target; the recovered specification also permits co-hosted artifacts. No second site was created and no actual Meta run passed. Portable live-router/full-profile support and real-model/browser evidence remain open.
+
+## Invocation safety checkpoint
+
+The browser runtime now checks declared tool arguments before any sibling dispatch. Malformed/duplicate/nonobject/oversized JSON, undeclared fields, wrong types, unknown tools, duplicate IDs and unsupported invocation constraints fail explicitly. Invalid JSON is no longer converted into a natural-language request. Empty string values and multi-field objects retain their data. The current bounded string-parameter profile remains deliberately narrower than the full official schema; no unsupported field is accepted silently.
+
+Fresh local checks passed: lint/typecheck/build, 76 unit tests, 44 Studio browser tests and 61 runtime browser tests. Upstream attribution and original blobs remain preserved; the runner patch has an updated verified provenance hash. Real-model/public acceptance is separate from these scripted/local passes.
 
 ## Run the local Home Studio
 
