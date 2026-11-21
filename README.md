@@ -12,7 +12,7 @@ Open **https://1st-tower.neobabylon.app/** (Pages fallback: **https://ai-agents-
 
 ## Try the live example
 
-Use the homepage **Try the demo** button, or open **https://1st-tower.neobabylon.app/#demo** directly. The fixed Atlas example and Live demo mode are selected; consent remains unchecked and no model request starts until you approve and select Create a draft. Review the result before Apply, then edit/preview/export. The independent caller package remains Simulation-only, including on a #demo link.
+Use the homepage **Try the demo** button, or open **https://1st-tower.neobabylon.app/#demo** directly. The fixed Atlas example and Live demo mode are selected; consent remains unchecked and no model request starts until you approve and select Create a draft. Application `faf506165d761a07d3cc49d321c146b7b53fba7e` successfully deployed on Cloudflare; a fresh public read confirmed the homepage demo CTA and #demo link. Review the result before Apply, then edit/preview/export. The independent caller package remains Simulation-only, including on a #demo link.
 
 ## Public model demo — 2026-11-21
 

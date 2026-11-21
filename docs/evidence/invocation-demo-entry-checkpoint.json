@@ -25,5 +25,18 @@
   "inferenceInTests": "scripted only",
   "assistantRealProviderRequest": false,
   "ownerLiveResult": "not yet reported",
-  "fullConformanceClaimed": false
+  "fullConformanceClaimed": false,
+  "applicationCommit": "faf506165d761a07d3cc49d321c146b7b53fba7e",
+  "remoteMainVerified": true,
+  "cloudflare": {
+    "conclusion": "success",
+    "deployment": "8edcbbc2-b248-4307-b406-7000252f24be"
+  },
+  "publicReadback": {
+    "url": "https://1st-tower.neobabylon.app/#demo",
+    "httpStatus": 200,
+    "homepageCTA": "Try the demo",
+    "verifiedLink": "https://1st-tower.neobabylon.app/#demo",
+    "generationSubmitted": false
+  }
 }
