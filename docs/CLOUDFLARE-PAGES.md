@@ -27,7 +27,7 @@ Official references checked 2026-11-21: [Git integration](https://developers.clo
 
 ## What the Pages adapter does
 
-Cloudflare does not use Vercel's api routing or vercel.json rewrites. `functions/api/reviewer/[[path]].ts` exports a Pages onRequest handler and delegates to the same unconditionally disabled reviewer response. It reads no bindings, secrets or request body and makes no provider calls. The committed `public/_routes.json`, copied into dist during Vite build, restricts Function execution to `/api/reviewer` and its children; homepage and public assets stay static.
+Cloudflare does not use Vercel's api routing or vercel.json rewrites. `functions/api/reviewer/[[path]].ts` exports a Pages onRequest handler and delegates to the same unconditionally disabled reviewer response. Inference routes read no bindings or request body and make no provider calls. The separate GET /api/reviewer/readiness reports only binding presence, without a provider call or secret disclosure. The committed `public/_routes.json`, copied into dist during Vite build, restricts Function execution to `/api/reviewer` and its children; homepage and public assets stay static.
 
 The current function only returns HTTP 503 with `{"error":"Live reviewer inference is disabled."}`. This is the expected release behavior, not a failed model request. `/reviewer/status.json` remains `{"enabled":false}`. Adding a Meta key by itself cannot enable inference. The Node-only offline gateway is not imported into the Pages function and is not represented as a production Cloudflare runtime integration.
 
@@ -61,7 +61,7 @@ For the owner-selected Meta preparation, use **Workers & Pages → ai-agents-tow
 
 | Name / setting | Value | Type / environment | Current behavior |
 | --- | --- | --- | --- |
-| `META_API_KEY` | A Meta Model API team key designated for this independent project; enter it directly in Cloudflare | Secret: select Encrypt; add separately to Production and Preview if preparing both | Reserved binding name for the next server integration. Current hard-disabled handler does not read it and cannot call Meta. |
+| `META_API_KEY` | A Meta Model API team key designated for this independent project; enter it directly in Cloudflare | Secret: select Encrypt; add separately to Production and Preview if preparing both | Reserved binding name for the next server integration. Readiness reports presence only; inference remains hard disabled and cannot call Meta. |
 | `NODE_VERSION` | `24` | Plain build variable, Production/Preview; optional because `.node-version` already selects 24 | Build configuration only; not a model permission. |
 | Model | `muse-spark-1.3` Standard | Pinned server constant; no dashboard variable required | Offline/scripted contract only until the real server adapter is implemented and authorized. |
 | Provider endpoint | `https://api.meta.ai/v1/responses` | Pinned server constant; no dashboard variable required | No live request is sent by this release. |
@@ -69,3 +69,9 @@ For the owner-selected Meta preparation, use **Workers & Pages → ai-agents-tow
 Do not create META_MODEL, provider-URL or live-enable flags for the current release; none is consumed. No CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, GitHub token, database binding or VITE_* model variable is required for Pages Git integration. Store no actual key in a public config, repo, browser input or chat. Local .dev.vars files are ignored as an additional guard; the owner is being directed to Cloudflare's encrypted dashboard entry, not asked to transfer a secret here.
 
 [Cloudflare's secret instructions](https://developers.cloudflare.com/pages/functions/bindings/#secrets) specify Encrypt and Save. A new deployment is needed for a Function that consumes a binding; the current release remains off even after a redeploy. The next server release must read context.env.META_API_KEY rather than a Vite build-time variable, keep credentials out of responses/logs, enforce the fixed synthetic scope and quota/cost policy, and undergo a separately bounded trial. Saving the key does not prove validity, account credit/expiry or permission for unlimited public usage.
+
+## Confirm the saved Secret
+
+After the readiness release deploys, open `https://1st-tower.neobabylon.app/api/reviewer/readiness`. Expected fields: enabled false, credentialConfigured true if the runtime binding exists and is nonblank, connectionVerified false, trialReady false, and the pinned model. A false credentialConfigured means absent/blank/wrong-type runtime binding; null means the presence check could not read the binding. Neither true nor a successful deployment validates the credential with Meta. The response is no-store/noindex; POST is rejected and the endpoint never calls a provider. Vercel does not expose this Pages-specific diagnostic.
+
+Actual Meta credentials are consumed only by a future authorized provider connection, not by the current disabled inference routes. Do not treat presence as spending approval; the owner still needs to report free balance/expiry and establish the credit boundary before a real trial.

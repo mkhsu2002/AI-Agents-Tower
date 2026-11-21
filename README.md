@@ -12,6 +12,12 @@ Cloudflare Pages is deployed. The primary public URL is **https://1st-tower.neob
 
 A Pages Function adapter preserves the hard-disabled reviewer API on Cloudflare; `_routes.json` keeps other assets static. Fresh public reads confirmed status false and reviewer-start HTTP 503 on both Cloudflare hostnames; full public browser interaction remains a separate check. Existing Vercel hosting remains available. The earlier Vercel API-key setup advice is superseded; model inference remains disabled on both adapters.
 
+## Meta binding check
+
+The owner has stored the Meta Secret and redeployed. The Pages-specific `GET /api/reviewer/readiness` now reports only whether `META_API_KEY` is a nonempty string; it never returns a key, length, prefix or hash. `connectionVerified`, `trialReady` and `enabled` remain false. Presence is not a provider-health, credit or permission check. No model call is made by this endpoint.
+
+A server-only Meta sender is prepared with explicit injected transport, fixed endpoint/model, request bounds, redirect refusal and generic error handling. Only synthetic fixtures use it; the Pages inference handler does not import or invoke it. The remaining live-trial gates are actual free-credit amount/expiry and enforceable cost/quota authority. Local validation: lint/typecheck/build and 56 unit tests passed; Wrangler 4.166.0 compiled the Pages Function. See [Meta gateway details](docs/META-REVIEWER-GATEWAY.md).
+
 ## Visit Agents Tower
 
 Open **https://1st-tower.neobabylon.app/** (Pages fallback: **https://ai-agents-tower.pages.dev/**). Cloudflare Pages reports a successful Git deployment of `c5fb1f20c88de0b5f99881ad58ec03aa6ff972a2`. Existing Vercel hosting is retained; [deployment records](docs/DEPLOYMENT.md) distinguish platform status from public browser verification. The application includes a simulated two-agent draft proposal flow and a disabled-by-default reviewer demo entry alongside the M1 text editor/preview. Check the current deployment record below; no sign-up, real model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.
