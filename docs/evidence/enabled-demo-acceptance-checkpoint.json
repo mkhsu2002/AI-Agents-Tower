@@ -36,5 +36,42 @@
     "Full canonical/profile and portable live default router",
     "Independent deployed HTTPS composition",
     "Measured judging availability"
+  ],
+  "applicationCommit": "e96c9ccb5bd6c49f982206c6be24d42960a23e57",
+  "remoteMainVerified": true,
+  "cloudflare": {
+    "conclusion": "success",
+    "deployment": "98aa0502-de40-4cee-89f6-1166c131846c"
+  },
+  "deployedReadback": [
+    {
+      "url": "https://1st-tower.neobabylon.app/reviewer/status.json",
+      "httpStatus": 200,
+      "body": {
+        "enabled": true,
+        "protocol": "tower-synthetic-v1"
+      }
+    },
+    {
+      "url": "https://1st-tower.neobabylon.app/api/reviewer/readiness",
+      "httpStatus": 200,
+      "body": {
+        "enabled": true,
+        "credentialConfigured": true,
+        "connectionVerified": false,
+        "model": "muse-spark-1.3",
+        "trialReady": true
+      }
+    },
+    {
+      "url": "https://1st-tower.neobabylon.app/api/reviewer/start",
+      "method": "GET",
+      "httpStatus": 403,
+      "body": {
+        "code": "REQUEST_REJECTED",
+        "error": "The demo request was rejected. Start again from the demo entry."
+      },
+      "admissionOrProviderCall": false
+    }
   ]
 }
