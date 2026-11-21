@@ -1,7 +1,7 @@
 // Build a caller that owns its runtime, with a separate explicitly selected network source.
 import { readFile, writeFile, cp, rm, mkdir } from 'node:fs/promises';
 const index = process.argv.indexOf('--source');
-const source = new URL(index < 0 ? 'https://ai-agents-tower.vercel.app/agents/tower-home-builder' : process.argv[index + 1]);
+const source = new URL(index < 0 ? 'https://1st-tower.neobabylon.app/agents/tower-home-builder' : process.argv[index + 1]);
 if ((!['https:', 'http:'].includes(source.protocol)) || (source.protocol === 'http:' && !['127.0.0.1', 'localhost'].includes(source.hostname)) || source.username || source.password || source.search || source.hash || !source.pathname.endsWith('/tower-home-builder')) throw new Error('Use a credential-free exact named HTTPS (or loopback) network URL.');
 const root = new URL('../artifacts/interop-caller/', import.meta.url); const dist = new URL('../dist/', import.meta.url);
 const html = await readFile(new URL('index.html', dist), 'utf8');

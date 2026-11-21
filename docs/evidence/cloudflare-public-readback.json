@@ -1,0 +1,35 @@
+{
+  "checkedDate": "2026-11-21",
+  "primaryURL": "https://1st-tower.neobabylon.app/",
+  "pagesURL": "https://ai-agents-tower.pages.dev/",
+  "sourceDeploymentCheck": {
+    "commit": "c5fb1f20c88de0b5f99881ad58ec03aa6ff972a2",
+    "name": "Cloudflare Pages",
+    "checkRunId": 136951997708,
+    "status": "completed",
+    "conclusion": "success",
+    "deploymentId": "1eca5a34-9c40-4a03-b3c0-4cb294a961ee"
+  },
+  "freshPublicGETs": {
+    "method": "Firecrawl extraction, maxAge 0; no credential or bypass",
+    "pagesHome": 200,
+    "pagesStatus": { "status": 200, "body": { "enabled": false } },
+    "pagesReviewerStart": { "status": 503, "body": { "error": "Live reviewer inference is disabled." } },
+    "customHome": 200,
+    "customStatus": { "status": 200, "body": { "enabled": false } },
+    "customReviewerStart": { "status": 503, "body": { "error": "Live reviewer inference is disabled." } }
+  },
+  "browserAcceptance": {
+    "host": "https://1st-tower.neobabylon.app/",
+    "attempted": 1,
+    "passed": 0,
+    "unrun": 2,
+    "failure": "page.goto: net::ERR_TUNNEL_CONNECTION_FAILED before interaction"
+  },
+  "limitations": [
+    "Custom domain is reachable from this extraction source; no claim about all DNS resolvers or Cloudflare dashboard certificate status.",
+    "Successful Git deployment and public extraction do not establish interactive acceptance.",
+    "These are two hostnames of the owner's deployment, not independent cross-origin composition proof.",
+    "No real model call, account credit check or secret read occurred."
+  ]
+}

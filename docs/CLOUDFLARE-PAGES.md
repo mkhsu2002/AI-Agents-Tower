@@ -1,6 +1,6 @@
 # Deploy this repository with Cloudflare Pages
 
-The owner will perform the Cloudflare dashboard deployment. This repository is prepared for Pages Git integration; no Cloudflare account, project, token, secret or DNS setting was created or changed by this preparation. Existing Vercel hosting is retained until a separate decision to remove it. Cloudflare deployment and public interaction are not verified yet.
+The owner completed the Cloudflare dashboard deployment and custom-domain setup. Fresh public reads on 2026-11-21 returned HTTP 200 at https://ai-agents-tower.pages.dev/ and https://1st-tower.neobabylon.app/. The custom domain is now the primary project URL. This repository is prepared for Pages Git integration; no Cloudflare account, project, token, secret or DNS setting was created or changed by this preparation. Existing Vercel hosting is retained until a separate decision to remove it. GitHub reports the Cloudflare Pages check successful for c5fb1f20c88de0b5f99881ad58ec03aa6ff972a2; public content/disabled API readback is verified separately from browser interaction.
 
 ## Dashboard setup
 
@@ -53,4 +53,19 @@ Lint, typecheck, Vite build and all 51 unit tests passed. Wrangler 4.166.0 was r
 
 The initial local command could not write Wrangler's default home config/cache; it was rerun with isolated temporary config/log paths. Request.cf metadata lookup was unavailable and Wrangler used its documented local placeholder. These are local checks, not Cloudflare account authorization, deployment or public acceptance. No Cloudflare login/token/account/zone/project API was used.
 
-Once the owner returns the actual Pages URL, update production verification targets and final sharing metadata as appropriate. The current og:image still points to the existing Vercel-hosted public artwork; no unknown Pages hostname is guessed. The production test and independent-caller package still default to the known Vercel source until a verified replacement is available.
+After the owner supplied the deployed URL, production verification, default independent-caller source and og:image were switched to the reachable custom domain https://1st-tower.neobabylon.app/. Historical Vercel evidence remains preserved; two hostnames of this deployment are not independent interoperability proof.
+
+## One-time variables and model setup
+
+For the owner-selected Meta preparation, use **Workers & Pages → ai-agents-tower → Settings → Variables and Secrets → Add**. Select the environment explicitly. Cloudflare stores Production and Preview bindings separately.
+
+| Name / setting | Value | Type / environment | Current behavior |
+| --- | --- | --- | --- |
+| `META_API_KEY` | A Meta Model API team key designated for this independent project; enter it directly in Cloudflare | Secret: select Encrypt; add separately to Production and Preview if preparing both | Reserved binding name for the next server integration. Current hard-disabled handler does not read it and cannot call Meta. |
+| `NODE_VERSION` | `24` | Plain build variable, Production/Preview; optional because `.node-version` already selects 24 | Build configuration only; not a model permission. |
+| Model | `muse-spark-1.3` Standard | Pinned server constant; no dashboard variable required | Offline/scripted contract only until the real server adapter is implemented and authorized. |
+| Provider endpoint | `https://api.meta.ai/v1/responses` | Pinned server constant; no dashboard variable required | No live request is sent by this release. |
+
+Do not create META_MODEL, provider-URL or live-enable flags for the current release; none is consumed. No CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, GitHub token, database binding or VITE_* model variable is required for Pages Git integration. Store no actual key in a public config, repo, browser input or chat. Local .dev.vars files are ignored as an additional guard; the owner is being directed to Cloudflare's encrypted dashboard entry, not asked to transfer a secret here.
+
+[Cloudflare's secret instructions](https://developers.cloudflare.com/pages/functions/bindings/#secrets) specify Encrypt and Save. A new deployment is needed for a Function that consumes a binding; the current release remains off even after a redeploy. The next server release must read context.env.META_API_KEY rather than a Vite build-time variable, keep credentials out of responses/logs, enforce the fixed synthetic scope and quota/cost policy, and undergo a separately bounded trial. Saving the key does not prove validity, account credit/expiry or permission for unlimited public usage.
