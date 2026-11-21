@@ -6,6 +6,12 @@ AI Agents Tower is a new, independent open-source project planned for the **Cogn
 
 This README defines the initial product direction and serves as the handoff document for IDEs and coding agents. Read it in full before starting development. Do not describe planned features as completed capabilities.
 
+## Deploy on Cloudflare Pages
+
+The owner has selected Cloudflare Pages for the next deployment and will connect GitHub manually. Use repository `mkhsu2002/AI-Agents-Tower`, branch `main`, framework `None`, build command `npm run build`, output `dist`, and leave the root directory empty. Node 24 is pinned in `.node-version`. No API key is needed for the current release. See the [Pages setup and acceptance checks](docs/CLOUDFLARE-PAGES.md).
+
+A Pages Function adapter preserves the hard-disabled reviewer API on Cloudflare; `_routes.json` keeps other assets static. This prepares deployment, not proof of a live Cloudflare site. Existing Vercel hosting remains available. The earlier Vercel API-key setup advice is superseded; model inference remains disabled on both adapters.
+
 ## Visit Agents Tower
 
 Open **https://ai-agents-tower.vercel.app/**. The existing Vercel project automatically deploys main; [deployment records](docs/DEPLOYMENT.md) distinguish platform status from public browser verification. The application includes a simulated two-agent draft proposal flow and a disabled-by-default reviewer demo entry alongside the M1 text editor/preview. Check the current deployment record below; no sign-up, real model API, private-home storage or publication is enabled. Draft edits remain in tab memory; export JSON before closing the page.

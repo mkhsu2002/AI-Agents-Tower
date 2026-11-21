@@ -11,3 +11,6 @@ playwright-report/
 *.sqlite-wal
 
 artifacts/
+
+# Cloudflare local build/emulator cache.
+.wrangler/
