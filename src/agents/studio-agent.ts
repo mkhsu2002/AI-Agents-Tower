@@ -3,6 +3,8 @@ import type { ConsentInfo } from '../../spikes/m2/vendor/runtime/engine.js';
 import { Operation, checkedUrl, strictJson } from '../../spikes/m2/safety.js';
 import { parseBundle } from '../domain/homebundle.ts';
 import type { HomeBundle } from '../domain/homebundle.ts';
+import { executeValidation, validationDefinition } from './validation-action.ts';
+import type { ValidationExecution } from './validation-action.ts';
 import { createModelAdapter, validateBrief, validateSettings } from './model.ts';
 export type Progress = (message: string) => void;
 // Drop user input, prompt bodies, tool arguments/results and exception detail from runtime tracing.
@@ -47,7 +49,14 @@ export class StudioAgent {
       this.preparation.dispose(); this.preparation = undefined;
       if (sequence !== this.sequence) throw new Error('Generation cancelled.');
       const trace = new StatusTrace(progress);
-      this.engine = new Engine({ originUrl: target.base, networkName: target.name, routerOverride: 'browser://mock', modelAdapter: createModelAdapter(settings), trace, timeoutMs: settings.timeoutMs });
+      const actionRef = `${target.base}/${target.name}#validate_home_bundle`;
+      this.engine = new Engine({ originUrl: target.base, networkName: target.name, routerOverride: 'browser://mock', modelAdapter: createModelAdapter(settings, actionRef), trace, timeoutMs: settings.timeoutMs });
+      let execution: ValidationExecution | undefined;
+      this.engine.actions.register({ base: target.base, network: target.name }, validationDefinition, async args => {
+        if (!this.preparation) throw new Error('Validation scope is unavailable.');
+        progress('Validating your draft…');
+        return executeValidation(args, this.preparation, settings.scenario, value => { execution = value; });
+      });
       this.engine.onConsent = async info => {
         const decision = await consent(info);
         // Upstream may skip an optional denied contact. Studio stops the whole run
@@ -59,8 +68,18 @@ export class StudioAgent {
       if (sequence !== this.sequence) throw new Error('Generation cancelled.');
       if (!trace.completed.has('reception') || !trace.completed.has('home_builder')) throw new Error('The agent team could not complete your draft. Try again.');
       progress('Checking your draft…');
+      const components = output.presentation?.components || [];
+      if (components.length !== 1 || components[0]?.kind !== 'action' || components[0].action !== actionRef || components[0].arguments?.bundleJson !== output.text) throw new Error('The draft did not include the required validation action with matching content.');
+      this.preparation = new Operation(settings.timeoutMs);
+      this.engine.onActionConfirm = async plan => sequence === this.sequence && approved && settings.scenario !== 'action-denied' && plan.length === 1 && plan[0]?.action === 'validate_home_bundle' && plan[0].effect === 'read' && plan[0].arguments.bundleJson === output.text;
+      const receipts = await this.preparation.wait(this.engine.submitActions({ turnId: output.turnId, componentId: components[0].id }));
+      if (!receipts) throw new Error('Validation permission declined.');
+      if (receipts.length !== 1 || receipts[0]?.status !== 'succeeded' || receipts[0].action !== actionRef || !execution || execution.raw !== output.text) throw new Error('Validation tool failed. The draft was not accepted.');
+      if (sequence !== this.sequence) throw new Error('Generation cancelled.');
       const parsed = parseBundle(output.text);
       if (!parsed.ok) throw new Error('Generated bundle failed validation. ' + parsed.errors.map(issue => `${issue.code} ${issue.path}: ${issue.message}`).join(' '));
+      if (!execution.bundle || receipts[0].result?.valid !== true) throw new Error('Validation did not confirm the generated draft.');
+      progress('Draft validated.');
       return parsed.value;
     } catch (error) {
       if (permissionDeclined) throw new Error('Permission declined. Generation stopped.');

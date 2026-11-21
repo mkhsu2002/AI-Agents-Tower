@@ -38,3 +38,7 @@ All redirects are rejected, including same-origin ones, rather than following an
 This proves bounded local second-origin loading, not independently deployed HTTPS interoperability. The existing 51-case spike separately proves nested caller → peer two-agent composition and real local MCP initialization/list/call, with scripted SSE and synthetic key isolation. The default Studio network uses host validation; it does **not** expose a model-selected registered site action or deployed MCP endpoint. Combining these bounded results does not establish real-model competition compliance.
 
 Next gates: agree full official-profile compatibility tests, test a genuinely available default real model, integrate an explicitly scoped grounded capability, host a second independent HTTPS caller/source with intentional CORS, then record browser video and reviewer-access evidence. M3 identity/private persistence and M4 public snapshots remain separate later work.
+
+## T02 update
+
+The earlier host-validation-only description is superseded by [STUDIO-VALIDATION-ACTION.md](STUDIO-VALIDATION-ACTION.md): the host registers a native runtime read action, the mock agents propose/relay it, and a matching successful execution receipt is required before final host validation. No real model or general remote action discovery is claimed.

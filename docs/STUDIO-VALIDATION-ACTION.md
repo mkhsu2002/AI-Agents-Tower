@@ -1,0 +1,11 @@
+# T02: registered read-only validation
+
+Studio uses the existing upstream ActionRegistry / CRUSE proposal and receipt APIs, not a new tool transport. The host registers validate_home_bundle with strict argument/result schemas and read effect. Home builder proposes the exact registered reference; reception relays it. The host requires exactly one validated action whose bundleJson equals the final candidate, then dispatches it through Engine.submitActions. Initial run approval explicitly covers public-network loading and browser-local validation. No third-party call or write is authorized by that approval; existing per-contact MCP prompts remain separate.
+
+A real successful action receipt, the host execution record and final shared HomeBundle parsing are all required before a proposal is shown. Fabricated receipts in model text are ignored. Missing/mismatched actions, unknown arguments, a denied action plan, handler failure, invalid bundle, timeout and cancellation stop the flow and preserve the editor. No imported handler, remote script or persistent state is enabled. Argument and capability code live in src/agents/validation-action.ts; only trusted application code can register the handler.
+
+The action API itself normally supports longer independent deadlines. Studio supplies its own bounded validation scope and waits/cancels through that scope. Current host validation is pure and read-only; these bounds do not promise rollback of future remote writes. The registry's conservative unknown failure receipt is rejected as success, never retried automatically.
+
+Execution is still deterministic mock. This proves a registered capability being proposed and executed with receipts inside the browser, not real model tool selection or full portable capability discovery. No general manifest action module was enabled. The restricted-profile and real-inference gates remain explicit.
+
+Validation: lint/typecheck/build; 20 unit tests and 33 browser tests passed. Seven new browser paths cover omitted action, malformed arguments, substituted content, handler error, denied plan, stalled validation and cancellation/restart. Original Studio/homepage/peer tests passed. No vendor JS was changed; declarations expose APIs already in the attributed source. No credentials, new service or paid call.

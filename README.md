@@ -245,3 +245,7 @@ Next engineering gates remain real free reviewer inference, full official-profil
 The [runtime compatibility contract](docs/RUNTIME-COMPATIBILITY.md) now distinguishes the applicable recovered Profile 0.2 baseline, current Profile 0.3 and Tower’s restricted runtime subset. Five focused fixtures cover accepted published assets and explicit unsupported cases; full official-schema support and historical organizer confirmation remain open. No current-version label is treated as competition certification.
 
 T01 validation: lint, typecheck, 17 unit tests and diff checks passed. No fresh browser/build result is claimed for the type-declaration/test/documentation-only change.
+
+## T02 registered validation checkpoint
+
+The two-agent flow now proposes the runtime’s registered read-only validate_home_bundle action. Studio executes it through the existing ActionRegistry/receipt API and requires matching input, a successful actual execution and final code validation before review/apply. Missing, forged/mismatched, denied, failed, cancelled or timed-out validation cannot create a success proposal. Run approval covers this local read-only check; external contact still needs separate consent. See [implementation and evidence](docs/STUDIO-VALIDATION-ACTION.md). Fresh lint/typecheck/build, 20 unit and 33 browser tests passed. Inference remains mock; portable full-profile capability discovery and real model execution remain unverified.

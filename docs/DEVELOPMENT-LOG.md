@@ -67,3 +67,7 @@
 Rechecked rules/current specification, pinned the Profile 0.3 path commit/blob, and compared its five-line delta with the retained submission-start baseline. Added explicit local-subset acceptance/rejection tests and compatibility documentation; updated matrix/README. Historical authority and full official schema acceptance remain unresolved, not falsely completed. Started from clean synchronized main 6aed49a.
 
 T01 validation passed: lint, typecheck, all 17 unit tests and git diff --check. No browser or real-inference run was needed/claimed for this boundary-test checkpoint.
+
+## T02 — native runtime validation action
+
+Registered the pure read validator using the existing attributed ActionRegistry and Engine.submitActions APIs. The builder proposes and reception relays a schema-bound action; the controller requires exact candidate equality, actual successful receipt/execution and final HomeBundle parsing. Added malformed/missing/substituted/denied/error/timeout/cancel tests. Initial run permission now describes local validation; external permissions remain separate. No vendor JS, credentials, storage or service change. Fresh lint/typecheck/build passed; 20 unit and 33 browser tests passed. Inference remains mock and full capability interoperability is not asserted.

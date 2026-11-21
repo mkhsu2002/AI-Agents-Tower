@@ -179,7 +179,7 @@ let runActive = false;
 sourceInput.value = new URL('/agents/tower-home-builder', location.origin).href;
 function updatePermission() {
   approval.checked = false;
-  try { const target = networkLocation(sourceInput.value, location.origin); el('#agent-permission').textContent = `Allow loading the agent network from ${target.origin} for this run.`; }
+  try { const target = networkLocation(sourceInput.value, location.origin); el('#agent-permission').textContent = `Allow loading the agent network from ${target.origin} and checking this draft in my browser.`; }
   catch { el('#agent-permission').textContent = 'Enter a valid network URL to continue.'; }
 }
 function discardProposal() { proposal = undefined; el('#agent-proposal').hidden = true; el('#agent-result').textContent = ''; }

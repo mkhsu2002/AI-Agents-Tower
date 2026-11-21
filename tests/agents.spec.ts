@@ -148,3 +148,20 @@ test('importing a different draft after generation prevents stale proposal repla
   await expect(page.locator('#agent-status')).toContainText('no edits were replaced');
   await expect(page.getByLabel('Display name')).toHaveValue('New imported draft');
 });
+for (const [scenario, message] of [['missing-action', 'required validation action'], ['invalid-action-args', 'required validation action'], ['substituted-action', 'matching content'], ['action-error', 'Validation tool failed'], ['action-denied', 'Validation permission declined'], ['slow-validation', 'deadline exceeded']]) {
+  test(`registered validation ${scenario} prevents a success proposal`, async ({ page }) => {
+    await settings(page, scenario!, scenario === 'slow-validation' ? { timeoutMs: 250 } : {});
+    await page.getByLabel('Display name').fill('Protected draft'); await run(page);
+    await expect(page.locator('#agent-status')).toContainText(message!);
+    await expect(page.locator('#agent-proposal')).toBeHidden();
+    await expect(page.getByLabel('Display name')).toHaveValue('Protected draft');
+  });
+}
+test('cancel during a pending validation action aborts and a fresh run succeeds', async ({ page }) => {
+  await settings(page, 'slow-validation'); await run(page);
+  await expect(page.locator('#agent-status')).toContainText('Validating your draft');
+  await page.getByRole('button', { name: 'Cancel generation' }).click();
+  await expect(page.locator('#agent-status')).toContainText('cancel');
+  await expect(page.locator('#agent-proposal')).toBeHidden();
+  await settings(page, 'success'); await run(page); await expect(page.locator('#agent-proposal')).toBeVisible();
+});
