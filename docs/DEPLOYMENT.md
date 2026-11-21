@@ -1,4 +1,12 @@
-# First Home Studio deployment
+# Deployment status
+
+Latest application source e28a5dd443da141abb7585c119a1b00bcc4a59a3 was pushed to main and remote SHA verified. Cloudflare check completed **failure** (deployment 5023c457-fc5a-457d-a89f-dc5bf460fef3, Build failed). The private build log was unavailable to this session; no failure cause is asserted. A clean git-archive build using the installed locked dependencies and Wrangler Functions compilation both passed. Owner was asked for the final error lines, without secrets. No retry or rollback of the production site was forced.
+
+Fresh public readiness GET returned HTTP 200, credentialConfigured true, enabled/trialReady/connectionVerified false. The model entry has not been activated and no real Meta call was made. The next sequence is build-log diagnosis, successful deployment, then Production TOWER_RUNTIME binding/redeploy and actual bounded live acceptance.
+
+## Historical deployment records
+
+### First Home Studio deployment
 
 This deployment serves the M1 static Home Studio from main. It does not deploy the separate mock runtime servers, create residents, save private homes, publish user bundles or enable real model calls. Draft content remains in tab memory. The app needs no environment variables, database, credentials or paid API.
 
