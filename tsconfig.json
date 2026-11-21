@@ -30,6 +30,7 @@
     "playwright.interop.config.ts",
     "api",
     "functions",
-    "playwright.live.config.ts"
+    "playwright.live.config.ts",
+    "playwright.pages-interop.config.ts"
   ]
 }

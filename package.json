@@ -23,7 +23,8 @@
     "test:interop": "node scripts/package-interop.mjs --source http://127.0.0.1:4173/agents/tower-home-builder && playwright test --config playwright.interop.config.ts",
     "licenses:inventory": "node scripts/license-inventory.mjs",
     "generate:domain": "node scripts/generate-homebundle-validator.mjs",
-    "test:live": "playwright test --config playwright.live.config.ts"
+    "test:live": "playwright test --config playwright.live.config.ts",
+    "test:pages:interop": "npm run build && node scripts/run-pages-interop.mjs"
   },
   "dependencies": {
     "ajv": "8.20.0"

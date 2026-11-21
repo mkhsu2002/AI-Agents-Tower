@@ -80,3 +80,9 @@ The fixed Atlas gateway now uses atomic D1 admission (60 reserved calls/day), si
 ## Enabled configuration and acceptance checkpoint — 2026-11-21
 
 After owner redeployment, fresh public readiness returned enabled/credentialConfigured/trialReady true. This closes the binding-presence setup step only. A normal public Playwright live acceptance attempt failed before UI at ERR_TUNNEL_CONNECTION_FAILED, with no start/model request. The explicit single-run harness, shared scripted round-trip assertions and allowlisted error diagnostics improve reproducibility; none establish actual model execution. Full portable default-router/profile, independent deployed HTTPS composition and judging availability remain open.
+
+## Public artifact delivery checkpoint — 2026-11-21
+
+Rules and the immutable recovered Profile 0.2 were re-read. Profile §3.4 allows co-hosted artifacts; a separate deployment is not an unconditional conformance requirement. The independent HTTPS demo remains Tower's owner-requested acceptance target. The historical pin is still best effort.
+
+Explicit Pages public-data CORS/MIME rules and three actual local workerd/browser checks now cover approved named-peer loading, no caller credential/body/code forwarding, Function isolation and credentialed-read refusal. The caller package contains no copied Tower network, reviewer controls or backend. Inference remains scripted and origins remain local HTTP. This closes the stated local delivery checks only; real inference/default-router/full-profile compatibility, independent HTTPS acceptance and judging availability remain unverified. The daily safety cap is not proof of unrestricted reviewer access under Rules §4.

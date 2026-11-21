@@ -1,0 +1,18 @@
+# Public, data-only interoperability artifacts. No credentials are accepted by this policy.
+/agents/agent-manifest.json
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  Content-Type: application/json; charset=utf-8
+  X-Content-Type-Options: nosniff
+
+/agents/tower-home-builder.network.json
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  Content-Type: application/json; charset=utf-8
+  X-Content-Type-Options: nosniff
+
+/schema/homebundle-v0.1.schema.json
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  Content-Type: application/json; charset=utf-8
+  X-Content-Type-Options: nosniff

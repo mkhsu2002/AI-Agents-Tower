@@ -8,6 +8,10 @@ The earlier e28a5dd / 1863547 Pages checks failed. No real Meta call occurred. P
 
 After the owner redeployed Production bindings, fresh public readiness returned enabled/credentialConfigured/trialReady true. No further binding setup is requested. Public live interaction still failed before navigation in this environment (ERR_TUNNEL_CONNECTION_FAILED), without a start/model request. A separate no-retry, explicitly opted-in acceptance harness and allowlisted diagnostics now cover the locally testable portion. Local final checks: lint/typecheck/build, 72 unit and 43 Studio browser tests passed; legacy Functions compilation passed; opt-in default returned one skip. Application e96c9ccb5bd6c49f982206c6be24d42960a23e57 deployed successfully (98aa0502-de40-4cee-89f6-1166c131846c), with origin/main SHA verified. Fresh status/readiness GETs returned HTTP 200 and enabled true; GET /api/reviewer/start returned expected HTTP 403 with REQUEST_REJECTED. This verifies the new safe failure contract before admission/provider dispatch, not actual D1/model health or live flow. No real inference pass is claimed.
 
+## Public-data header policy and caller preparation — 2026-11-21
+
+The static public manifest/network/schema now carry explicit CORS/JSON/nosniff rules. Function origin/credential behavior remains separate. A dedicated credential-free local workerd/caller check passes all three cases, including browser credential refusal and M1 round-trip; the existing Vite caller regression also passes. Caller packaging is Simulation-only and carries no backend or Tower network copy. No second site was deployed. Production delivery and body/MIME readback follow push; local header tests are not public cross-origin browser evidence.
+
 ## Historical deployment records
 
 ### First Home Studio deployment

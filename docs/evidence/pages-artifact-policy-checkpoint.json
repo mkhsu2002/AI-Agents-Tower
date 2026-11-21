@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-21",
+  "baseCommit": "4c4d2235bea4b0f93bc6857c1a6f3769f46dcdb1",
+  "freshChecks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 72,
+    "cloudflareLocalInteropBrowserTests": 3,
+    "viteIndependentCallerRegression": 1
+  },
+  "localSource": {
+    "runtime": "Wrangler 4.166.0 / local workerd",
+    "origin": "http://127.0.0.1:4203",
+    "projectSecretFilesLoaded": false,
+    "providerOrD1Bindings": false
+  },
+  "localCaller": {
+    "origin": "http://127.0.0.1:4204",
+    "inference": "scripted mock",
+    "sourceRestored": "https://1st-tower.neobabylon.app/agents/tower-home-builder",
+    "backendOrTowerNetworkCopied": false
+  },
+  "verifiedLocalScope": [
+    "Explicit public artifact CORS/MIME/nosniff",
+    "No Function CORS permission",
+    "No source contact before consent",
+    "Exact named JSON loading without credentials/body/peer script",
+    "Caller-owned runtime and local validator",
+    "Review/apply/edit/export/reimport and no browser storage",
+    "Browser rejects credentialed public artifact and cross-origin model API reads"
+  ],
+  "newHTTPSDeployment": false,
+  "actualModelInferenceVerified": false,
+  "fullConformanceClaimed": false,
+  "interpretation": "Profile 3.4 permits co-hosting. Independent deployed HTTPS remains the owner-requested demonstration target, not a universal hosting mandate."
+}

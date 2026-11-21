@@ -26,6 +26,14 @@ The database holds only admission counters, hashed tickets and transient fixed-e
 
 Fresh acceptance-stage checks passed: lint, typecheck, build, **72 unit tests and 43 Studio browser tests**; legacy Wrangler compiled the Pages Functions. The explicit live-test opt-in guard skipped correctly without starting a browser/model. The earlier 52 runtime browser and 1 independent local caller passes are prior-stage evidence, not newly rerun here. Verification uses scripted provider responses, real local SQLite and the local Cloudflare workerd/D1 runtime. **No real Meta inference or public live interaction has passed yet. P0 remains incomplete.** Deployment and final test results are recorded in [the development log](docs/DEVELOPMENT-LOG.md) and [deployment record](docs/DEPLOYMENT.md). Public browser navigation was previously blocked by this environment's tunnel; deployment success is not an interaction pass.
 
+## Cross-origin artifact delivery
+
+Public network/schema files now have explicit Cloudflare CORS/MIME rules, with no credential permission. A new isolated Cloudflare workerd source and independently served caller verify actual asset delivery, consent, exact named JSON loading, browser credential rejection and M1 review/edit/export/reimport. The caller package contains its own runtime and no copied Tower network, live-demo controls or backend routes. It remains Simulation.
+
+Run `CHROMIUM_PATH=/usr/bin/chromium npm run test:pages:interop`; the public-source package is restored automatically. Fresh stage checks: lint/typecheck/build, 72 unit tests, 3 Cloudflare-backed cross-origin browser tests and the existing 1 independent-caller regression passed. The earlier 43 Studio/52 runtime results remain prior-stage evidence; application runtime/UI source did not change here. See [policy, reproduction and specification interpretation](docs/PUBLIC-ARTIFACT-POLICY.md).
+
+A separate HTTPS deployment is Tower's requested acceptance target; the recovered specification also permits co-hosted artifacts. No second site was created and no actual Meta run passed. Portable live-router/full-profile support and real-model/browser evidence remain open.
+
 ## Run the local Home Studio
 
 Use Node >=22.12 (Node 24 verified) and npm:
