@@ -3,7 +3,7 @@ import { strictJson } from '../spikes/m2/safety.js';
 import { parseAgentResponse } from '../spikes/m2/vendor/runtime/cruse.js';
 import { parseBundle } from '../src/domain/homebundle.ts';
 import { REVIEWER_BRIEF } from '../src/agents/reviewer-contract.ts';
-import schema from '../public/schema/homebundle-v0.1.schema.json' with { type: 'json' };
+import { homeBundleSchema as schema } from '../src/domain/homebundle-validator.js';
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 export function turnPayload(step: number, origin: string, builder?: string): Record<string, unknown> {
   const action = origin + '/agents/tower-home-builder#validate_home_bundle';

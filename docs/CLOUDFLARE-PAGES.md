@@ -32,3 +32,9 @@ To stop new inference, remove the Production D1 binding and redeploy. Already di
 ## Verified scope
 
 Local unit/browser tests use scripted Meta Responses fixtures. Local workerd/D1 verified configuration status, denial, admission, cancellation and durable quota rejection without a provider call. Full local results are in DEVELOPMENT-LOG.md. Public delivery and actual Meta inference must be verified separately after the owner binds D1. Successful deployment alone is insufficient.
+
+## Legacy Functions bundler compatibility
+
+The owner-supplied failure excerpt showed an unrecognized ES2023 target warning. Wrangler 2.20.2 / esbuild 0.16.3 locally reproduced that warning and a fatal Expected semicolon but found with error on server/reviewer-turn.ts JSON import attributes. The exact remote Wrangler version and complete remote error were not provided; this is a verified compatible failure reproduction, not an assertion about the remote binary.
+
+The project now targets ES2022 syntax while retaining ES2023 library types for the existing modern runtime. The build-generated validator module also exports the exact HomeBundle schema, so server prompts need no JSON import attributes or runtime code generation. The build freshness check covers both schema data and validator. No alternate schema, reduced validation, dependency upgrade, runtime flag or dashboard setting is required. Both Wrangler 2.20.2 and 4.166.0 successfully compile the corrected Functions locally.

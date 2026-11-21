@@ -1,8 +1,8 @@
 # Deployment status
 
-Latest application source e28a5dd443da141abb7585c119a1b00bcc4a59a3 was pushed to main and remote SHA verified. Cloudflare check completed **failure** (deployment 5023c457-fc5a-457d-a89f-dc5bf460fef3, Build failed). The private build log was unavailable to this session; no failure cause is asserted. A clean git-archive build using the installed locked dependencies and Wrangler Functions compilation both passed. Owner was asked for the final error lines, without secrets. No retry or rollback of the production site was forced.
+The owner supplied the final error excerpt from the failed Pages Functions build. A local legacy Wrangler 2.20.2 / esbuild 0.16.3 build reproduced the ES2023 warning plus a fatal unsupported JSON import-attributes error. The repair changes the TypeScript output target to ES2022 and imports prompt schema data from the checked build-generated JavaScript module. Both legacy and modern Wrangler compile the repaired source; full remote deployment remains a separate check after push.
 
-Fresh public readiness GET returned HTTP 200, credentialConfigured true, enabled/trialReady/connectionVerified false. The model entry has not been activated and no real Meta call was made. The next sequence is build-log diagnosis, successful deployment, then Production TOWER_RUNTIME binding/redeploy and actual bounded live acceptance.
+The earlier e28a5dd / 1863547 Pages checks failed. No real Meta call occurred. Production still requires the dedicated TOWER_RUNTIME D1 binding before the fixed demo can activate. Configuration status and a successful deployment do not verify Meta or browser interaction. See the historical records below and the latest development log for exact tests and readback.
 
 ## Historical deployment records
 

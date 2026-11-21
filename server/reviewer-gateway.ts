@@ -4,7 +4,7 @@ import { Operation, strictJson } from '../spikes/m2/safety.js';
 import { parseAgentResponse } from '../spikes/m2/vendor/runtime/cruse.js';
 import { parseBundle } from '../src/domain/homebundle.ts';
 import { REVIEWER_BRIEF } from '../src/agents/reviewer-contract.ts';
-import schema from '../public/schema/homebundle-v0.1.schema.json' with { type: 'json' };
+import { homeBundleSchema as schema } from '../src/domain/homebundle-validator.js';
 import { META_ENDPOINT, META_MODEL } from './meta-policy.ts';
 export { META_ENDPOINT, META_MODEL } from './meta-policy.ts';
 export const LIMITS = Object.freeze({ starts: 3, calls: 9, sessions: 2, requests: 4, bodyBytes: 512, outputBytes: 32768, inputTokens: 8192, lifetimeMs: 60000 });

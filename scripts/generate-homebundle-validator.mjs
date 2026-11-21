@@ -7,7 +7,7 @@ const ajv = new Ajv({ allErrors: true, strict: true, code: { source: true, esm: 
 let source = standalone(ajv, ajv.compile(schema));
 source = source.replaceAll('require("ajv/dist/runtime/ucs2length").default', 'ucs2length');
 if (/require\(|new Function\(|eval\(/.test(source)) throw Error('Unsupported generated runtime dependency.');
-source = '// Generated from homebundle-v0.1.schema.json; run npm run generate:domain.\nconst ucs2length = value => [...value].length;\n' + source + '\n';
+source = '// Generated from homebundle-v0.1.schema.json; run npm run generate:domain.\nexport const homeBundleSchema = ' + JSON.stringify(schema) + ';\nconst ucs2length = value => [...value].length;\n' + source + '\n';
 const target = new URL('../src/domain/homebundle-validator.js', import.meta.url);
 if (process.argv.includes('--check')) {
   if (await readFile(target, 'utf8') !== source) throw Error('HomeBundle validator is stale. Run npm run generate:domain.');
