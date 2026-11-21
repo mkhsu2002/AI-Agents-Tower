@@ -1,3 +1,4 @@
+import { discardableReceptionText } from './reception-output.ts';
 import { TurnValidationError } from './turn-rejection.ts';
 import type { TurnRejection } from './turn-rejection.ts';
 import { META_MODEL } from './meta-policy.ts';
@@ -23,10 +24,13 @@ export function checkedTurn(raw: string, step: number, origin: string, builder?:
   if (data.error) reject('PROVIDER_ERROR_PRESENT');
   if (!Array.isArray(data.output)) throw new TurnValidationError('OUTPUT_ARRAY_INVALID', data);
   if (!object(data.usage) || !Number.isSafeInteger(data.usage.input_tokens) || Number(data.usage.input_tokens) < 0 || Number(data.usage.input_tokens) > 8192 || !Number.isSafeInteger(data.usage.output_tokens) || Number(data.usage.output_tokens) < 0 || Number(data.usage.output_tokens) > (step === 0 ? 256 : 1024)) throw new TurnValidationError('USAGE_INVALID', data);
-  const items = data.output.filter(item => !object(item) || item.type !== 'reasoning'); const item = items[0];
+  const items = data.output.filter(item => !object(item) || item.type !== 'reasoning'); let item = items[0];
   let message: Record<string, unknown>; let content = '';
   if (step === 0) {
-    if (items.length !== 1 || !object(item) || item.type !== 'function_call' || item.name !== 'home_builder' || typeof item.call_id !== 'string' || !/^[\w-]{1,100}$/.test(item.call_id) || typeof item.arguments !== 'string') throw new TurnValidationError('HANDOFF_SHAPE_INVALID', data);
+    const requiredItems = items.filter(item => !discardableReceptionText(item));
+    if (requiredItems.length !== 1 || items.length - requiredItems.length > 1) reject('HANDOFF_SHAPE_INVALID');
+    item = requiredItems[0];
+    if (!object(item) || item.type !== 'function_call' || item.name !== 'home_builder' || typeof item.call_id !== 'string' || !/^[\w-]{1,100}$/.test(item.call_id) || typeof item.arguments !== 'string') throw new TurnValidationError('HANDOFF_SHAPE_INVALID', data);
     let args: unknown; try { args = strictJson(item.arguments); } catch { reject('HANDOFF_ARGUMENTS_JSON_INVALID'); } if (!object(args) || Object.keys(args).length !== 1 || args.request !== REVIEWER_BRIEF) reject('HANDOFF_ARGUMENTS_INVALID');
     message = { role: 'assistant', content, tool_calls: [{ id: item.call_id, type: 'function', function: { name: 'home_builder', arguments: item.arguments } }] };
   } else {

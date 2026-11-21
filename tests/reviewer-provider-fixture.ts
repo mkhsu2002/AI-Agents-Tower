@@ -3,7 +3,7 @@ import { META_MODEL } from '../server/reviewer-gateway.ts';
 import type { RunBudgetReservation, OfflineProvider, ProviderRequest } from '../server/reviewer-gateway.ts';
 import { REVIEWER_BRIEF } from '../src/agents/reviewer-contract.ts';
 import { actionPresentation } from '../src/agents/validation-action.ts';
-export function fixtureProvider(origin: string, failure?: number | 'invalid' | 'refused' | 'wrong-model' | 'redirect' | 'huge') {
+export function fixtureProvider(origin: string, failure?: number | 'invalid' | 'refused' | 'wrong-model' | 'redirect' | 'huge', receptionNarration = false) {
   const calls: ProviderRequest[] = [];
   let reservation: RunBudgetReservation | null = { project: 'ai-agents-tower', syntheticOnly: true, calls: 3, expiresAt: Date.now() + 60000, inputTokensPerCall: 8192, outputTokens: 2304 };
   const provider: OfflineProvider = {
@@ -23,6 +23,7 @@ export function fixtureProvider(origin: string, failure?: number | 'invalid' | '
         const content = instructions.includes('You are Home builder') ? raw + actionPresentation(origin + '/agents/tower-home-builder#validate_home_bundle', raw, 'success') : request.body.input;
         output = [{ type: 'message', role: 'assistant', content: failure === 'refused' ? [{ type: 'refusal', refusal: 'Synthetic refusal' }] : [{ type: 'output_text', text: content }] }];
       }
+      if (receptionNarration && instructions.includes('Call home_builder')) output = [{ type: 'reasoning', summary: [] }, { type: 'message', role: 'assistant', status: 'completed', content: [{ type: 'output_text', text: 'SCRIPTED-NARRATION-MUST-BE-DISCARDED' }] }, ...output];
       return Response.json({ id: 'SCRIPTED-NOT-INFERENCE', model: failure === 'wrong-model' ? 'unapproved-model' : META_MODEL, status: 'completed', output, usage: { input_tokens: 120, output_tokens: 150 } });
     },
   };

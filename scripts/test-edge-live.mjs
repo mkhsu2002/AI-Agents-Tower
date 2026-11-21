@@ -23,10 +23,10 @@ try {
   pagesScript = await readFile(join(scratch, 'worker/index.js'), 'utf8');
 } finally { await rm(scratch, { recursive: true, force: true }); }
 const origin = 'https://tower.example';
-const cases = [{ date: '2026-01-01' }, { date: '2026-11-19' }, ...[302, 401, 400, 429, 503, 'invalid'].map(failure => ({ date: '2026-11-19', failure }))];
+const cases = [{ date: '2026-01-01' }, { date: '2026-11-19' }, { date: '2026-11-19', receptionNarration: true }, ...[302, 401, 400, 429, 503, 'invalid'].map(failure => ({ date: '2026-11-19', failure }))];
 for (const [surface, script] of [['gateway', compiled.outputFiles[0].text], ['pages-router', pagesScript], ['legacy-pages-router', legacyScript]]) {
-for (const { date, failure } of cases) {
-  const f = fixtureProvider(origin, failure === 302 ? 'redirect' : failure); let dispatched = 0;
+for (const { date, failure, receptionNarration } of cases) {
+  const f = fixtureProvider(origin, failure === 302 ? 'redirect' : failure, receptionNarration); let dispatched = 0;
   const mf = new Miniflare(convertV4MiniflareOptions({ modules: true, script, compatibilityDate: date, cf: false, d1Databases: ['TOWER_RUNTIME'], bindings: { META_API_KEY: 'SYNTHETIC-NOT-REAL' }, outboundService: async request => {
     assert.equal(request.url, META_ENDPOINT); assert.equal(request.headers.get('Authorization'), 'Bearer SYNTHETIC-NOT-REAL'); dispatched++;
     return f.provider.send({ endpoint: META_ENDPOINT, redirect: 'error', signal: request.signal, body: await request.json() });
@@ -43,6 +43,7 @@ for (const { date, failure } of cases) {
       const response = await mf.dispatchFetch(origin + '/api/reviewer/v1/chat/completions', { method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket: grant.ticket, step }) });
       if (surface !== 'gateway') assert.equal(response.headers.get('x-tower-gateway'), 'tower-synthetic-v1');
       const result = await response.json();
+      assert.ok(!JSON.stringify(result).includes('SCRIPTED-NARRATION-MUST-BE-DISCARDED'));
       if (failure !== undefined && !response.ok) {
         const expected = failure === 401 ? 'PROVIDER_AUTHORIZATION' : failure === 400 ? 'PROVIDER_REQUEST_REJECTED' : failure === 429 ? 'PROVIDER_LIMIT' : failure === 'invalid' ? 'OUTPUT_REJECTED' : 'PROVIDER_UNAVAILABLE';
         assert.equal(result.code, expected); assert.ok(!JSON.stringify(result).includes('Private upstream'));
@@ -52,7 +53,7 @@ for (const { date, failure } of cases) {
       assert.equal(response.status, 200);
     }
     assert.equal(dispatched, failure === undefined ? 3 : failure === 'invalid' ? 2 : 1);
-    console.log('PASS scripted workerd/D1', surface, date, failure ?? 'three-role success', 'outbound calls', dispatched);
+    console.log('PASS scripted workerd/D1', surface, date, failure ?? (receptionNarration ? 'mixed-output three-role success' : 'three-role success'), 'outbound calls', dispatched);
   } finally { await mf.dispose(); }
 }
 }

@@ -17,10 +17,10 @@ async function start(page: Page) {
   await page.locator('#agent-approve').check();
   await page.getByRole('button', { name: 'Create a draft' }).click();
 }
-async function scriptedService(page: Page, failure?: number | 'invalid' | 'refused') {
+async function scriptedService(page: Page, failure?: number | 'invalid' | 'refused', receptionNarration = false) {
   const calls: { headers: Record<string, string>; body: string }[] = [];
   const origin = new URL(page.url()).origin;
-  const f = fixtureProvider(origin, failure);
+  const f = fixtureProvider(origin, failure, receptionNarration);
   const storage = sqliteRuntime();
   const gateway = createLiveReviewer({ transport: async (_url, init) => f.provider.send({ endpoint: META_ENDPOINT, redirect: 'error', signal: init?.signal as AbortSignal, body: JSON.parse(String(init?.body)) }) });
   page.on('close', () => storage.close());
@@ -141,4 +141,15 @@ test('platform HTML 502 retains a safe Cloudflare correlation value, preserves d
   await start(page);
   await expect(page.locator('#agent-status')).toContainText('Gateway: received.');
   await expect(page.locator('body')).not.toContainText('PRIVATE-UNTRUSTED');
+});
+
+test('scripted mixed Reception output discards narration while retaining actual validation and review/apply/export', async ({ page }) => {
+  await selectDemo(page); const calls = await scriptedService(page, undefined, true);
+  await start(page); await expect(page.locator('#agent-proposal')).toBeVisible();
+  expect(calls).toHaveLength(3);
+  await expect(page.locator('#agent-receipt')).toContainText('"valid": true');
+  await expect(page.locator('body')).not.toContainText('SCRIPTED-NARRATION-MUST-BE-DISCARDED');
+  await reviewApplyExport(page);
+  await expect(page.locator('body')).not.toContainText('SCRIPTED-NARRATION-MUST-BE-DISCARDED');
+  expect(calls.every(call => !call.body.includes('SCRIPTED-NARRATION-MUST-BE-DISCARDED'))).toBe(true);
 });

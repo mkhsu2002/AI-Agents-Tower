@@ -1,4 +1,5 @@
 // Safe structural observations only. No provider strings, IDs, arguments, content or usage values.
+import { discardableReceptionText } from './reception-output.ts';
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 export type TurnRejection = 'JSON_INVALID' | 'ENVELOPE_INVALID' | 'MODEL_MISMATCH' | 'STATUS_NOT_COMPLETED' | 'PROVIDER_ERROR_PRESENT' | 'OUTPUT_ARRAY_INVALID' | 'USAGE_INVALID' | 'HANDOFF_SHAPE_INVALID' | 'HANDOFF_ARGUMENTS_JSON_INVALID' | 'HANDOFF_ARGUMENTS_INVALID' | 'MESSAGE_SHAPE_INVALID' | 'DRAFT_OR_ACTION_INVALID';
 const kind = (item: unknown) => !object(item) ? 'missing' : item.type === 'function_call' ? 'function_call' : item.type === 'message' ? 'message' : item.type === 'reasoning' ? 'reasoning' : 'other';
@@ -21,6 +22,9 @@ export class TurnValidationError extends Error {
       outputCountCapped: Math.min(outputs?.length ?? 0, 5),
       actionableCountCapped: Math.min(items?.length ?? 0, 5),
       firstItem: kind(first),
+      functionCallCountCapped: Math.min(items?.filter(item => object(item) && item.type === 'function_call').length ?? 0, 5),
+      discardableTextCountCapped: Math.min(items?.filter(discardableReceptionText).length ?? 0, 5),
+      otherNonReasoningCountCapped: Math.min(items?.filter(item => !(object(item) && item.type === 'function_call') && !discardableReceptionText(item)).length ?? 0, 5),
       handoffNameMatches: object(first) && first.name === 'home_builder',
       callIdAcceptedShape: object(first) && typeof first.call_id === 'string' && /^[\w-]{1,100}$/.test(first.call_id),
       argumentsString: object(first) && typeof first.arguments === 'string',
