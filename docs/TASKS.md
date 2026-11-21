@@ -34,3 +34,18 @@ Recommended immediate sequence: T01 + T02 preparation → T03 authorized real ro
 ## Work that needs no new credentials, paid services or product choice
 
 Continue official-profile fixture tests and matrix maintenance, the local read-only validation action, adapter failure/limit tests, existing-origin production verification where reachable, accessibility/performance checks and reproducible evidence tooling. Do not register services, create credentials, purchase capacity, persist user drafts or publish user content as a side effect.
+
+## Execution checkpoint after P0/P1 authorization
+
+| Task | Actual status | Remaining acceptance gate |
+| --- | --- | --- |
+| T01 | Engineering reconciliation and five boundary tests implemented | Complete official-profile support is not asserted; authoritative historical confirmation still open |
+| T02 | Implemented and tested | Native read action, actual receipts and final code validation; inference still mock |
+| T03 | Keyless transport prepared/tested with scripted HTTP fixtures | Authorized actual model and a usable free default reviewer route |
+| T04 | Independent caller packaged; local 4190→4173 browser test passed | Authorized independent HTTPS hosting/CORS and real inference demonstration |
+| T05 | Production harness prepared; attempted and blocked | Environment tunnel / Cloud Browser tab creation prevents public interaction |
+| T06 | Server-only durable domain core and nine synthetic-auth tests implemented | Actual identity verifier, production persistent hosting/store, retention/session/CSRF and UI/API integration |
+| T07 | Local immutable snapshot/review/withdrawal core tested | Authenticated UI/API and actual HTTP/cache withdrawal evidence |
+| T08 | English draft/script, rights inventory and MOCK-only local recording prepared | Owner project-license selection, final real-inference narrated video and authorized upload/submission |
+
+Full P0/P1 completion is **blocked, not claimed**. No priority/product replanning has been requested at this checkpoint; the remaining items are actual service/identity/license/browser gates. See REAL-INFERENCE-READINESS.md, INTEROP-AND-PRODUCTION.md, PRIVATE-PUBLIC-CORE.md and submission/ for reviewable implementation/evidence and configuration boundaries.

@@ -253,3 +253,17 @@ The two-agent flow now proposes the runtime’s registered read-only validate_ho
 ## T03 inference transport preparation
 
 A strict host-approved keyless inference adapter and four real-HTTP/scripted-response contract tests are ready. The public app still uses mock inference; no real provider/model was called, installed or enabled. See [readiness and remaining gate](docs/REAL-INFERENCE-READINESS.md). The checkpoint passed lint/typecheck and 24 unit tests; actual model execution and free reviewer capacity remain blocked on an authorized route.
+
+## T04/T05 and submission evidence preparation
+
+An independent caller package, an actually passing local two-origin browser check and production-specific UI tests are ready. The live round-trip attempt remains blocked by the environment tunnel; Cloud Browser could not create its tab, so no public interactive pass is claimed. See [interop/production evidence](docs/INTEROP-AND-PRODUCTION.md). English submission text, video script and rights checklist are prepared under docs/submission; a local silent MOCK-only walkthrough was recorded (8.28 seconds; sampled frames inspected), not a final real-model submission video. No new origin was deployed, no license selected and nothing uploaded/submitted. Packaging, rights inventory and recording use existing tools without new credentials or paid services.
+
+## T06/T07 server-core checkpoint
+
+A server-only SQLite reference core implements owner-scoped private homes, durable request-key/input-hash receipts, atomic rollback/recovery, optimistic revisions, reviewed immutable public snapshots and withdrawal. Nine local tests with synthetic identities verify isolation, concurrency, restart recovery and private/public separation. See [boundaries and production gates](docs/PRIVATE-PUBLIC-CORE.md). This is not deployed login/authentication, a production database, a private save API or public residency. The frontend does not import it and still keeps drafts only in tab memory. Real auth/store/session/cache integration requires configuration and authorization; no service was provisioned.
+
+## P0/P1 execution status
+
+The authorized sequence has delivered T01 compatibility reconciliation, T02 native validation receipts, a disabled T03 keyless transport, T04 independent caller packaging, T05 production test tooling, T06/T07 local durable private/public domain cores and T08 draft evidence tools. [Task-by-task status](docs/TASKS.md) explicitly marks production/model/auth/license/browser gates instead of claiming all P0/P1 complete.
+
+Latest local checks: lint/typecheck/build passed; 33 unit, 33 Studio browser, 51 runtime browser, 1 independent-caller browser and 1 mock recording test passed. The public round-trip attempt failed before UI with ERR_TUNNEL_CONNECTION_FAILED, and the other production cases are unrun; no real inference, production authentication or public/private persistence is implied by local passes. The 8.28-second silent MOCK footage is development evidence only. No new account, service, credential, paid route, license grant, remote origin or public submission was created.

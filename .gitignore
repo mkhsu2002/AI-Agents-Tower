@@ -4,3 +4,10 @@ test-results/
 playwright-report/
 .env*
 !.env.example
+
+# Server-core test/local data; never commit private content.
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+artifacts/

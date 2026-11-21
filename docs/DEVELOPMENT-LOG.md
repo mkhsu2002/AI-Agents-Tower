@@ -75,3 +75,22 @@ Registered the pure read validator using the existing attributed ActionRegistry 
 ## T03 — keyless transport preparation
 
 Added a bounded exact-origin keyless OpenAI-compatible adapter, kept disconnected from public Studio and its mock-only runtime gate. Four actual-local-HTTP fixture tests cover format/tools/no credentials, errors, truncation, unknown calls, redirect refusal, cancellation and deadline. Scripted responses do not establish real inference. Lint/typecheck and 24 unit tests passed at this checkpoint. No installed/configured authorized model route, weights download, credential or provider request; T03 actual-inference acceptance remains blocked.
+
+## T04/T05/T08 preparation — independent caller and evidence tooling
+
+- Packaged the existing browser runtime as an independent static caller, preserving default-deny source consent. Local 4190 caller→4173 source test passed, including exact named files, zero contact on refusal and no content POSTs to the source. Restored default package target to public HTTPS after local testing. No second origin deployed or CORS/security setting changed.
+- Added production-specific tests. Attempted the first live round-trip: failed before UI with ERR_TUNNEL_CONNECTION_FAILED. Other production cases not run. Cloud Browser could select Chrome but tab creation failed with "Browser Use could not read requirements." Marked T04 deployed evidence and T05 as blocked, not passed.
+- Added a local package-license metadata inventory (149 entries), English submission draft, under-two-minute final video plan and explicit license/rights gates. No license grant, registration, upload or submission.
+- Recorded local MOCK-only silent walkthrough; 1 recording test passed, duration 8.28 seconds, sampled 2/5/8-second frames visually inspected. It is not a real-inference/final narrated submission clip. Initial Playwright FFmpeg download was blocked (403 Domain forbidden); reused the existing system FFmpeg through an isolated temporary cache, with no installed-package or system/security changes.
+- Generated artifacts are ignored by Git and ESLint, like dist; authored source remains linted. No actual private user data, keys, service purchases or production persistence added.
+
+## T06/T07 — local private/public persistence core
+
+Implemented a server-only SQLite domain reference with a mandatory trusted authenticator boundary (unconfigured/failed verification fails closed), derived owner scope, strict commands, durable owner/key/operation/input-hash receipts, atomic rollback, revision guards and separate reviewed public snapshots/unpublish. No frontend import, API route, production auth/database or UI save/publish capability. Nine synthetic local tests passed, including two tenant/client instances, concurrent stale-write protection, receipt rollback and actual close/reopen recovery. Production identity, storage hosting, retention, sessions/CSRF and HTTP/CDN behavior remain gated; no credentials or services were created.
+
+## P0/P1 verification checkpoint
+
+- Final local checks: lint, typecheck and build passed; 33 unit tests passed, including nine server-core cases. Earlier in this same execution stage all 33 current Studio browser tests passed, the independent-caller test passed, the mock recording test passed, and the complete 51-case runtime browser suite was rerun and passed. No real model was invoked.
+- Confirmed node:sqlite/server code is absent from the client build. Generated artifacts are excluded from lint/Git; production source remains checked. Project dependencies were not expanded.
+- The one attempted public round-trip failed before interaction at ERR_TUNNEL_CONNECTION_FAILED; other prepared production cases were not run. Cloud Browser tab creation also failed. These are explicit failed/blocked checks, not green tests.
+- T01–T08 status now distinguishes implemented software/local evidence from actual external acceptance gates. Full P0/P1 is not declared complete. No product replanning, credentials, service creation, project license, additional deployment/origin or final publication was invented.

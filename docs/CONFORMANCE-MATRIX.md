@@ -44,3 +44,7 @@ See [STUDIO-AGENTS.md](STUDIO-AGENTS.md) for the implemented state machine, mock
 ## T01 reconciliation
 
 Current Profile 0.3 path commit a0ceda34e4f2e653223e13e63282abc9b60eaf7c changes version/date, links and wording relative to the recovered baseline; the submission-start baseline is retained. See [runtime compatibility](RUNTIME-COMPATIBILITY.md) and tests/compatibility.test.ts for explicit accepted/unsupported fixtures. Reconciliation is implemented; full schema compatibility and organizer historical confirmation remain open.
+
+## P0/P1 execution checkpoint
+
+T02 now requires actual registered-action execution receipts in the Studio; this replaces the older host-validation-only limitation. T03 has a disabled keyless transport preparation tested against scripted local HTTP, not actual weights. T04 has a separately served caller package and local browser evidence, not deployed independent HTTPS. T05 production navigation failed at the tunnel before interaction. T06/T07 have a local server-only SQLite/authenticator-boundary core, not deployed authentication/private/public Home services. T08 drafts/inventory/mock footage exist; license, actual inference, judging capacity and final submission remain unverified. No success badge is substituted for these gates.
