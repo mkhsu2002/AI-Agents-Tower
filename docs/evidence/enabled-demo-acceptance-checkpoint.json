@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-21",
+  "baseCommit": "68294388f4a1f1d43196184a39f80c2c0ec590a0",
+  "publicReadiness": {
+    "url": "https://1st-tower.neobabylon.app/api/reviewer/readiness",
+    "httpStatus": 200,
+    "body": {
+      "enabled": true,
+      "credentialConfigured": true,
+      "connectionVerified": false,
+      "model": "muse-spark-1.3",
+      "trialReady": true
+    }
+  },
+  "normalPublicAttempt": {
+    "browserTool": "Tab creation failed: Browser Use could not read requirements",
+    "playwright": "Failed at page.goto: ERR_TUNNEL_CONNECTION_FAILED",
+    "commandLineGET": 403,
+    "modelOrStartRequestSent": false,
+    "bypassAttempted": false
+  },
+  "freshLocalChecks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 72,
+    "studioBrowserTests": 43,
+    "legacyFunctionsCompilation": "Wrangler 2.20.2 passed",
+    "liveWithoutOptIn": "1 skipped before browser fixture setup"
+  },
+  "inferenceForLocalTests": "scripted fixtures only",
+  "realMetaInferenceVerified": false,
+  "fullP0Completed": false,
+  "remaining": [
+    "Normal-path actual live acceptance from a permitted environment",
+    "Full canonical/profile and portable live default router",
+    "Independent deployed HTTPS composition",
+    "Measured judging availability"
+  ]
+}

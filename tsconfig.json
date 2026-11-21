@@ -29,6 +29,7 @@
     "playwright.demo.config.ts",
     "playwright.interop.config.ts",
     "api",
-    "functions"
+    "functions",
+    "playwright.live.config.ts"
   ]
 }

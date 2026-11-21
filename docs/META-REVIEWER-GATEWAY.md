@@ -8,7 +8,7 @@ Protocol reference: read-only public MuseCondo documentation at [26f884fdf3247fb
 
 ## Public fixed-example boundary
 
-Cloudflare's functions/api/reviewer/[[path]].ts calls server/live-reviewer.ts only when both META_API_KEY and TOWER_RUNTIME D1 bindings are present. Its dynamic status route then advertises tower-synthetic-v1. Missing bindings fail closed. Vercel's api/reviewer.ts and static status remain disabled. See CLOUDFLARE-PAGES.md for the one remaining D1 binding step.
+Cloudflare's functions/api/reviewer/[[path]].ts calls server/live-reviewer.ts only when both META_API_KEY and TOWER_RUNTIME D1 bindings are present. Its dynamic status route then advertises tower-synthetic-v1. Missing bindings fail closed. Vercel's api/reviewer.ts and static status remain disabled. The owner completed both Production bindings and redeployment; fresh readiness/status readback is enabled. See PUBLIC-LIVE-ACCEPTANCE.md for the remaining actual-run gate.
 
 Fresh explicit consent precedes POST start `{consent:true}`. The server issues a random 48-hex-character ticket valid for 60 seconds, stores only its SHA-256 hash and binds it to the request origin. Chat accepts exactly `{ticket,step}` and cancel exactly `{ticket}`. Unknown/duplicate fields, extra client prompts/models/tools/routes/credentials, query parameters, cookies, unauthorized origins and oversized bodies are rejected. Browser requests omit credentials and reject redirects. There is no arbitrary prompt proxy, cross-origin public inference permission, automatic retry or model fallback.
 
@@ -32,4 +32,8 @@ HomeBundle uses a checked-in Ajv standalone validator generated at build time by
 
 Tests use scripted Meta responses and real SQLite behind the narrow D1 port. They cover cross-worker admission/replay/cancel, origin/body/consent failures, missing configuration, malformed/refused/oversized/redirected responses, model/quota errors, stalled storage/provider, abort and no retry. Browser fixtures exercise the actual gateway, native two-role Engine, validation receipt, review/apply/export and M1 regressions. Local workerd/D1 additionally verifies actual Cloudflare SQL admission and quota rejection without a provider request.
 
-No real Meta call has passed. Public activation needs the owner D1 binding and actual public live acceptance; configured status is not provider-health evidence. The manifest still advertises the development mock router, full canonical/streaming compatibility is incomplete, and independent deployed HTTPS composition remains unverified. P0 is not complete.
+No real Meta call has passed. Production binding readiness is confirmed. Actual public live acceptance remains unverified; configured status is not provider-health evidence. The manifest still advertises the development mock router, full canonical/streaming compatibility is incomplete, and independent deployed HTTPS composition remains unverified. P0 is not complete.
+
+## Safe diagnostics and acceptance
+
+Gateway failures now return a fixed code and safe message; the browser displays only locally allowlisted copy, never an arbitrary upstream body. Codes distinguish request/consent, capacity, stopped tickets, provider quota/service, rejected output, storage failure and timeout/cancellation. Deadlines use HTTP 504, caller abort 499, unavailable storage 503 and malformed commands 400. Limits, single-use state and no retries/refunds are unchanged. See PUBLIC-LIVE-ACCEPTANCE.md.

@@ -50,7 +50,7 @@ for (const failure of [429, 503, 'invalid', 'refused', 'wrong-model', 'redirect'
     try {
       const ticket = await start(g, f.env); let r = await g(request('v1/chat/completions', { ticket, step: 0 }), f.env);
       if (r.ok) r = await g(request('v1/chat/completions', { ticket, step: 1 }), f.env);
-      assert.equal(r.ok, false); const n = f.calls;
+      assert.equal(r.ok, false); const error = await r.json(); assert.equal(error.code, failure === 429 ? 'PROVIDER_LIMIT' : [503, 'redirect'].includes(failure) ? 'PROVIDER_UNAVAILABLE' : 'OUTPUT_REJECTED'); assert.ok(!JSON.stringify(error).includes('Private upstream')); const n = f.calls;
       assert.equal((await createLiveReviewer({ transport: f.transport })(request('v1/chat/completions', { ticket, step: 0 }), f.env)).status, 409); assert.equal(f.calls, n);
       assert.equal(f.sql.prepare('SELECT reserved FROM tower_runtime_budget').get()!.reserved, 3);
     } finally { f.close(); }
@@ -73,7 +73,7 @@ test('cross-worker cancellation, expiry and duplicate concurrency never accept l
 test('stalled provider deadline never refunds or redispatches a consumed step', async () => {
   const f = fixture(); let calls = 0; const g = createLiveReviewer({ timeoutMs: 100, transport: async () => { calls++; return new Promise<Response>(() => {}); } });
   try {
-    const ticket = await start(g, f.env); assert.equal((await g(request('v1/chat/completions', { ticket, step: 0 }), f.env)).status, 502);
+    const ticket = await start(g, f.env); const timeout = await g(request('v1/chat/completions', { ticket, step: 0 }), f.env); assert.equal(timeout.status, 504); assert.equal((await timeout.json()).code, 'TIMEOUT');
     assert.equal((await createLiveReviewer({ transport: f.transport })(request('v1/chat/completions', { ticket, step: 0 }), f.env)).status, 409); assert.equal(calls, 1); assert.equal(f.calls, 0);
   } finally { f.close(); }
 });
@@ -83,7 +83,7 @@ test('database failure and stalled initialization fail closed without dispatch',
     for (const exec of [async () => { throw Error('SYNTHETIC-PRIVATE-DB-ERROR'); }, async () => new Promise(() => {})]) {
       const g = createLiveReviewer({ transport: f.transport, timeoutMs: 100 });
       const r = await g(request('start', { consent: true }), { ...f.env, TOWER_RUNTIME: { ...f.db, exec } });
-      assert.equal(r.status, 502); assert.ok(!(await r.text()).includes('SYNTHETIC-PRIVATE')); assert.equal(f.calls, 0);
+      assert.ok([503, 504].includes(r.status)); const error = await r.json(); assert.equal(error.code, r.status === 503 ? 'STORAGE_UNAVAILABLE' : 'TIMEOUT'); assert.ok(!JSON.stringify(error).includes('SYNTHETIC-PRIVATE')); assert.equal(f.calls, 0);
     }
   } finally { f.close(); }
 });
@@ -93,7 +93,7 @@ test('request abort ends a stalled dispatched call and its step cannot be replay
   try {
     const ticket = await start(g, f.env); const control = new AbortController();
     const pending = g(request('v1/chat/completions', { ticket, step: 0 }, { signal: control.signal }), f.env);
-    await started; control.abort(); assert.equal((await pending).status, 502);
+    await started; control.abort(); const cancelled = await pending; assert.equal(cancelled.status, 499); assert.equal((await cancelled.json()).code, 'CANCELLED');
     assert.equal((await createLiveReviewer({ transport: f.transport })(request('v1/chat/completions', { ticket, step: 0 }), f.env)).status, 409); assert.equal(f.calls, 0);
   } finally { f.close(); }
 });

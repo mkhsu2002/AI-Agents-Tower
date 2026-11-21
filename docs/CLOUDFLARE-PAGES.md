@@ -6,9 +6,9 @@ Primary: https://1st-tower.neobabylon.app/ . Pages fallback: https://ai-agents-t
 
 Repository mkhsu2002/AI-Agents-Tower, Production branch main, framework None, build command `npm run build`, output `dist`, root empty. Node 24 is pinned in .node-version. Optional build variable `NODE_VERSION=24`. Use Git integration, including the root functions directory, rather than uploading dist alone.
 
-## Enable the bounded public demo
+## Production setup — completed by the owner
 
-The owner already saved the encrypted server Secret **META_API_KEY**; presence was confirmed by a fresh public configuration read. Do not paste it in chat, source, logs or any VITE_* variable. No new model key, URL, model variable or operator password is needed.
+The owner saved **META_API_KEY**, bound **TOWER_RUNTIME** and redeployed. Fresh public readiness returned enabled/credentialConfigured/trialReady true. The steps below are retained for reproduction; no repeat setup is needed. Do not paste it in chat, source, logs or any VITE_* variable. No new model key, URL, model variable or operator password is needed.
 
 1. In Cloudflare **Storage & Databases → D1**, create a dedicated database named `ai-agents-tower-runtime`. Use the existing/free plan without upgrading or enabling additional services.
 2. Open **Workers & Pages → ai-agents-tower → Settings → Bindings → Add → D1 database binding**. Select **Production**. Set **Variable name** to exactly **TOWER_RUNTIME** and choose that database.
@@ -31,7 +31,7 @@ To stop new inference, remove the Production D1 binding and redeploy. Already di
 
 ## Verified scope
 
-Local unit/browser tests use scripted Meta Responses fixtures. Local workerd/D1 verified configuration status, denial, admission, cancellation and durable quota rejection without a provider call. Full local results are in DEVELOPMENT-LOG.md. Public delivery and actual Meta inference must be verified separately after the owner binds D1. Successful deployment alone is insufficient.
+Local unit/browser tests use scripted Meta Responses fixtures. Local workerd/D1 verified configuration status, denial, admission, cancellation and durable quota rejection without a provider call. Full local results are in DEVELOPMENT-LOG.md. Production binding readiness has now been confirmed; actual Meta inference/browser interaction remains a separate verification. Successful deployment alone is insufficient.
 
 ## Legacy Functions bundler compatibility
 

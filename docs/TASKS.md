@@ -1,6 +1,6 @@
 # Current inventory and next tasks
 
-Current resource checkpoint: the bounded public Meta gateway and shared D1 quota/session implementation are complete locally. Production activation needs the owner TOWER_RUNTIME binding, then real-provider and normal public interaction evidence. No real model call has passed. Earlier inventory below is historical where superseded; see META-REVIEWER-GATEWAY.md and DEVELOPMENT-LOG.md.
+Current resource checkpoint: the bounded public Meta gateway and shared D1 quota/session implementation are complete locally. Production binding readiness is confirmed; real-provider and normal public interaction evidence remain open. No real model call has passed. Earlier inventory below is historical where superseded; see META-REVIEWER-GATEWAY.md and DEVELOPMENT-LOG.md.
 
 ## Completed and bounded evidence
 
@@ -56,4 +56,4 @@ T03 now includes a public, disabled-by-default fixed synthetic demo entry, trust
 
 Next: obtain the one provider authorization decision; implement and test the restricted synthetic-only server gateway, quota/abuse policy and no-paid-fallback enforcement; then run normal public live acceptance and independent HTTPS interoperability. Do not activate status alone. T06/T07, license selection and submission/public listing remain outside this round.
 
-Meta direction update: OpenRouter is superseded. T03 now includes the Cloudflare-compatible fixed-example Meta gateway, single-use ticket/step protocol, 20-run UTC daily D1 budget, bounded sender and token usage receipts. Local scripted tests and workerd/D1 admission checks pass; actual provider inference/public interaction remain unverified. Next: owner binds TOWER_RUNTIME in Production and redeploys, then perform a bounded synthetic live run. No new model credential or private-Home storage is needed. T04 full-profile/independent HTTPS proof and T05 public interaction remain open.
+Meta direction update: OpenRouter is superseded. T03 now includes the Cloudflare-compatible fixed-example Meta gateway, single-use ticket/step protocol, 20-run UTC daily D1 budget, bounded sender and token usage receipts. Local scripted tests and workerd/D1 admission checks pass; actual provider inference/public interaction remain unverified. Next: run the prepared opt-in single-run acceptance from an environment that can open the normal public site. Production bindings are confirmed; this environment fails before browser navigation. No new model credential or private-Home storage is needed. T04 full-profile/independent HTTPS proof and T05 public interaction remain open.

@@ -4,6 +4,10 @@ The owner supplied the final error excerpt from the failed Pages Functions build
 
 The earlier e28a5dd / 1863547 Pages checks failed. No real Meta call occurred. Production still requires the dedicated TOWER_RUNTIME D1 binding before the fixed demo can activate. Configuration status and a successful deployment do not verify Meta or browser interaction. See the historical records below and the latest development log for exact tests and readback.
 
+## Enabled configuration and acceptance tools — 2026-11-21
+
+After the owner redeployed Production bindings, fresh public readiness returned enabled/credentialConfigured/trialReady true. No further binding setup is requested. Public live interaction still failed before navigation in this environment (ERR_TUNNEL_CONNECTION_FAILED), without a start/model request. A separate no-retry, explicitly opted-in acceptance harness and allowlisted diagnostics now cover the locally testable portion. Local final checks: lint/typecheck/build, 72 unit and 43 Studio browser tests passed; legacy Functions compilation passed; opt-in default returned one skip. Application deployment/readback is checked after push; model health and actual live flow remain unverified.
+
 ## Historical deployment records
 
 ### First Home Studio deployment

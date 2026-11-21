@@ -2,6 +2,7 @@
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { createLiveReviewer } from '../server/live-reviewer.ts';
+import { reviewApplyExport } from '../checks/live-flow.ts';
 import { sqliteRuntime } from './d1-fixture.ts';
 import { META_ENDPOINT } from '../server/meta-policy.ts';
 import { fixtureProvider } from './reviewer-provider-fixture.ts';
@@ -57,10 +58,8 @@ test('scripted gateway keyless three-call collaboration produces a real local va
   await expect(page.locator('#agent-receipt')).toContainText('"valid": true');
   await page.locator('#agent-receipt').evaluate(node => { (node.parentElement as HTMLDetailsElement).open = true; });
   await page.locator('.agent-panel').screenshot({ path: 'artifacts/evidence/reviewer-SCRIPTED-FIXTURE.png' });
-  await page.getByRole('button', { name: 'Apply draft' }).click();
+  await reviewApplyExport(page);
   await expect(page.locator('#preview')).toContainText(REVIEWER_BRIEF);
-  const pending = page.waitForEvent('download'); await page.getByRole('button', { name: 'Download JSON' }).click();
-  expect((await pending).suggestedFilename()).toMatch(/\.json$/);
   expect(await page.evaluate(() => [localStorage.length, sessionStorage.length])).toEqual([0, 0]);
 });
 for (const failure of [429, 503, 'refused', 'invalid'] as const) {
@@ -109,4 +108,15 @@ test('tampered synthetic brief or network cannot contact the service or peers', 
   await page.locator('#agent-source').evaluate((node: HTMLInputElement) => { node.value = 'http://127.0.0.1:4182/agents/tower-home-builder'; });
   await start(page); await expect(page.locator('#agent-status')).toContainText('only accepts the fixed synthetic example');
   expect(requests).toEqual([]);
+});
+
+test('service error codes are allowlisted; arbitrary server text never reaches the page', async ({ page }) => {
+  await selectDemo(page); await scriptedService(page);
+  await page.route('**/api/reviewer/start', route => route.fulfill({ status: 429, json: { code: 'DAILY_LIMIT', error: 'PRIVATE-SERVER-SENTINEL' } }));
+  await start(page); await expect(page.locator('#agent-status')).toContainText('Today’s demo capacity');
+  await expect(page.locator('body')).not.toContainText('PRIVATE-SERVER-SENTINEL');
+  await page.route('**/api/reviewer/start', route => route.fulfill({ status: 502, json: { code: 'PRIVATE-SERVER-SENTINEL', error: '<script>PRIVATE-SERVER-SENTINEL</script>' } }));
+  await start(page); await expect(page.locator('#agent-status')).toContainText('Demo service failed (502)');
+  await expect(page.locator('body')).not.toContainText('PRIVATE-SERVER-SENTINEL');
+  await expect(page.locator('#agent-proposal')).toBeHidden();
 });

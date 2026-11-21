@@ -46,6 +46,8 @@ test('production client fault injection: cancellation and explicit restart', asy
 
 test('production reviewer entry fails closed while the live service is disabled', async ({ page }) => {
   await page.goto('/');
+  const status = await page.request.get('/reviewer/status.json');
+  test.skip((await status.json()).enabled === true, 'Live service is enabled; use the explicitly opted-in single-run acceptance test.');
   await page.locator('#reviewer-demo').click();
   const calls: string[] = [];
   page.on('request', request => { if (request.method() !== 'GET') calls.push(request.url()); });
