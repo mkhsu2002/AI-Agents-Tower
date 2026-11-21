@@ -243,3 +243,19 @@ Additional request bootstrap hardening: incoming Request.signal is read once wit
 Fresh final validation: lint/typecheck/build passed; 84/84 unit, 47/47 Studio browser and 24/24 intercepted workerd/D1 cases passed. Native coverage includes direct gateway, modern Pages router and legacy Pages router, with no live network/model. Existing 61 runtime and 3 independently served Cloudflare caller checks are prior-stage evidence, not rerun here; vendor runtime, public artifact policy and caller packaging are unchanged.
 
 Diagnostic release readback: local/origin main matched a001c9d0c83f6cd38e96f1369b1bda14e0932fc6. Cloudflare completed success (3e7621ec-a247-42e5-81c4-902fc071c190). Fresh public /#demo GET returned HTTP 200 and exact frontend asset /assets/index-D5Gw9J4L.js; readiness remained enabled/credentialConfigured/trialReady true, connectionVerified false. No provider request was made in these reads. Documentation-only follow-up preserves this evidence; the live first-turn failure remains unresolved pending authorized normal-path logs.
+
+
+## Coordinated provider 400: local tool-choice compatibility candidate — 2026-11-21
+
+K's normal-path production test at 22:10:57.434 UTC on 4858ad7 observed request-start → provider-start → provider-response 400 → request-end 502 with Functions outcome ok and no exceptions; browser still reported GATEWAY_RESPONSE_INVALID at Reception with unconfirmed marker. This is handed-off evidence, not a new provider call by the assistant. The prior no-request observation remains a separate attempt.
+
+Checked official Meta tool-calling/Responses/strict-schema/reasoning docs and identified a deterministic request mismatch: named and none tool choices are documented as rejected with 400; only auto is supported. Added three local contract regressions, first observing two expected failures before the repair. Local payloads now use auto; Reception alone advertises the unchanged single strict tool and parallel_tool_calls false. Sender rejects unsupported choices/parallel true before transport, and the offline mirror/fixture enforce the same bounded contract. Output validation continues to reject plain text, foreign/multiple calls and altered arguments; no synthetic handoff or retry is introduced.
+
+See META-TOOL-CHOICE-REPAIR.md. Work is intentionally local and uncommitted/unpushed under the current diagnostic handoff. No public-site operation, real inference call, credential access, model/quota change, deployment or settings change occurred. The browser-response marker discrepancy and actual live success remain unresolved.
+
+Fresh candidate checks: lint/typecheck/build passed; 87/87 unit tests, 47/47 Studio browser tests and 24/24 intercepted workerd/D1 cases passed. The newly added contract tests are part of the unit total. No real-provider test was run. git diff --check passed.
+
+
+## Authorized tool-choice release — 2026-11-21
+
+The owner authorized deployment of the tested minimal correction and delegated public acceptance to K; this supersedes the previous local-only checkpoint. Fetched origin/main and confirmed it still matched local HEAD 4858ad791467ccdd0ddc8f745c32d8ca2578fd0e, with only the known candidate changes and no conflicting work. Reviewed the existing candidate test records: lint/typecheck/build, 87 unit, 47 Studio browser and 24 intercepted workerd/D1 cases passed. Application source is unchanged since those tests; only release notes were condensed/updated. git diff --check passed. The release uses main Git integration only. No direct upload, model request, credential access, setting or limit change is performed by the implementation agent. Production SHA/log/UI acceptance is assigned exclusively to K and remains pending.

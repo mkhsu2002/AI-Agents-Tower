@@ -10,6 +10,8 @@ export function fixtureProvider(origin: string, failure?: number | 'invalid' | '
     async reserveRunBudget() { return reservation; },
     async send(request) {
       calls.push(request);
+      // Model only this documented request constraint; this is not full provider validation.
+      if (request.body.tool_choice !== 'auto' || Array.isArray(request.body.tools) && request.body.tools.length > 0 && request.body.parallel_tool_calls !== false) return Response.json({ error: 'Scripted tool choice contract rejected.' }, { status: 400 });
       if (typeof failure === 'number') return new Response('Private upstream details', { status: failure });
       if (failure === 'redirect') return new Response(null, { status: 302, headers: { Location: 'https://unapproved.invalid' } });
       if (failure === 'huge') return new Response('x'.repeat(32769));

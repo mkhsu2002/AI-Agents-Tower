@@ -6,7 +6,7 @@ export function createMetaSender(key: string, transport: typeof fetch) {
   if (typeof key !== 'string' || !key.trim() || key.length > 8192 || /\s/.test(key) || typeof transport !== 'function') throw fail();
   return async (request: ProviderRequest): Promise<Response> => {
     const body = request.body;
-    if (request.endpoint !== META_ENDPOINT || request.redirect !== 'error' || body.model !== META_MODEL || body.store !== false || ![256, 1024].includes(Number(body.max_output_tokens)) || !Number.isInteger(body.max_output_tokens) || typeof body.instructions !== 'string' || typeof body.input !== 'string' || Object.keys(body).some(name => !['model', 'store', 'max_output_tokens', 'reasoning', 'instructions', 'input', 'tools', 'tool_choice'].includes(name))) throw fail();
+    if (request.endpoint !== META_ENDPOINT || request.redirect !== 'error' || body.model !== META_MODEL || body.tool_choice !== 'auto' || (body.parallel_tool_calls !== undefined && body.parallel_tool_calls !== false) || body.store !== false || ![256, 1024].includes(Number(body.max_output_tokens)) || !Number.isInteger(body.max_output_tokens) || typeof body.instructions !== 'string' || typeof body.input !== 'string' || Object.keys(body).some(name => !['model', 'store', 'max_output_tokens', 'reasoning', 'instructions', 'input', 'tools', 'tool_choice', 'parallel_tool_calls'].includes(name))) throw fail();
     const encoded = JSON.stringify(body);
     if (new TextEncoder().encode(encoded).length > 8192) throw fail();
     request.signal.throwIfAborted();

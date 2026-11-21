@@ -6,7 +6,7 @@ import { META_ENDPOINT, META_MODEL } from '../server/meta-policy.ts';
 import { REVIEWER_BRIEF } from '../src/agents/reviewer-contract.ts';
 import type { ProviderRequest } from '../server/reviewer-gateway.ts';
 const key = 'SYNTHETIC-NOT-A-REAL-KEY';
-const request = (): ProviderRequest => ({ endpoint: META_ENDPOINT, redirect: 'error', signal: new AbortController().signal, body: { model: META_MODEL, store: false, max_output_tokens: 256, reasoning: { effort: 'minimal' }, instructions: 'Synthetic Reception fixture', input: REVIEWER_BRIEF, tools: [], tool_choice: 'none' } });
+const request = (): ProviderRequest => ({ endpoint: META_ENDPOINT, redirect: 'error', signal: new AbortController().signal, body: { model: META_MODEL, store: false, max_output_tokens: 256, reasoning: { effort: 'minimal' }, instructions: 'Synthetic Reception fixture', input: REVIEWER_BRIEF, tools: [], tool_choice: 'auto' } });
 test('prepared sender uses exact Meta endpoint, server-only authorization and bounded nonstoring payload', async () => {
   let calls = 0;
   const send = createMetaSender(key, async (url, init) => { calls++; assert.equal(url, META_ENDPOINT); assert.equal(init?.redirect, 'manual'); assert.equal(init?.credentials, 'omit'); assert.equal(new Headers(init?.headers).get('Authorization'), 'Bearer ' + key); return Response.json({ scripted: true }); });
