@@ -14,6 +14,12 @@ Open **https://1st-tower.neobabylon.app/** (Pages fallback: **https://ai-agents-
 
 Use the homepage **Try the demo** button, or open **https://1st-tower.neobabylon.app/#demo** directly. The fixed Atlas example and Live demo mode are selected; consent remains unchecked and no model request starts until you approve and select Create a draft. Application `faf506165d761a07d3cc49d321c146b7b53fba7e` successfully deployed on Cloudflare; a fresh public read confirmed the homepage demo CTA and #demo link. Review the result before Apply, then edit/preview/export. The independent caller package remains Simulation-only, including on a #demo link.
 
+## Current blocker: unrecognized first-turn 502
+
+The owner's refreshed public demo still stops at Reception with GATEWAY_RESPONSE_INVALID. Admission succeeds; the first turn does not return a readable recognized gateway error. The production cause and whether Meta was contacted remain unknown. No API key/D1 reset or repeated blind trial is requested.
+
+Actual modern and legacy Pages Functions routers are now included in local workerd/D1 fixture coverage, with every outbound call intercepted. Safe request/provider lifecycle metadata and a gateway response marker help correlate the next single normal-path trial with Cloudflare's live logs. Unknown errors display only a validated Ray value and marker presence; no raw body, credential, ticket or prompt is logged/displayed. See [the diagnostic procedure](docs/PUBLIC-LIVE-ACCEPTANCE.md#unrecognized-502-at-reception--diagnostic-procedure). Fresh lint/typecheck/build, 84 unit tests, 47 Studio browser tests and 24 intercepted native edge/router cases passed. These are diagnostic improvements, not a claim that the public failure is repaired or real inference has passed.
+
 ## Cloudflare 502 repair
 
 The owner's first reported public live attempt stopped with HTTP 502. A real local workerd/D1 reproduction confirmed a pre-provider failure: Workers rejects fetch redirect:error. The server now uses manual redirect mode and rejects/cancels every 3xx response without following it. Browser redirect refusal remains unchanged. Live adapter failures now stop the runtime immediately so child errors retain their original code/stage instead of being replaced by a later role-sequence error. Authorization/request-format failures are distinguished; unknown gateway responses still show only safe diagnostics.

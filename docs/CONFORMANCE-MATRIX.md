@@ -94,3 +94,8 @@ The declared local invocation subset now has runtime argument enforcement and wh
 ## First public failure and transport repair — 2026-11-21
 
 Owner reported a 502 live failure through the normal public entry. No successful real-model collaboration is claimed. Native workerd/D1 reproduction found the server's unsupported redirect:error mode; manual-plus-explicit-3xx refusal repairs that local blocker. Eight intercepted edge cases and browser regressions validate the repair and safe error propagation, not real inference. The owner's refreshed single-run acceptance after deployment remains the next real-provider evidence gate.
+
+
+### Repeated public 502 diagnostic checkpoint — 2026-11-21
+
+The owner observed GATEWAY_RESPONSE_INVALID at Reception after successful admission. Actual modern/legacy Pages routers now join the wholly intercepted workerd/D1 tests, and safe lifecycle logs/response markers support production correlation. These verify local routing and failure handling only. Public turn-path GET returns the expected 403 JSON; it is not a POST/model pass. Real inference, production execution diagnosis, independent HTTPS caller and portable real-router/full-profile compliance remain unverified. See [the log-assisted diagnostic procedure](PUBLIC-LIVE-ACCEPTANCE.md#unrecognized-502-at-reception--diagnostic-procedure).

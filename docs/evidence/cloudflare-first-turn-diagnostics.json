@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-21",
+  "baseCommit": "c46eafcdbbb5d850905040143d2afa92f600fc47",
+  "ownerReport": "Generation stopped: Demo service failed (502). This run has stopped. [GATEWAY_RESPONSE_INVALID; Reception] Current draft is unchanged.",
+  "productionCauseProven": false,
+  "realInferenceSuccessVerified": false,
+  "realProviderRequestByAssistant": false,
+  "publicReadback": {
+    "method": "GET",
+    "url": "https://1st-tower.neobabylon.app/api/reviewer/v1/chat/completions",
+    "httpStatus": 403,
+    "code": "REQUEST_REJECTED",
+    "scope": "Route delivery only, not POST or inference"
+  },
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 84,
+    "studioBrowserTests": 47,
+    "interceptedNativeCases": 24,
+    "surfaces": [
+      "direct gateway",
+      "Pages router / Wrangler 4.166.0",
+      "Pages router / Wrangler 2.20.2"
+    ],
+    "compatibilityDates": [
+      "2026-01-01",
+      "2026-11-19"
+    ]
+  },
+  "diagnostics": {
+    "events": [
+      "request-start",
+      "provider-start",
+      "provider-response",
+      "request-end",
+      "handler-error"
+    ],
+    "fields": [
+      "service",
+      "event",
+      "fixed route category",
+      "validated Cloudflare Ray",
+      "bounded HTTP status"
+    ],
+    "requestBodyOrCredentialsLogged": false,
+    "responseMarker": "X-Tower-Gateway: tower-synthetic-v1",
+    "markerIsAuthority": false
+  },
+  "remainingBlocker": "One normal-path attempt with an authorized live Cloudflare log stream; this workspace lacks log access and normal public browser navigation. No API/D1 reset requested."
+}

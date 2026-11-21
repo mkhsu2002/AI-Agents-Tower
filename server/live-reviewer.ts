@@ -5,6 +5,7 @@ import { turnPayload, checkedTurn } from './reviewer-turn.ts';
 import { createMetaSender } from './meta-sender.ts';
 import { DEMO_ERRORS } from '../src/agents/reviewer-errors.ts';
 import type { DemoErrorCode } from '../src/agents/reviewer-errors.ts';
+import { logGatewayEvent } from './reviewer-diagnostics.ts';
 import { META_ENDPOINT } from './meta-policy.ts';
 export interface Statement { bind(...values: unknown[]): Statement; first<T = Record<string, unknown>>(): Promise<T | null>; run(): Promise<{ meta: { changes: number } }> }
 export interface RuntimeDatabase { exec(sql: string): Promise<unknown>; prepare(sql: string): Statement }
@@ -61,8 +62,9 @@ export function createLiveReviewer(options: { transport: typeof fetch; timeoutMs
       callOp = new Operation(Math.min(timeout, row.expires - now()));
       phase = 'provider'; const send = createMetaSender(env!.META_API_KEY as string, options.transport);
       const payload = turnPayload(step, url.origin, row.builder ?? undefined);
-      op.assert();
+      op.assert(); logGatewayEvent(request, 'provider-start');
       const response = await op.wait(callOp.wait(send({ endpoint: META_ENDPOINT, redirect: 'error', signal: AbortSignal.any([op.signal, callOp.signal]), body: payload })));
+      logGatewayEvent(request, 'provider-response', response.status);
       if (!response.ok) stop(response.status === 429 ? 429 : 502, 'Model service rejected the request. No retry was sent.', response.status === 429 ? 'PROVIDER_LIMIT' : [401, 403].includes(response.status) ? 'PROVIDER_AUTHORIZATION' : [400, 404, 422].includes(response.status) ? 'PROVIDER_REQUEST_REJECTED' : 'PROVIDER_UNAVAILABLE');
       phase = 'output'; const checked = checkedTurn(await op.wait(boundedText(response.body, 32768, callOp)), step, url.origin, row.builder ?? undefined);
       phase = 'storage'; const completion = await op.wait(db.prepare("UPDATE tower_runtime_runs SET state=?,builder=? WHERE ticket_hash=? AND origin=? AND state='running' AND step=? AND expires>?").bind(step === 2 ? 'complete' : 'ready', step === 1 ? checked.content : null, ticketHash, url.origin, step + 1, now()).run());

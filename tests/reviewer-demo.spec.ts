@@ -124,3 +124,21 @@ test('service error codes are allowlisted; arbitrary server text never reaches t
   await expect(page.locator('body')).not.toContainText('PRIVATE-SERVER-SENTINEL');
   await expect(page.locator('#agent-proposal')).toBeHidden();
 });
+
+test('platform HTML 502 retains a safe Cloudflare correlation value, preserves draft and never retries', async ({ page }) => {
+  await selectDemo(page); await scriptedService(page); let calls = 0;
+  await page.route('**/api/reviewer/v1/chat/completions', route => {
+    calls++;
+    return route.fulfill({ status: 502, contentType: 'text/html', headers: { 'cf-ray': '0123456789abcdef-YVR' }, body: '<html>PRIVATE-PLATFORM-ERROR</html>' });
+  });
+  await start(page);
+  await expect(page.locator('#agent-status')).toContainText('[GATEWAY_RESPONSE_INVALID; Reception] Gateway: unconfirmed. Cloudflare Ray: 0123456789abcdef-YVR.');
+  await expect(page.locator('body')).not.toContainText('PRIVATE-PLATFORM-ERROR');
+  await expect(page.locator('#agent-proposal')).toBeHidden();
+  await expect(page.getByLabel('Display name')).toHaveValue('Atlas');
+  expect(calls).toBe(1);
+  await page.route('**/api/reviewer/v1/chat/completions', route => route.fulfill({ status: 502, headers: { 'cf-ray': 'PRIVATE-UNTRUSTED', 'x-tower-gateway': 'tower-synthetic-v1' }, json: {} }));
+  await start(page);
+  await expect(page.locator('#agent-status')).toContainText('Gateway: received.');
+  await expect(page.locator('body')).not.toContainText('PRIVATE-UNTRUSTED');
+});

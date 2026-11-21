@@ -17,7 +17,9 @@ export async function reviewerAdapter(operation: Operation, origin: string): Pro
   const rejectResponse = async (response: Response, op: Operation, stage: string): Promise<never> => {
     let message: string | undefined; let code = 'GATEWAY_RESPONSE_INVALID';
     try { const body: unknown = strictJson(await op.read(response.text())); if (object(body)) { message = demoErrorMessage(body.code); if (message) code = String(body.code); } } catch { op.assert(); }
-    throw new Error(`${message ?? `Demo service failed (${response.status}). This run has stopped.`} [${code}; ${stage}]`);
+    const ray = response.headers.get('cf-ray');
+    const diagnostic = code === 'GATEWAY_RESPONSE_INVALID' ? ` Gateway: ${response.headers.get('x-tower-gateway') === REVIEWER_PROTOCOL ? 'received' : 'unconfirmed'}.${ray && /^[a-f0-9]{16,32}-[A-Z]{3}$/.test(ray) ? ` Cloudflare Ray: ${ray}.` : ''}` : '';
+    throw new Error(`${message ?? `Demo service failed (${response.status}). This run has stopped.`} [${code}; ${stage}]${diagnostic}`);
   };
   const start = await operation.fetch(new URL('/api/reviewer/start', origin).href, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ consent: true }) });
   if (!start.ok) await rejectResponse(start, operation, 'Start');
