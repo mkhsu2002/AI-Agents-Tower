@@ -27,6 +27,7 @@
     "checks",
     "playwright.production.config.ts",
     "playwright.demo.config.ts",
-    "playwright.interop.config.ts"
+    "playwright.interop.config.ts",
+    "api"
   ]
 }

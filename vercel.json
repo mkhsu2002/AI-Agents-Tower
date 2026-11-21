@@ -3,5 +3,19 @@
   "framework": "vite",
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/reviewer/start",
+      "destination": "/api/reviewer"
+    },
+    {
+      "source": "/api/reviewer/cancel",
+      "destination": "/api/reviewer"
+    },
+    {
+      "source": "/api/reviewer/v1/chat/completions",
+      "destination": "/api/reviewer"
+    }
+  ]
 }

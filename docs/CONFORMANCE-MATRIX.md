@@ -64,3 +64,7 @@ Re-read the official [rules](https://cognizant-agenticweb.devpost.com/rules) and
 | Production interaction | Unverified | Readback/deployment status are separate from a public interaction pass; see DEPLOYMENT.md. |
 
 See REVIEWER-DEMO.md for exact shipped state and future gateway policy. No new full-conformance or P0-complete claim is made.
+
+## Meta gateway preparation checkpoint — 2026-11-21
+
+Owner selected Meta Model API instead of OpenRouter. [META-REVIEWER-GATEWAY.md](META-REVIEWER-GATEWAY.md) pins the read-only Muse reference and official protocol/pricing sources. Offline Request/Response fixtures now enforce server-owned synthetic prompts and three stages, bounded tickets/steps and a trusted Tower-only free-run reservation boundary. Browser tests reuse the real validation action/receipt and review/apply separation. This strengthens local safety evidence only. The production handler is hard disabled; no model, credit balance, account entitlement, expiry, overage protection, judging-period capacity or deployed independent HTTPS run was verified. Model API usage is metered even if free credits offset it. No competition requirement is closed merely by the gateway's existence; P0/full conformance remain incomplete.

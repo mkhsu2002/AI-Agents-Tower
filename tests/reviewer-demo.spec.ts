@@ -1,10 +1,9 @@
 // All enabled-service responses below are SCRIPTED FIXTURES, not model inference.
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { createModelAdapter } from '../src/agents/model.ts';
-import type { ModelRequest } from '../src/agents/model.ts';
-import { Operation } from '../spikes/m2/safety.js';
-import { REVIEWER_BRIEF } from '../src/agents/reviewer-demo.ts';
+import { createOfflineReviewerGateway } from '../server/reviewer-gateway.ts';
+import { fixtureProvider } from './reviewer-provider-fixture.ts';
+import { REVIEWER_BRIEF, REVIEWER_PROTOCOL } from '../src/agents/reviewer-contract.ts';
 async function selectDemo(page: Page) {
   await page.goto('/');
   await page.locator('#reviewer-demo').click();
@@ -17,18 +16,16 @@ async function start(page: Page) {
 }
 async function scriptedService(page: Page, failure?: number | 'invalid' | 'refused') {
   const calls: { headers: Record<string, string>; body: string }[] = [];
-  await page.route('**/reviewer/status.json', route => route.fulfill({ json: { enabled: true, model: 'SCRIPTED-FIXTURE-NOT-INFERENCE' } }));
-  await page.route('**/api/reviewer/v1/chat/completions', async route => {
-    calls.push({ headers: route.request().headers(), body: route.request().postData() || '' });
-    if (typeof failure === 'number') return route.fulfill({ status: failure, body: 'Private upstream detail must not appear' });
-    if (failure === 'refused') return route.fulfill({ json: { choices: [{ finish_reason: 'stop', message: { role: 'assistant', refusal: 'Refused', content: null } }] } });
-    const operation = new Operation(5000);
-    try {
-      const adapter = createModelAdapter({ mode: 'mock', scenario: failure === 'invalid' ? 'invalid-bundle' : 'success', timeoutMs: 5000, delayMs: 0 }, new URL('/agents/tower-home-builder#validate_home_bundle', page.url()).href);
-      const request = route.request().postDataJSON() as ModelRequest;
-      const result = await adapter.chat({ ...request, operation });
-      await route.fulfill({ json: { model: 'SCRIPTED-FIXTURE-NOT-INFERENCE', choices: [{ finish_reason: result.finishReason, message: { role: 'assistant', content: result.content, tool_calls: result.toolCalls } }] } });
-    } finally { operation.dispose(); }
+  const origin = new URL(page.url()).origin;
+  const f = fixtureProvider(origin, failure);
+  const gateway = createOfflineReviewerGateway({ origin, provider: f.provider });
+  page.on('close', () => gateway.dispose());
+  await page.route('**/reviewer/status.json', route => route.fulfill({ json: { enabled: true, protocol: REVIEWER_PROTOCOL } }));
+  await page.route('**/api/reviewer/**', async route => {
+    const request = route.request();
+    if (request.url().endsWith('/v1/chat/completions')) calls.push({ headers: request.headers(), body: request.postData() || '' });
+    const response = await gateway.handle(new Request(request.url(), { method: request.method(), headers: request.headers(), body: request.postData() }));
+    await route.fulfill({ status: response.status, headers: Object.fromEntries(response.headers), body: await response.text() }).catch(() => {});
   });
   return calls;
 }
@@ -43,13 +40,13 @@ test('public entry defaults to no consent; disabled live service sends no model 
   await expect(page.locator('#agent-proposal')).toBeHidden();
   await expect(page.getByLabel('Display name')).toHaveValue('Atlas');
 });
-test('scripted keyless three-call collaboration produces a real local validation receipt and review/apply/export', async ({ page }) => {
+test('scripted gateway keyless three-call collaboration produces a real local validation receipt and review/apply/export', async ({ page }) => {
   await selectDemo(page); const calls = await scriptedService(page);
   await page.getByLabel('Display name').fill('Private editor sentinel');
   await start(page);
   await expect(page.locator('#agent-proposal')).toBeVisible();
   expect(calls).toHaveLength(3);
-  for (const call of calls) { expect(call.headers.authorization).toBeUndefined(); expect(call.headers.cookie).toBeUndefined(); expect(call.body).not.toContain('Private editor sentinel'); }
+  for (const call of calls) { expect(call.headers.authorization).toBeUndefined(); expect(call.headers.cookie).toBeUndefined(); expect(call.body).not.toContain('Private editor sentinel'); expect(Object.keys(JSON.parse(call.body)).sort()).toEqual(['step', 'ticket']); }
   await expect(page.getByLabel('Display name')).toHaveValue('Private editor sentinel');
   await expect(page.locator('#agent-receipt')).toContainText('succeeded');
   await expect(page.locator('#agent-receipt')).toContainText('"valid": true');
