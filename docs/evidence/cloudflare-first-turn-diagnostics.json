@@ -48,5 +48,22 @@
     "responseMarker": "X-Tower-Gateway: tower-synthetic-v1",
     "markerIsAuthority": false
   },
-  "remainingBlocker": "One normal-path attempt with an authorized live Cloudflare log stream; this workspace lacks log access and normal public browser navigation. No API/D1 reset requested."
+  "remainingBlocker": "One normal-path attempt with an authorized live Cloudflare log stream; this workspace lacks log access and normal public browser navigation. No API/D1 reset requested.",
+  "applicationCommit": "a001c9d0c83f6cd38e96f1369b1bda14e0932fc6",
+  "remoteMainVerified": true,
+  "cloudflare": {
+    "conclusion": "success",
+    "deployment": "3e7621ec-a247-42e5-81c4-902fc071c190"
+  },
+  "publicDeploymentReadback": {
+    "demoHttpStatus": 200,
+    "expectedAsset": "/assets/index-D5Gw9J4L.js",
+    "assetPresent": true,
+    "readinessHttpStatus": 200,
+    "enabled": true,
+    "credentialConfigured": true,
+    "trialReady": true,
+    "connectionVerified": false,
+    "generationSubmitted": false
+  }
 }
