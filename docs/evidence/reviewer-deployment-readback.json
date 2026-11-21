@@ -1,0 +1,25 @@
+{
+  "checkedDateUTC": "2026-11-21",
+  "applicationCommit": "c5e4f321e45bca97c452111b6ab05a7199e8cf6d",
+  "deploymentId": "dpl_6K6ik3nCEcRaG2R8TaDKhXCiR4fZ",
+  "platformState": "READY",
+  "productionAlias": "https://ai-agents-tower.vercel.app/",
+  "readback": {
+    "method": "Fresh public Firecrawl extraction, maxAge 0, no credentials or protection bypass",
+    "homepageHTTPStatus": 200,
+    "homepageContains": ["Try the demo", "Simulation", "Live demo", "Validation receipt"],
+    "statusURL": "https://ai-agents-tower.vercel.app/reviewer/status.json",
+    "statusHTTPStatus": 200,
+    "statusBody": { "enabled": false }
+  },
+  "publicBrowserAcceptance": {
+    "command": "CHROMIUM_PATH=/usr/bin/chromium npm run test:production -- --grep \"production reviewer entry\"",
+    "attempted": 1,
+    "passed": 0,
+    "failure": "net::ERR_TUNNEL_CONNECTION_FAILED at page.goto before any interaction",
+    "bypassAttempted": false
+  },
+  "realInferenceExecuted": false,
+  "secondIndependentHTTPSOriginVerified": false,
+  "limitations": ["Deployment READY and content extraction are not an interaction pass.", "Extracted DOM text may include hidden sections.", "No provider gateway, account, credential or live switch was enabled.", "Local scripted service tests are not model inference evidence."]
+}

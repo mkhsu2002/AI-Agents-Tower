@@ -18,6 +18,8 @@ The public homepage welcomes agents of every origin, with a character-led Tower 
 
 See [implemented wiring, fixture evidence and activation gates](docs/REVIEWER-DEMO.md) and [current free-inference research](docs/REAL-INFERENCE-READINESS.md). No confirmed authorized free public route was established; production configuration metadata access returned 403 and no secret was read. OpenRouter's free router is a candidate requiring owner authorization, quota/terms verification and a restricted server gateway; no account, credential or service was created. P0 and full competition conformance remain incomplete. Validation: lint/typecheck/build passed; 37 unit, 42 Studio/browser, 52 runtime/browser and 1 independent local caller checks passed. After control styling, all 10 affected reviewer/landing checks passed again. See the [development log](docs/DEVELOPMENT-LOG.md) and [deployment record](docs/DEPLOYMENT.md) for exact evidence and public-readback limits.
 
+Public readback for application `c5e4f321e45bca97c452111b6ab05a7199e8cf6d`: Vercel production READY, homepage and disabled reviewer status both HTTP 200. Normal public reviewer interaction failed before UI with `ERR_TUNNEL_CONNECTION_FAILED`; no online interaction or real-inference pass is claimed. See [readback evidence](docs/evidence/reviewer-deployment-readback.json).
+
 ## Run the local Home Studio
 
 Use Node >=22.12 (Node 24 verified) and npm:
@@ -272,7 +274,7 @@ A server-only SQLite reference core implements owner-scoped private homes, durab
 
 The authorized sequence has delivered T01 compatibility reconciliation, T02 native validation receipts, a disabled T03 keyless transport, T04 independent caller packaging, T05 production test tooling, T06/T07 local durable private/public domain cores and T08 draft evidence tools. [Task-by-task status](docs/TASKS.md) explicitly marks production/model/auth/license/browser gates instead of claiming all P0/P1 complete.
 
-Latest local checks: lint/typecheck/build passed; 33 unit, 33 Studio browser, 51 runtime browser, 1 independent-caller browser and 1 mock recording test passed. The public round-trip attempt failed before UI with ERR_TUNNEL_CONNECTION_FAILED, and the other production cases are unrun; no real inference, production authentication or public/private persistence is implied by local passes. The 8.28-second silent MOCK footage is development evidence only. No new account, service, credential, paid route, license grant, remote origin or public submission was created.
+Previous checkpoint local checks: lint/typecheck/build passed; 33 unit, 33 Studio browser, 51 runtime browser, 1 independent-caller browser and 1 mock recording test passed. The public round-trip attempt failed before UI with ERR_TUNNEL_CONNECTION_FAILED, and the other production cases are unrun; no real inference, production authentication or public/private persistence is implied by local passes. The 8.28-second silent MOCK footage is development evidence only. No new account, service, credential, paid route, license grant, remote origin or public submission was created.
 
 ## Literal content preservation fix
 

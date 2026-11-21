@@ -67,3 +67,11 @@ When the page is reachable, enter a synthetic brief, approve the displayed origi
 - Direct local-browser tunneling and reference-screenshot downloading remain constrained. No public screenshot pixels or end-to-end live generation/apply/export interaction were inspected in this stage. Those claims are not inferred from READY or from page extraction, which can include hidden DOM text.
 - Local production-build evidence: lint/typecheck/build and 12 unit / 26 browser tests passed; actual desktop/mobile screenshots visually reviewed. No real inference or saved/public residency exists.
 - The following documentation-only commit may trigger another automatic build of the same application assets. Application checkpoint and later documentation deployment are distinguished deliberately.
+
+## Restricted reviewer checkpoint — 2026-11-21
+
+- Application commit `c5e4f321e45bca97c452111b6ab05a7199e8cf6d` was committed/pushed on main and origin/main readback matched exactly. The existing Git integration produced `dpl_6K6ik3nCEcRaG2R8TaDKhXCiR4fZ`, production READY, aliased to https://ai-agents-tower.vercel.app/. No direct deployment, new service, environment setting, credential or plan was created.
+- Fresh ordinary public Firecrawl reads returned HTTP 200 for the homepage (new Try the demo, mode selector and validation receipt markup) and `/reviewer/status.json` (`{"enabled":false}`). No credential or protection bypass was used. Extraction can include hidden DOM text and does not prove controls were clicked.
+- One normal public Playwright reviewer check was attempted. It failed at page.goto with `net::ERR_TUNNEL_CONNECTION_FAILED`, before any interaction. No live/model UI acceptance is claimed; no bypass or alternate origin was used to evade that failure.
+- [Compact readback evidence](evidence/reviewer-deployment-readback.json) records the application SHA, platform metadata, public statuses and failed interaction attempt. A following documentation-only commit records this evidence without changing application assets; its Git-triggered deployment must be checked separately.
+- This release exposes prepared UI wiring with live status OFF. It does not supply a model gateway, real inference, free judging capacity or second deployed HTTPS proof. Those remain explicit gates in REVIEWER-DEMO.md.
