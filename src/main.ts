@@ -1,6 +1,7 @@
 import './style.css';
 import './landing.css';
 import { towerHeader, towerLanding } from './landing.ts';
+import { REVIEWER_BRIEF } from './agents/reviewer-demo.ts';
 import { StudioAgent, networkLocation } from './agents/studio-agent.ts';
 import type { ConsentInfo } from '../spikes/m2/vendor/runtime/engine.js';
 import example from '../public/examples/welcome.homebundle.json';
@@ -17,13 +18,14 @@ root.innerHTML = `
     <section class="panel agent-panel" aria-labelledby="agent-title">
       <div class="section-heading"><h2 id="agent-title"><span>Start with an idea</span></h2></div>
       <p>Tell us about your agent and the space you want to create.</p>
+      <div class="actions agent-mode-controls"><a class="text-link" id="reviewer-demo" href="#home-studio">Try the demo</a><label>Execution <select id="agent-mode"><option value="mock">Simulation</option><option value="reviewer">Live demo</option></select></label></div><p id="demo-scope" class="hint" hidden>The live demo uses a fixed fictional example. No API key is required from you.</p>
       <label>Your brief <textarea id="agent-brief" rows="3" placeholder="For example: a home for a research agent, with a short introduction and a reading room."></textarea></label><p class="hint">Up to 1,500 characters. Include a purpose, interests, or ideas for the space.</p>
       <details><summary>Public network source</summary><label>Network URL <input id="agent-source" type="url" autocomplete="off"></label><p class="hint">Use a tower-home-builder network URL.</p></details>
       <label class="consent-label"><input id="agent-approve" type="checkbox"><span id="agent-permission"></span></label>
       <div class="actions"><button id="agent-run" class="primary" type="button">Create a draft</button><button id="agent-cancel" type="button" disabled>Cancel generation</button></div>
       <p id="agent-status" role="status" aria-live="polite">Enter a brief to get started, or edit the home below.</p>
       <section id="agent-contact" hidden><h3>Allow an external connection?</h3><pre id="agent-contact-details"></pre><button id="agent-contact-allow" type="button">Allow connection</button><button id="agent-contact-deny" type="button">Deny connection</button></section>
-      <section id="agent-proposal" hidden><h3>Review your draft</h3><p>Apply this draft to replace the editor’s current content.</p><div id="agent-result" class="proposal-preview"></div><div class="actions"><button id="agent-apply" type="button">Apply draft</button><button id="agent-discard" type="button">Discard draft</button></div></section>
+      <section id="agent-proposal" hidden><h3>Review your draft</h3><p>Apply this draft to replace the editor’s current content.</p><div id="agent-result" class="proposal-preview"></div><details><summary>Validation receipt</summary><pre id="agent-receipt"></pre></details><div class="actions"><button id="agent-apply" type="button">Apply draft</button><button id="agent-discard" type="button">Discard draft</button></div></section>
     </section>
     <div class="workspace">
       <section class="panel editor" aria-labelledby="editor-title"><div class="section-heading"><h2 id="editor-title">01 <span>Edit your home</span></h2><span class="tag">DRAFT</span></div>
@@ -166,6 +168,9 @@ el('#export').addEventListener('click', () => {
   } catch { transferStatus.textContent = 'Download could not start. Try again.'; }
 });
 const agent = new StudioAgent();
+const modeInput = el<HTMLSelectElement>('#agent-mode');
+let customBrief = '';
+let customSource = '';
 const briefInput = el<HTMLTextAreaElement>('#agent-brief');
 const sourceInput = el<HTMLInputElement>('#agent-source');
 const approval = el<HTMLInputElement>('#agent-approve');
@@ -179,10 +184,10 @@ let runActive = false;
 sourceInput.value = new URL('/agents/tower-home-builder', location.origin).href;
 function updatePermission() {
   approval.checked = false;
-  try { const target = networkLocation(sourceInput.value, location.origin); el('#agent-permission').textContent = `Allow loading the agent network from ${target.origin} and checking this draft in my browser.`; }
+  try { const target = networkLocation(sourceInput.value, location.origin); el('#agent-permission').textContent = modeInput.value === 'reviewer' ? `Allow sending the fixed fictional example to this site's model service, loading the local agent network, and checking the result in my browser.` : `Allow loading the agent network from ${target.origin} and checking this draft in my browser.`; }
   catch { el('#agent-permission').textContent = 'Enter a valid network URL to continue.'; }
 }
-function discardProposal() { proposal = undefined; el('#agent-proposal').hidden = true; el('#agent-result').textContent = ''; }
+function discardProposal() { proposal = undefined; el('#agent-proposal').hidden = true; el('#agent-result').textContent = ''; el('#agent-receipt').textContent = ''; }
 function reviewContact(info: ConsentInfo): Promise<string> {
   return new Promise(resolve => {
     const panel = el('#agent-contact'); let finished = false;
@@ -194,24 +199,36 @@ function reviewContact(info: ConsentInfo): Promise<string> {
     el('#agent-contact-allow').onclick = () => finish('allow'); el('#agent-contact-deny').onclick = () => finish('decline');
   });
 }
+function changeMode() {
+  discardProposal();
+  const live = modeInput.value === 'reviewer';
+  if (live) { customBrief = briefInput.value; customSource = sourceInput.value; briefInput.value = REVIEWER_BRIEF; sourceInput.value = new URL('/agents/tower-home-builder', location.origin).href; }
+  else { briefInput.value = customBrief; sourceInput.value = customSource || new URL('/agents/tower-home-builder', location.origin).href; }
+  briefInput.readOnly = live; sourceInput.disabled = live; el('#demo-scope').hidden = !live;
+  el('#execution-mode').textContent = live ? 'Live demo selected. Service availability is checked after permission; failures stop the run.' : 'Preview mode: agent responses are simulated.';
+  agentStatus.textContent = live ? 'Review the fictional example and allow the demo to continue.' : 'Enter a brief to get started, or edit the home below.';
+  updatePermission();
+}
+modeInput.addEventListener('change', changeMode);
+el('#reviewer-demo').addEventListener('click', () => { if (!runActive && modeInput.value !== 'reviewer') { modeInput.value = 'reviewer'; changeMode(); } });
 sourceInput.addEventListener('input', updatePermission);
 briefInput.addEventListener('input', () => { dirty = true; });
 cancelRun.addEventListener('click', () => agent.cancel());
 window.addEventListener('pagehide', () => agent.cancel());
 runButton.addEventListener('click', async () => {
   if (runActive) return;
-  discardProposal(); runActive = true; runButton.disabled = true; cancelRun.disabled = false;
+  discardProposal(); runActive = true; modeInput.disabled = true; runButton.disabled = true; cancelRun.disabled = false;
   const brief = briefInput.value; const source = sourceInput.value; const approved = approval.checked; approval.checked = false;
   proposedAtRevision = draftRevision;
   try {
-    const result = await agent.generate(brief, source, approved, message => { agentStatus.textContent = message; }, reviewContact);
-    proposal = result; dirty = true;
+    const result = await agent.generate(brief, source, approved, message => { agentStatus.textContent = message; }, reviewContact, modeInput.value === 'reviewer' ? 'reviewer' : 'mock');
+    proposal = result; dirty = true; el('#agent-receipt').textContent = JSON.stringify(agent.lastReceipt, null, 2);
     const review = el('#agent-result'); review.replaceChildren(text('h4', result.displayName), text('p', result.introduction));
     for (const block of result.blocks) review.append(text('h4', block.title), text('p', block.text)); el('#agent-proposal').hidden = false;
     applyButton.disabled = draftRevision !== proposedAtRevision;
     agentStatus.textContent = applyButton.disabled ? 'The editor changed during generation. Discard this draft and create another to keep your edits.' : 'Draft ready. Review it, then apply it to the editor.';
   } catch (error) { discardProposal(); agentStatus.textContent = `Generation stopped: ${error instanceof Error ? error.message : 'Draft generation failed.'} Current draft is unchanged.`; }
-  finally { runActive = false; runButton.disabled = false; cancelRun.disabled = true; }
+  finally { runActive = false; modeInput.disabled = false; runButton.disabled = false; cancelRun.disabled = true; }
 });
 applyButton.addEventListener('click', () => {
   if (!proposal) return;

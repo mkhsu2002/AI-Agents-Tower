@@ -6,6 +6,7 @@ import type { HomeBundle } from '../domain/homebundle.ts';
 import { executeValidation, validationDefinition } from './validation-action.ts';
 import type { ValidationExecution } from './validation-action.ts';
 import { createModelAdapter, validateBrief, validateSettings } from './model.ts';
+import { REVIEWER_BRIEF, reviewerAdapter } from './reviewer-demo.ts';
 export type Progress = (message: string) => void;
 // Drop user input, prompt bodies, tool arguments/results and exception detail from runtime tracing.
 class StatusTrace {
@@ -31,26 +32,37 @@ export function networkLocation(input: string, callerOrigin: string): { base: st
   return { name, base: new URL('./', url).href.replace(/\/$/, ''), origin: url.origin };
 }
 export class StudioAgent {
+  lastReceipt?: { action: string; status: string; result?: Record<string, unknown>; mode: 'mock' | 'reviewer' };
   private engine?: Engine; private preparation?: Operation; private active = false; private sequence = 0;
   cancel() { this.sequence++; this.engine?.cancel(); this.preparation?.cancel(); }
-  async generate(brief: string, source: string, approved: boolean, progress: Progress, consent: (info: ConsentInfo) => Promise<string>): Promise<HomeBundle> {
+  async generate(brief: string, source: string, approved: boolean, progress: Progress, consent: (info: ConsentInfo) => Promise<string>, mode: 'mock' | 'reviewer' = 'mock'): Promise<HomeBundle> {
     if (this.active) throw new Error('Generation is already in progress. Cancel it to start again.');
     validateBrief(brief);
     const target = networkLocation(source, location.origin);
     if (!approved) throw new Error('Permission declined. No agent network was contacted.');
+    if (mode !== 'mock' && mode !== 'reviewer') throw new Error('Unsupported execution mode.');
+    if (mode === 'reviewer' && (brief !== REVIEWER_BRIEF || source !== new URL('/agents/tower-home-builder', location.origin).href)) throw new Error('The live demo only accepts the fixed synthetic example and local network.');
+    this.lastReceipt = undefined;
     const sequence = ++this.sequence; this.active = true;
     this.preparation = new Operation(10000);
     let permissionDeclined = false;
     try {
       progress('Loading the agent network…');
-      const response = await this.preparation.fetch(new URL('/development/mock-settings.json', location.origin).href);
-      if (!response.ok) throw new Error('Generation settings could not be loaded. Try again.');
-      const settings = validateSettings(strictJson(await this.preparation.read(response.text())));
+      let settings = { scenario: 'success', timeoutMs: 30000 };
+      let adapter;
+      if (mode === 'reviewer') adapter = await reviewerAdapter(this.preparation, location.origin);
+      else {
+        const response = await this.preparation.fetch(new URL('/development/mock-settings.json', location.origin).href);
+        if (!response.ok) throw new Error('Generation settings could not be loaded. Try again.');
+        const mockSettings = validateSettings(strictJson(await this.preparation.read(response.text())));
+        settings = mockSettings;
+        adapter = createModelAdapter(mockSettings, `${target.base}/${target.name}#validate_home_bundle`);
+      }
       this.preparation.dispose(); this.preparation = undefined;
       if (sequence !== this.sequence) throw new Error('Generation cancelled.');
       const trace = new StatusTrace(progress);
       const actionRef = `${target.base}/${target.name}#validate_home_bundle`;
-      this.engine = new Engine({ originUrl: target.base, networkName: target.name, routerOverride: 'browser://mock', modelAdapter: createModelAdapter(settings, actionRef), trace, timeoutMs: settings.timeoutMs });
+      this.engine = new Engine({ originUrl: target.base, networkName: target.name, routerOverride: mode === 'mock' ? 'browser://mock' : location.origin, modelAdapter: adapter, ...(mode === 'reviewer' ? { trustedAdapterOrigin: location.origin } : {}), trace, timeoutMs: settings.timeoutMs });
       let execution: ValidationExecution | undefined;
       this.engine.actions.register({ base: target.base, network: target.name }, validationDefinition, async args => {
         if (!this.preparation) throw new Error('Validation scope is unavailable.');
@@ -79,6 +91,7 @@ export class StudioAgent {
       const parsed = parseBundle(output.text);
       if (!parsed.ok) throw new Error('Generated bundle failed validation. ' + parsed.errors.map(issue => `${issue.code} ${issue.path}: ${issue.message}`).join(' '));
       if (!execution.bundle || receipts[0].result?.valid !== true) throw new Error('Validation did not confirm the generated draft.');
+      this.lastReceipt = { ...receipts[0], mode };
       progress('Draft validated.');
       return parsed.value;
     } catch (error) {

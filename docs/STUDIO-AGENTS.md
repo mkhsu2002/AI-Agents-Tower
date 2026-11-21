@@ -42,3 +42,5 @@ Next gates: agree full official-profile compatibility tests, test a genuinely av
 ## T02 update
 
 The earlier host-validation-only description is superseded by [STUDIO-VALIDATION-ACTION.md](STUDIO-VALIDATION-ACTION.md): the host registers a native runtime read action, the mock agents propose/relay it, and a matching successful execution receipt is required before final host validation. No real model or general remote action discovery is claimed.
+
+Reviewer checkpoint (2026-11-21): Simulation remains the default. A separate fixed synthetic **Live demo** entry is connected through a trusted same-origin adapter path, with a shipped disabled status and no server gateway. It reuses this state machine, actual validation dispatcher and review/apply boundary. Both modes now expose the actual validation receipt. Tests of the enabled route use scripted fixtures only. See REVIEWER-DEMO.md for the exact host trust and future gateway requirements; no real inference is claimed.

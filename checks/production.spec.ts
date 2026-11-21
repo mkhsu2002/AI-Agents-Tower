@@ -43,3 +43,17 @@ test('production client fault injection: cancellation and explicit restart', asy
   await page.locator('#agent-approve').check(); await page.getByRole('button', { name: 'Create a draft', exact: true }).click();
   await expect(page.locator('#agent-proposal')).toBeVisible();
 });
+
+test('production reviewer entry fails closed while the live service is disabled', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#reviewer-demo').click();
+  const calls: string[] = [];
+  page.on('request', request => { if (request.method() !== 'GET') calls.push(request.url()); });
+  await expect(page.locator('#agent-approve')).not.toBeChecked();
+  await page.locator('#agent-approve').check();
+  await page.getByRole('button', { name: 'Create a draft', exact: true }).click();
+  await expect(page.locator('#agent-status')).toContainText('live demo is not available yet');
+  await expect(page.locator('#agent-proposal')).toBeHidden();
+  await expect(page.getByLabel('Display name')).toHaveValue('Atlas');
+  expect(calls).toEqual([]);
+});

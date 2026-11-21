@@ -12,7 +12,7 @@
       "path": "runtime/engine.js",
       "upstreamPath": "nsdeploy/runtime/engine.js",
       "gitBlob": "1777948ad49b9111742011b24664eeee13792907",
-      "patchedGitBlob": "a6efa8ba60ef1f379c06785258ff2216a3a43e07"
+      "patchedGitBlob": "14255a47b4deee30633f6b2b8ccfe756e0a02b35"
     },
     {
       "path": "runtime/hocon.js",

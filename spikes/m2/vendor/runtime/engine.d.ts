@@ -3,7 +3,7 @@ export interface ActionComponent { id: string; kind: string; action?: string; ar
 export interface ActionPlan { action: string; effect: string; arguments: Record<string, unknown> }
 export interface ActionReceipt { action: string; status: string; result?: Record<string, unknown> }
 export class Engine {
-  constructor(options: { originUrl: string; networkName?: string; routerOverride?: string; modelAdapter?: unknown; trace?: unknown; timeoutMs?: number });
+  constructor(options: { originUrl: string; networkName?: string; routerOverride?: string; modelAdapter?: unknown; trustedAdapterOrigin?: string; trace?: unknown; timeoutMs?: number });
   onConsent: ((info: ConsentInfo) => Promise<string>) | null;
   actions: { register(scope: { base: string; network: string }, definition: unknown, execute: (args: Record<string, unknown>) => Promise<unknown>): string };
   onActionConfirm: (plan: ActionPlan[]) => Promise<boolean>;

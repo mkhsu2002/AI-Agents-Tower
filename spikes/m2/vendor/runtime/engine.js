@@ -94,7 +94,13 @@ export class Engine {
     this.operation = null;
     this.networkName = arguments[0]?.networkName;
     this.modelAdapter = arguments[0]?.modelAdapter;
-    if (this.modelAdapter && (this.modelAdapter.mock !== true || typeof this.modelAdapter.chat !== "function")) throw new Error("Only an explicitly mock custom adapter is enabled in this profile.");
+    if (this.modelAdapter) {
+      const trustedOrigin = arguments[0]?.trustedAdapterOrigin;
+      const liveAllowed = this.modelAdapter.mode === "real" && this.modelAdapter.mock === false &&
+        typeof trustedOrigin === "string" && trustedOrigin === globalThis.location?.origin &&
+        new URL(this.originUrl).origin === trustedOrigin && this.modelAdapter.baseUrl === trustedOrigin && routerOverride === trustedOrigin;
+      if (typeof this.modelAdapter.chat !== "function" || (this.modelAdapter.mock !== true && !liveAllowed)) throw new Error("Custom inference requires an explicitly mock adapter or a trusted same-origin keyless adapter.");
+    }
     this.sandboxWorkerUrl = sandboxWorkerUrl || "/runtime/sandbox-worker.js";
     this.byokKey = byokKey || "";
     this.routerOverride = routerOverride || "";

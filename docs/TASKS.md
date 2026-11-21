@@ -49,3 +49,9 @@ Continue official-profile fixture tests and matrix maintenance, the local read-o
 | T08 | English draft/script, rights inventory and MOCK-only local recording prepared | Owner project-license selection, final real-inference narrated video and authorized upload/submission |
 
 Full P0/P1 completion is **blocked, not claimed**. No priority/product replanning has been requested at this checkpoint; the remaining items are actual service/identity/license/browser gates. See REAL-INFERENCE-READINESS.md, INTEROP-AND-PRODUCTION.md, PRIVATE-PUBLIC-CORE.md and submission/ for reviewable implementation/evidence and configuration boundaries.
+
+## Next bounded reviewer stage — 2026-11-21
+
+T03 now includes a public, disabled-by-default fixed synthetic demo entry, trusted same-origin adapter wiring and visible actual validation receipts. Local scripted fixtures verify success and negative paths without a visitor key. This does not close T03/P0: no model gateway, authorized provider, measured real-model run or free judging capacity exists as verified evidence. See REVIEWER-DEMO.md and REAL-INFERENCE-READINESS.md.
+
+Next: obtain the one provider authorization decision; implement and test the restricted synthetic-only server gateway, quota/abuse policy and no-paid-fallback enforcement; then run normal public live acceptance and independent HTTPS interoperability. Do not activate status alone. T06/T07, license selection and submission/public listing remain outside this round.

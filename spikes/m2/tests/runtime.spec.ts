@@ -296,3 +296,22 @@ test('bounded transport rejects oversized requests and invalid timeout configura
   })()`);
   expect(failures).toHaveLength(6); expect(failures.every(message => !message.includes('unexpected success'))).toBe(true);
 });
+
+test('live adapter injection requires explicit trusted caller origin; network metadata cannot authorize it', async ({ page }) => {
+  await page.goto('');
+  const results = await page.evaluate(`(async () => {
+    const {Engine} = await import('/spikes/m2/vendor/runtime/engine.js');
+    const origin = location.origin;
+    const adapter = {mode:'real',mock:false,baseUrl:origin,chat:async()=>{throw Error('Fixture must not execute');}};
+    const cases = [
+      {originUrl:origin,routerOverride:origin,modelAdapter:adapter},
+      {originUrl:origin,routerOverride:origin,modelAdapter:adapter,trustedAdapterOrigin:'https://unapproved.invalid'},
+      {originUrl:'http://127.0.0.1:4181',routerOverride:origin,modelAdapter:adapter,trustedAdapterOrigin:origin},
+      {originUrl:origin,routerOverride:origin,modelAdapter:{...adapter,baseUrl:'https://unapproved.invalid'},trustedAdapterOrigin:origin},
+      {originUrl:origin,routerOverride:'browser://mock',modelAdapter:adapter,trustedAdapterOrigin:origin},
+      {originUrl:origin,routerOverride:origin,modelAdapter:adapter,trustedAdapterOrigin:origin}
+    ];
+    return cases.map(options=>{try {new Engine(options);return 'accepted';}catch{return 'rejected';}});
+  })()`);
+  expect(results).toEqual(['rejected','rejected','rejected','rejected','rejected','accepted']);
+});
