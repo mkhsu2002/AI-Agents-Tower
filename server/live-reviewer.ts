@@ -5,7 +5,7 @@ import { turnPayload, checkedTurn } from './reviewer-turn.ts';
 import { createMetaSender } from './meta-sender.ts';
 import { DEMO_ERRORS } from '../src/agents/reviewer-errors.ts';
 import type { DemoErrorCode } from '../src/agents/reviewer-errors.ts';
-import { logGatewayEvent } from './reviewer-diagnostics.ts';
+import { logGatewayEvent, logTurnFailure } from './reviewer-diagnostics.ts';
 import { META_ENDPOINT } from './meta-policy.ts';
 export interface Statement { bind(...values: unknown[]): Statement; first<T = Record<string, unknown>>(): Promise<T | null>; run(): Promise<{ meta: { changes: number } }> }
 export interface RuntimeDatabase { exec(sql: string): Promise<unknown>; prepare(sql: string): Statement }
@@ -72,6 +72,7 @@ export function createLiveReviewer(options: { transport: typeof fetch; timeoutMs
       return reply(200, checked.response);
     } catch (error) {
       const interrupted = clientSignal?.aborted ? 'CANCELLED' : op.signal.aborted || callOp?.signal.aborted ? 'TIMEOUT' : undefined;
+      if (!interrupted && phase === 'output') logTurnFailure(request, error, Number(claimedStep) - 1);
       if (claimed && db && ticketHash) { const cleanup = new Operation(250); try { await cleanup.wait(db.prepare("UPDATE tower_runtime_runs SET state='error',builder=NULL WHERE ticket_hash=? AND state='running' AND step=?").bind(ticketHash, claimedStep).run()); } catch { /* Consumed running step is never retried, even if storage is unavailable. */ } finally { cleanup.dispose(); } }
       const code: DemoErrorCode = interrupted ?? (error instanceof Stop ? error.code : phase === 'storage' ? 'STORAGE_UNAVAILABLE' : phase === 'output' ? 'OUTPUT_REJECTED' : phase === 'request' ? 'REQUEST_REJECTED' : 'PROVIDER_UNAVAILABLE');
       const status = interrupted === 'CANCELLED' ? 499 : interrupted === 'TIMEOUT' ? 504 : error instanceof Stop ? error.status : phase === 'storage' ? 503 : phase === 'request' ? 400 : 502;
