@@ -54,3 +54,10 @@
 - Followed the Vercel deployment inspection skill using connected read-only metadata; no deployment API, credential or plan/security changes.
 - Fresh Firecrawl read of https://ai-agents-tower.vercel.app/ returned HTTP 200 and current homepage title, all-agent welcome, hero image URL, shared-values copy and initialized Studio. This is public content verification, not public interactive or screenshot-pixel verification. Local browsers/screenshot download still face proxy limits.
 - Updated obsolete public-read limitation in README and recorded bounded evidence in DEPLOYMENT.md. This documentation-only completion uses diff review/git diff --check; application tests are the successful implementation-stage runs rather than invented fresh results.
+
+## Inventory and backlog reconciliation
+
+- Reviewed current main, README, milestone plan, conformance matrix and delivery history in response to the owner's inventory/planning request. Working tree was clean at 0f5c8b0.
+- Corrected stale milestone statements that product integration/deployment had not occurred. Added docs/TASKS.md with bounded completed evidence, T01–T09 priorities, acceptance criteria and genuine owner authorization gates.
+- No implementation, service, model call, credential, persistence or publication added. Existing test counts are historical verified runs, not fresh checks for this documentation-only stage.
+- Validation: reviewed documentation against implementation history and git diff --check. Authorized completion workflow remains main commit/push without force.
