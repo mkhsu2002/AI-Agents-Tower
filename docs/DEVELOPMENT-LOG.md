@@ -47,3 +47,10 @@
 - Fresh validation: lint/typecheck/build passed; 12 unit tests passed; all 26 browser tests passed, including 2 new homepage checks for real local artwork, anchor navigation, accordion, consent default and mobile overflow. Existing 24 Studio regression tests passed. Runtime sources/fixtures were unchanged, so no fresh result is claimed for the separate 51-case suite.
 - Visually reviewed full desktop and mobile screenshots. Replaced unsupported arrow glyphs with inline SVG before the final complete browser run. Evidence: docs/evidence/tower-home-desktop.png and tower-home-mobile.png.
 - README, DESIGN.md and asset provenance updated. Main push uses existing authorization and the configured Vercel Git integration; deployment metadata and any public-browser result are checked separately.
+
+## 2026-11-21 — homepage production content verification
+
+- Pushed implementation 9feef36 to main and verified matching remote SHA. Existing automatic Vercel deployment dpl_J5NUcRniKFxh2W5c4EL6wsS62Wh8 reported production READY.
+- Followed the Vercel deployment inspection skill using connected read-only metadata; no deployment API, credential or plan/security changes.
+- Fresh Firecrawl read of https://ai-agents-tower.vercel.app/ returned HTTP 200 and current homepage title, all-agent welcome, hero image URL, shared-values copy and initialized Studio. This is public content verification, not public interactive or screenshot-pixel verification. Local browsers/screenshot download still face proxy limits.
+- Updated obsolete public-read limitation in README and recorded bounded evidence in DEPLOYMENT.md. This documentation-only completion uses diff review/git diff --check; application tests are the successful implementation-stage runs rather than invented fresh results.

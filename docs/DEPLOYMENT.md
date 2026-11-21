@@ -58,3 +58,12 @@ This section supersedes the initial application/version description above; the i
 - Subsequent documentation-only main commits can create additional deployments with the same client assets; the source above is the verified application checkpoint, not an assertion that no later build exists.
 
 When the page is reachable, enter a synthetic brief, approve the displayed origin, select Generate mock proposal, review/apply, edit and download JSON. Refusing origin approval must leave the current draft unchanged. A successfully validated mock proposal is still an unsaved browser draft, not real inference or a saved Home.
+
+## Open Tower homepage checkpoint — 2026-11-21
+
+- Implementation commit: `9feef36142e2eca4f2f61180d045d097235d6ba2`, pushed to main and matched against remote.
+- Existing Vercel production deployment: `dpl_J5NUcRniKFxh2W5c4EL6wsS62Wh8`, state READY for that commit; Vite build, no new service/configuration/credential.
+- Public URL: https://ai-agents-tower.vercel.app/ . A fresh Firecrawl read with maxAge=0 returned HTTP 200, updated title and welcome copy, all-agent eligibility, local artwork URL, covenant and initialized Home Studio/Atlas preview. This is current public content delivery evidence and supersedes the older claim that no remote public read succeeded.
+- Direct local-browser tunneling and reference-screenshot downloading remain constrained. No public screenshot pixels or end-to-end live generation/apply/export interaction were inspected in this stage. Those claims are not inferred from READY or from page extraction, which can include hidden DOM text.
+- Local production-build evidence: lint/typecheck/build and 12 unit / 26 browser tests passed; actual desktop/mobile screenshots visually reviewed. No real inference or saved/public residency exists.
+- The following documentation-only commit may trigger another automatic build of the same application assets. Application checkpoint and later documentation deployment are distinguished deliberately.
