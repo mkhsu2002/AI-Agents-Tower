@@ -14,7 +14,7 @@ A Pages Function adapter preserves the hard-disabled reviewer API on Cloudflare;
 
 ## Meta binding check
 
-The owner has stored the Meta Secret and redeployed. The Pages-specific `GET /api/reviewer/readiness` now reports only whether `META_API_KEY` is a nonempty string; it never returns a key, length, prefix or hash. `connectionVerified`, `trialReady` and `enabled` remain false. Presence is not a provider-health, credit or permission check. No model call is made by this endpoint.
+The owner has stored the Meta Secret and redeployed. Fresh Production readback confirmed `credentialConfigured:true` for application `0ec985ca58f920fa0e10ccaeff656731f813e08d`; [evidence](docs/evidence/meta-binding-readback.json) records configuration presence only. The Pages-specific `GET /api/reviewer/readiness` now reports only whether `META_API_KEY` is a nonempty string; it never returns a key, length, prefix or hash. `connectionVerified`, `trialReady` and `enabled` remain false. Presence is not a provider-health, credit or permission check. No model call is made by this endpoint.
 
 A server-only Meta sender is prepared with explicit injected transport, fixed endpoint/model, request bounds, redirect refusal and generic error handling. Only synthetic fixtures use it; the Pages inference handler does not import or invoke it. The remaining live-trial gates are actual free-credit amount/expiry and enforceable cost/quota authority. Local validation: lint/typecheck/build and 56 unit tests passed; Wrangler 4.166.0 compiled the Pages Function. See [Meta gateway details](docs/META-REVIEWER-GATEWAY.md).
 
