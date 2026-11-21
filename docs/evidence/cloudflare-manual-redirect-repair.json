@@ -45,5 +45,27 @@
     "Preserve fatal child errors instead of replacing them with later role-order errors",
     "Safe JSON for otherwise uncaught handler failures",
     "Optional incoming signal access without per-worker slot leaks; deadlines and explicit cancel remain"
-  ]
+  ],
+  "applicationCommit": "d96fd0b0f21451047eb1222a6818c75f87d9aaf0",
+  "remoteMainVerified": true,
+  "cloudflare": {
+    "conclusion": "success",
+    "deployment": "f7080ab8-7f01-42e6-b935-6b189810537e"
+  },
+  "publicReadback": {
+    "demo": {
+      "url": "https://1st-tower.neobabylon.app/#demo",
+      "httpStatus": 200,
+      "expectedAsset": "/assets/index-_nsYDWN5.js",
+      "assetPresent": true
+    },
+    "readiness": {
+      "httpStatus": 200,
+      "enabled": true,
+      "credentialConfigured": true,
+      "trialReady": true,
+      "connectionVerified": false
+    },
+    "generationSubmitted": false
+  }
 }

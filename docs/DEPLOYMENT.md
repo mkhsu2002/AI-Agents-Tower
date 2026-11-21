@@ -18,7 +18,7 @@ Homepage demo CTA and #demo direct/hash/reload entry select the fictional live e
 
 ## Reported 502 and native fetch repair — 2026-11-21
 
-Owner's normal public live attempt failed with generic 502. Native workerd reproduced an unsupported redirect:error pre-provider failure. Server transport now uses manual mode and rejects/cancels all redirects; the live adapter preserves fatal child error codes/stages. No API/D1 setup or limit expansion is needed. Fresh 83 unit/46 Studio/8 intercepted edge cases plus lint/typecheck/build passed; actual public provider success remains pending. Deployment and safe GET readback follow push.
+Owner's normal public live attempt failed with generic 502. Native workerd reproduced an unsupported redirect:error pre-provider failure. Server transport now uses manual mode and rejects/cancels all redirects; the live adapter preserves fatal child error codes/stages. No API/D1 setup or limit expansion is needed. Fresh 83 unit/46 Studio/8 intercepted edge cases plus lint/typecheck/build passed; actual public provider success remains pending. Cloudflare deployed d96fd0b0f21451047eb1222a6818c75f87d9aaf0 successfully (f7080ab8-7f01-42e6-b935-6b189810537e), with origin/main SHA matched. Fresh /#demo raw HTML contained index-_nsYDWN5.js and returned HTTP 200; readiness returned enabled/credentialConfigured/trialReady true, connectionVerified false. No generation was submitted in those GET checks. Owner was asked for one refreshed normal-path trial; actual real-model success is still unverified.
 
 ## Historical deployment records
 
