@@ -61,3 +61,9 @@
 - Corrected stale milestone statements that product integration/deployment had not occurred. Added docs/TASKS.md with bounded completed evidence, T01–T09 priorities, acceptance criteria and genuine owner authorization gates.
 - No implementation, service, model call, credential, persistence or publication added. Existing test counts are historical verified runs, not fresh checks for this documentation-only stage.
 - Validation: reviewed documentation against implementation history and git diff --check. Authorized completion workflow remains main commit/push without force.
+
+## T01 — runtime compatibility reconciliation
+
+Rechecked rules/current specification, pinned the Profile 0.3 path commit/blob, and compared its five-line delta with the retained submission-start baseline. Added explicit local-subset acceptance/rejection tests and compatibility documentation; updated matrix/README. Historical authority and full official schema acceptance remain unresolved, not falsely completed. Started from clean synchronized main 6aed49a.
+
+T01 validation passed: lint, typecheck, all 17 unit tests and git diff --check. No browser or real-inference run was needed/claimed for this boundary-test checkpoint.

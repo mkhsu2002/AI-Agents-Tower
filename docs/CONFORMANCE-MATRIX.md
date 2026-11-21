@@ -1,12 +1,12 @@
 # Competition conformance matrix
 
-Rechecked 2026-11-18. This is engineering evidence, **not a conformance declaration**. Status vocabulary: Verified (the stated bounded check passed), Partial (some local evidence only), Not implemented, Unverified. A verified local safety test does not establish the corresponding full competition requirement.
+Baseline checked 2026-11-18; current-version delta rechecked 2026-11-21 (see RUNTIME-COMPATIBILITY.md). This is engineering evidence, **not a conformance declaration**. Status vocabulary: Verified (the stated bounded check passed), Partial (some local evidence only), Not implemented, Unverified. A verified local safety test does not establish the corresponding full competition requirement.
 
 ## Applicable sources and version
 
 - [Official rules, sections 1 and 4](https://cognizant-agenticweb.devpost.com/rules): applicability is the specification at submission-period start, 2026-11-12T04:00:00Z, not automatically today's main.
 - [Recovered baseline](https://github.com/cognizant-ai-labs/agentic-web/blob/e4a8727d5c6807233b8976f28494bbdac7bc1c6e/docs/worldwide_agentic_web_mvp_spec.md): Profile 0.2, dated 6 November 2026. File blob `7a09be795cc3eee47f601f1a6bc7dc26d408f7a9`, 36,225 bytes. Historical main reconstruction remains best effort; see SPEC-BASELINE.md.
-- Current repository head observed: `a39df2b7376ccf4a0dbe1c7dc411d04189838979`, 2026-11-18T06:18:08Z. Latest specification-path commit is still `fd872b9221aeb8ff762b75a5badbf84b23c133cc`, 2026-11-10T15:50:31Z. Current tree has the same specification blob. No silent baseline change is made.
+- Historical 2026-11-18 repository head observed: `a39df2b7376ccf4a0dbe1c7dc411d04189838979`, 2026-11-18T06:18:08Z. The specification-path commit at that observation was `fd872b9221aeb8ff762b75a5badbf84b23c133cc`, 2026-11-10T15:50:31Z. Current tree has the same specification blob. No silent baseline change is made.
 
 | Source area | Requirement / check | Current bounded status | Evidence or next verification |
 | --- | --- | --- | --- |
@@ -40,3 +40,7 @@ Proceed with the clear browser/data/consent/product requirements while these que
 ## Integration checkpoint — 2026-11-18
 
 See [STUDIO-AGENTS.md](STUDIO-AGENTS.md) for the implemented state machine, mock-only adapter, explicit review/apply, conflict protection and reproducible second-origin evidence. Studio stops the entire run on a denied additional contact; upstream optional-tool skipping is not presented as success. The independent-origin fixture remains local HTTP, the grounded MCP remains in the separate spike, and actual real-model/default reviewer inference remains Not implemented. Deployment metadata and actual public UI verification are recorded separately in DEPLOYMENT.md.
+
+## T01 reconciliation
+
+Current Profile 0.3 path commit a0ceda34e4f2e653223e13e63282abc9b60eaf7c changes version/date, links and wording relative to the recovered baseline; the submission-start baseline is retained. See [runtime compatibility](RUNTIME-COMPATIBILITY.md) and tests/compatibility.test.ts for explicit accepted/unsupported fixtures. Reconciliation is implemented; full schema compatibility and organizer historical confirmation remain open.

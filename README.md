@@ -239,3 +239,9 @@ Next engineering gates remain real free reviewer inference, full official-profil
 ## Inventory and prioritized tasks
 
 [Current inventory and task backlog](docs/TASKS.md) distinguishes completed homepage/Studio/mock safety work from real inference, deployed interoperability and later persistence/publication. [MVP-PLAN.md](docs/MVP-PLAN.md) now reflects the existing public deployment and Studio integration rather than the historical spike-only status. Next priorities are official-profile compatibility, a registered read-only validation capability, authorized real inference and production/second-origin evidence. This planning checkpoint adds no application behavior and claims no fresh application test run.
+
+## T01 compatibility checkpoint
+
+The [runtime compatibility contract](docs/RUNTIME-COMPATIBILITY.md) now distinguishes the applicable recovered Profile 0.2 baseline, current Profile 0.3 and Tower’s restricted runtime subset. Five focused fixtures cover accepted published assets and explicit unsupported cases; full official-schema support and historical organizer confirmation remain open. No current-version label is treated as competition certification.
+
+T01 validation: lint, typecheck, 17 unit tests and diff checks passed. No fresh browser/build result is claimed for the type-declaration/test/documentation-only change.

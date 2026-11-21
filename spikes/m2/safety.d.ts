@@ -10,3 +10,5 @@ export class Operation {
   wait<T>(promise: Promise<T>): Promise<T>;
   read<T>(promise: Promise<T>): Promise<T>;
 }
+export function validateDefinition(value: unknown): unknown;
+export function validateManifest(value: unknown, base: string): unknown;
