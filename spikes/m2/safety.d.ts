@@ -12,3 +12,5 @@ export class Operation {
 }
 export function validateDefinition(value: unknown): unknown;
 export function validateManifest(value: unknown, base: string): unknown;
+
+export function policyError(message: string): Error & { code: 'RUNTIME_POLICY' };

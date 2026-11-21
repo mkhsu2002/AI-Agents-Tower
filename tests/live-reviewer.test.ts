@@ -44,13 +44,13 @@ test('no consent, missing binding, unknown fields, private input and unauthorize
     assert.equal((await g(request('v1/chat/completions', { ticket, step: 0, model: 'paid-other' }), f.env)).status, 400); assert.equal(f.calls, 0);
   } finally { f.close(); }
 });
-for (const failure of [429, 503, 'invalid', 'refused', 'wrong-model', 'redirect', 'huge'] as const) {
+for (const failure of [400, 401, 403, 404, 422, 429, 503, 'invalid', 'refused', 'wrong-model', 'redirect', 'huge'] as const) {
   test(`scripted provider ${failure} consumes its step and cannot be retried on another worker`, async () => {
     const f = fixture(failure); const g = createLiveReviewer({ transport: f.transport });
     try {
       const ticket = await start(g, f.env); let r = await g(request('v1/chat/completions', { ticket, step: 0 }), f.env);
       if (r.ok) r = await g(request('v1/chat/completions', { ticket, step: 1 }), f.env);
-      assert.equal(r.ok, false); const error = await r.json(); assert.equal(error.code, failure === 429 ? 'PROVIDER_LIMIT' : [503, 'redirect'].includes(failure) ? 'PROVIDER_UNAVAILABLE' : 'OUTPUT_REJECTED'); assert.ok(!JSON.stringify(error).includes('Private upstream')); const n = f.calls;
+      assert.equal(r.ok, false); const error = await r.json(); assert.equal(error.code, failure === 429 ? 'PROVIDER_LIMIT' : [401, 403].includes(failure as number) ? 'PROVIDER_AUTHORIZATION' : [400, 404, 422].includes(failure as number) ? 'PROVIDER_REQUEST_REJECTED' : [503, 'redirect'].includes(failure) ? 'PROVIDER_UNAVAILABLE' : 'OUTPUT_REJECTED'); assert.ok(!JSON.stringify(error).includes('Private upstream')); const n = f.calls;
       assert.equal((await createLiveReviewer({ transport: f.transport })(request('v1/chat/completions', { ticket, step: 0 }), f.env)).status, 409); assert.equal(f.calls, n);
       assert.equal(f.sql.prepare('SELECT reserved FROM tower_runtime_budget').get()!.reserved, 3);
     } finally { f.close(); }
@@ -95,5 +95,15 @@ test('request abort ends a stalled dispatched call and its step cannot be replay
     const pending = g(request('v1/chat/completions', { ticket, step: 0 }, { signal: control.signal }), f.env);
     await started; control.abort(); const cancelled = await pending; assert.equal(cancelled.status, 499); assert.equal((await cancelled.json()).code, 'CANCELLED');
     assert.equal((await createLiveReviewer({ transport: f.transport })(request('v1/chat/completions', { ticket, step: 0 }), f.env)).status, 409); assert.equal(f.calls, 0);
+  } finally { f.close(); }
+});
+test('unavailable incoming signal does not crash admission or leak per-worker request slots', async () => {
+  const f = fixture(); const g = createLiveReviewer({ transport: f.transport });
+  try {
+    for (let i = 0; i < 5; i++) {
+      const req = request('start', { consent: true }); Object.defineProperty(req, 'signal', { get() { throw Error('SYNTHETIC-PRIVATE-SIGNAL-ERROR'); } });
+      const r = await g(req, f.env); assert.equal(r.status, 200); assert.ok(!(await r.text()).includes('SYNTHETIC-PRIVATE'));
+    }
+    assert.equal(f.calls, 0);
   } finally { f.close(); }
 });

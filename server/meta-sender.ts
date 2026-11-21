@@ -12,9 +12,10 @@ export function createMetaSender(key: string, transport: typeof fetch) {
     request.signal.throwIfAborted();
     let response: Response;
     try {
-      response = await transport(META_ENDPOINT, { method: 'POST', credentials: 'omit', redirect: 'error', signal: request.signal, headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: encoded });
+      // Workers rejects redirect:'error' before dispatch. Manual mode plus the 3xx check never follows a hop.
+      response = await transport(META_ENDPOINT, { method: 'POST', credentials: 'omit', redirect: 'manual', signal: request.signal, headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: encoded });
     } catch { throw new Error('Meta transport failed. Remote outcome may be unknown; no retry was sent.'); }
-    if (response.redirected || response.status >= 300 && response.status < 400) throw new Error('Meta redirect rejected.');
+    if (response.redirected || response.status >= 300 && response.status < 400) { void response.body?.cancel().catch(() => {}); throw new Error('Meta redirect rejected.'); }
     if (!response.ok) {
       void response.body?.cancel().catch(() => {});
       return Response.json({ error: 'Meta service rejected the request.' }, { status: response.status });

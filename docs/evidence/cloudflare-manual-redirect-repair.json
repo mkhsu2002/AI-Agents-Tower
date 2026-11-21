@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-21",
+  "baseCommit": "80749dc9d1247442e76e3f54c3f65e9097bb8629",
+  "ownerReport": "Generation stopped: Demo service failed (502). This run has stopped. Current draft is unchanged.",
+  "fullProductionCauseProven": false,
+  "nativeReproduction": {
+    "runtime": "Pinned Wrangler 4.166.0 / Miniflare workerd; local D1; all outbound calls intercepted",
+    "errorRedirectRejected": true,
+    "manualRedirectAccepted": true,
+    "before": {
+      "admission": 200,
+      "firstRole": 502,
+      "code": "PROVIDER_UNAVAILABLE"
+    },
+    "after": {
+      "successCompatibilityDates": [
+        "2026-01-01",
+        "2026-11-19"
+      ],
+      "successfulRolesPerCase": 3,
+      "negativeCases": [
+        302,
+        401,
+        400,
+        429,
+        503,
+        "invalid-output"
+      ],
+      "consumedStepsNotRetried": true
+    }
+  },
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 83,
+    "studioBrowserTests": 46,
+    "nativeInterceptedEdgeCases": 8,
+    "legacyFunctionsCompilation": "passed"
+  },
+  "realProviderCallByAssistant": false,
+  "realInferenceSuccessVerified": false,
+  "settingsOrCredentialsChanged": false,
+  "additionalHardening": [
+    "Preserve fatal child errors instead of replacing them with later role-order errors",
+    "Safe JSON for otherwise uncaught handler failures",
+    "Optional incoming signal access without per-worker slot leaks; deadlines and explicit cancel remain"
+  ]
+}

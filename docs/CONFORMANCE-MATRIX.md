@@ -90,3 +90,7 @@ Explicit Pages public-data CORS/MIME rules and three actual local workerd/browse
 ## Invocation and demo-discovery checkpoint — 2026-11-21
 
 The declared local invocation subset now has runtime argument enforcement and whole-batch validation before downstream execution. Eight browser negatives reject invalid JSON/unknown/type/extra/size/mixed-sibling cases before peer contact; empty/multi-field argument preservation is tested. This is a stronger bounded local check, not full official-schema support. The public homepage now has a direct demo CTA and #demo entry, both retaining default-deny consent and zero automatic model calls. Actual provider success and public live interaction still require normal-path evidence.
+
+## First public failure and transport repair — 2026-11-21
+
+Owner reported a 502 live failure through the normal public entry. No successful real-model collaboration is claimed. Native workerd/D1 reproduction found the server's unsupported redirect:error mode; manual-plus-explicit-3xx refusal repairs that local blocker. Eight intercepted edge cases and browser regressions validate the repair and safe error propagation, not real inference. The owner's refreshed single-run acceptance after deployment remains the next real-provider evidence gate.

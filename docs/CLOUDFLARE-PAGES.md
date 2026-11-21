@@ -42,3 +42,7 @@ The project now targets ES2022 syntax while retaining ES2023 library types for t
 ## Public interoperability artifacts
 
 public/_headers supplies explicit credential-free CORS/JSON/nosniff rules for the manifest, network definition and HomeBundle schema. They apply to static assets, not Function responses. Model/status APIs retain existing same-origin checks and no cross-origin permission. The isolated workerd/caller test verifies this hosting distinction rather than relying on Vite defaults. See PUBLIC-ARTIFACT-POLICY.md. No new binding, credential or dashboard change is needed.
+
+## Server fetch compatibility
+
+Cloudflare Workers does not implement redirect:error. The Meta sender uses manual mode and rejects every 3xx before any follow-up request; browser fetch continues to refuse redirects with error mode. This repair needs no dashboard flag, new credential or changed binding. The fully intercepted workerd/D1 test covers native fetch semantics rather than a Node-only transport stub. See META-REVIEWER-GATEWAY.md.

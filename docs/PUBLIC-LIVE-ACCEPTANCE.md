@@ -49,3 +49,9 @@ The server returns a short code from a fixed allowlist. Browser copy comes from 
 | TIMEOUT / CANCELLED | Local acceptance stopped; remote computation may still finish and allowance is not refunded. |
 
 The gateway keeps the existing endpoint/model, input/output caps, 20-run daily admission, three-call sequence and timeouts. Failed runs require a deliberate new attempt; this guide is not authorization for repeated unattended trials or higher limits.
+
+## After the reported 502
+
+A public owner-run attempt failed; it is not a live success. The local workerd reproduction exposed an unsupported server redirect mode and the repair preserves no-follow behavior. The next normal-path attempt should be a single refreshed #demo run after the repaired deployment is confirmed. No binding/key reset is required by this repair. If it fails, copy the displayed allowlisted code and stage, not secrets or raw provider data. Do not repeatedly restart.
+
+PROVIDER_AUTHORIZATION denotes a provider 401/403; PROVIDER_REQUEST_REJECTED denotes 400/404/422. GATEWAY_UNAVAILABLE is a caught handler failure; client-generated GATEWAY_RESPONSE_INVALID means the response lacked a recognized safe service code. Start/Reception/Home builder/Review show the stopped phase. The generic 502 report alone cannot identify the full production cause.

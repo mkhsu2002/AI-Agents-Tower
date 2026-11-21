@@ -62,11 +62,14 @@ test('scripted gateway keyless three-call collaboration produces a real local va
   await expect(page.locator('#preview')).toContainText(REVIEWER_BRIEF);
   expect(await page.evaluate(() => [localStorage.length, sessionStorage.length])).toEqual([0, 0]);
 });
-for (const failure of [429, 503, 'refused', 'invalid'] as const) {
+for (const failure of [400, 401, 429, 503, 'refused', 'invalid'] as const) {
   test(`scripted ${failure} stops without simulation fallback; explicit restart succeeds`, async ({ page }) => {
     await selectDemo(page); const calls = await scriptedService(page, failure);
     await start(page);
     await expect(page.locator('#agent-status')).toContainText('Generation stopped');
+    await expect(page.locator('#agent-status')).toContainText(typeof failure === 'number' ? '; Reception]' : '; Home builder]');
+    if (failure === 400) await expect(page.locator('#agent-status')).toContainText('PROVIDER_REQUEST_REJECTED');
+    if (failure === 401) await expect(page.locator('#agent-status')).toContainText('PROVIDER_AUTHORIZATION');
     await expect(page.locator('#agent-status')).not.toContainText('Private upstream detail');
     await expect(page.locator('#agent-proposal')).toBeHidden();
     expect(calls.length).toBeGreaterThan(0);
@@ -117,6 +120,7 @@ test('service error codes are allowlisted; arbitrary server text never reaches t
   await expect(page.locator('body')).not.toContainText('PRIVATE-SERVER-SENTINEL');
   await page.route('**/api/reviewer/start', route => route.fulfill({ status: 502, json: { code: 'PRIVATE-SERVER-SENTINEL', error: '<script>PRIVATE-SERVER-SENTINEL</script>' } }));
   await start(page); await expect(page.locator('#agent-status')).toContainText('Demo service failed (502)');
+  await expect(page.locator('#agent-status')).toContainText('[GATEWAY_RESPONSE_INVALID; Start]');
   await expect(page.locator('body')).not.toContainText('PRIVATE-SERVER-SENTINEL');
   await expect(page.locator('#agent-proposal')).toBeHidden();
 });

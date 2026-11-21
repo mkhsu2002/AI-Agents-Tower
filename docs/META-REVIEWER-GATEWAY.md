@@ -37,3 +37,15 @@ No real Meta call has passed. Production binding readiness is confirmed. Actual 
 ## Safe diagnostics and acceptance
 
 Gateway failures now return a fixed code and safe message; the browser displays only locally allowlisted copy, never an arbitrary upstream body. Codes distinguish request/consent, capacity, stopped tickets, provider quota/service, rejected output, storage failure and timeout/cancellation. Deadlines use HTTP 504, caller abort 499, unavailable storage 503 and malformed commands 400. Limits, single-use state and no retries/refunds are unchanged. See PUBLIC-LIVE-ACCEPTANCE.md.
+
+## Cloudflare outbound transport repair — 2026-11-21
+
+The owner reported a generic 502 from the public live entry. Local real workerd/D1 tests reproduced a failure before provider dispatch: redirect:error is not implemented by Workers fetch. See the [official Request API](https://developers.cloudflare.com/workers/runtime-apis/request/). The sender now maps its no-redirect policy to manual transport mode and rejects/cancels 3xx without following Location. Browser Operation.fetch keeps redirect:error, which is supported in the browser. No origin policy or credential scope was widened.
+
+`npm run test:edge:fixture` uses pinned Wrangler/Miniflare with every outbound request intercepted and only a literal synthetic key/local D1. It tests actual request construction, three gateway steps on two compatibility dates, redirect/auth/request/quota/service/invalid-output failures and consumed-step replay rejection. Before repair, admission succeeded and step zero returned 502; after repair both three-role cases pass. This demonstrates the transport bug and local repair, not actual Meta health or proof of the complete production failure cause. No real provider request or secret read occurs.
+
+Browser errors now retain a safe allowlisted code and stage. 401/403 map to authorization, 400/404/422 to rejected request/model, 429 to capacity, other provider failures to availability. Unknown/HTML errors receive GATEWAY_RESPONSE_INVALID with a locally generated stage. Child live failures are fatal runtime-policy errors, preventing a later Reception retry from masking the real error. The outer Pages handler also returns safe JSON for otherwise unhandled exceptions. No provider body, stack, ticket, prompt or key is exposed.
+
+Builder instructions now include the exact components/kind/action wire shape and request compact output within the existing limits. Program validation/receipt/review/apply gates remain mandatory; the instruction example is not an attestation that a real model complied.
+
+Incoming disconnect-signal access is feature-dependent on edge runtimes. Missing/throwing signal access no longer escapes before cleanup or leaks per-worker slots. Own deadlines and explicit shared-ticket cancellation remain enforced; immediate disconnect notification cannot be promised where the platform does not provide it.

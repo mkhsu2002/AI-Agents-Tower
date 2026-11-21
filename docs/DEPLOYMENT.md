@@ -16,6 +16,10 @@ The static public manifest/network/schema now carry explicit CORS/JSON/nosniff r
 
 Homepage demo CTA and #demo direct/hash/reload entry select the fictional live example without automatic consent/model calls. Caller packaging strips both demo links and remains Simulation-only. Browser runtime strictly validates an entire tool-call batch before any downstream execution; invalid JSON is not converted into text and multiple/empty argument values are preserved. Fresh lint/typecheck/build, 76 unit, 44 Studio, 61 runtime and 3 Cloudflare caller tests passed, with a final 3-case landing rerun after hash-navigation handling. Cloudflare deployed faf506165d761a07d3cc49d321c146b7b53fba7e successfully (8edcbbc2-b248-4307-b406-7000252f24be), and origin/main matched. Fresh public GET /#demo returned HTTP 200 with homepage Try the demo and the correct direct link. The owner was given that verified entry for one normal-path model run. Actual interaction/provider success remains unverified; no assistant real-model call occurred.
 
+## Reported 502 and native fetch repair — 2026-11-21
+
+Owner's normal public live attempt failed with generic 502. Native workerd reproduced an unsupported redirect:error pre-provider failure. Server transport now uses manual mode and rejects/cancels all redirects; the live adapter preserves fatal child error codes/stages. No API/D1 setup or limit expansion is needed. Fresh 83 unit/46 Studio/8 intercepted edge cases plus lint/typecheck/build passed; actual public provider success remains pending. Deployment and safe GET readback follow push.
+
 ## Historical deployment records
 
 ### First Home Studio deployment

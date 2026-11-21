@@ -24,13 +24,15 @@ export function createLiveReviewer(options: { transport: typeof fetch; timeoutMs
     if (inflight >= 4) return reply(429, { code: 'BUSY', error: DEMO_ERRORS.BUSY }); inflight++;
     const op = new Operation(timeout); let db: RuntimeDatabase | undefined; let ticketHash: string | undefined; let claimed = false; let claimedStep: number | undefined; let callOp: Operation | undefined;
     let phase: 'storage' | 'request' | 'provider' | 'output' = 'request';
-    const abort = () => op.cancel(); request.signal.addEventListener('abort', abort, { once: true });
+    const abort = () => op.cancel(); let clientSignal: AbortSignal | undefined;
+    try { clientSignal = request.signal; } catch { /* Some edge runtimes do not expose incoming disconnect signals. */ }
     try {
+      clientSignal?.addEventListener('abort', abort, { once: true });
       const url = new URL(request.url);
       if (request.method !== 'POST' || request.headers.get('origin') !== url.origin || url.search || request.headers.has('authorization') || request.headers.has('cookie') || request.headers.get('content-type')?.split(';')[0] !== 'application/json') stop(403, 'Reviewer request origin or format rejected.');
       if (!['/api/reviewer/start', '/api/reviewer/cancel', '/api/reviewer/v1/chat/completions'].includes(url.pathname)) stop(404, 'Unknown reviewer route.');
       if (!liveConfigured(env)) stop(503, 'Reviewer runtime is not configured.', 'NOT_CONFIGURED'); db = env!.TOWER_RUNTIME!;
-      if (request.signal.aborted) op.cancel();
+      if (clientSignal?.aborted) op.cancel();
       phase = 'storage'; let setup = initialized.get(db); if (!setup) { setup = db.exec(schema); initialized.set(db, setup); setup.catch(() => initialized.delete(db!)); } await op.wait(setup);
       phase = 'request'; const body = strictJson(await boundedText(request.body, 512, op)); if (!object(body)) stop(400, 'Invalid reviewer request.');
       if (url.pathname === '/api/reviewer/start') {
@@ -61,17 +63,17 @@ export function createLiveReviewer(options: { transport: typeof fetch; timeoutMs
       const payload = turnPayload(step, url.origin, row.builder ?? undefined);
       op.assert();
       const response = await op.wait(callOp.wait(send({ endpoint: META_ENDPOINT, redirect: 'error', signal: AbortSignal.any([op.signal, callOp.signal]), body: payload })));
-      if (!response.ok) stop(response.status === 429 ? 429 : 502, 'Model service rejected the request. No retry was sent.', response.status === 429 ? 'PROVIDER_LIMIT' : 'PROVIDER_UNAVAILABLE');
+      if (!response.ok) stop(response.status === 429 ? 429 : 502, 'Model service rejected the request. No retry was sent.', response.status === 429 ? 'PROVIDER_LIMIT' : [401, 403].includes(response.status) ? 'PROVIDER_AUTHORIZATION' : [400, 404, 422].includes(response.status) ? 'PROVIDER_REQUEST_REJECTED' : 'PROVIDER_UNAVAILABLE');
       phase = 'output'; const checked = checkedTurn(await op.wait(boundedText(response.body, 32768, callOp)), step, url.origin, row.builder ?? undefined);
       phase = 'storage'; const completion = await op.wait(db.prepare("UPDATE tower_runtime_runs SET state=?,builder=? WHERE ticket_hash=? AND origin=? AND state='running' AND step=? AND expires>?").bind(step === 2 ? 'complete' : 'ready', step === 1 ? checked.content : null, ticketHash, url.origin, step + 1, now()).run());
       if (completion.meta.changes !== 1) stop(409, 'Run stopped before the response was accepted. Remote outcome may be unknown.', 'RUN_STOPPED');
       return reply(200, checked.response);
     } catch (error) {
-      const interrupted = request.signal.aborted ? 'CANCELLED' : op.signal.aborted || callOp?.signal.aborted ? 'TIMEOUT' : undefined;
+      const interrupted = clientSignal?.aborted ? 'CANCELLED' : op.signal.aborted || callOp?.signal.aborted ? 'TIMEOUT' : undefined;
       if (claimed && db && ticketHash) { const cleanup = new Operation(250); try { await cleanup.wait(db.prepare("UPDATE tower_runtime_runs SET state='error',builder=NULL WHERE ticket_hash=? AND state='running' AND step=?").bind(ticketHash, claimedStep).run()); } catch { /* Consumed running step is never retried, even if storage is unavailable. */ } finally { cleanup.dispose(); } }
       const code: DemoErrorCode = interrupted ?? (error instanceof Stop ? error.code : phase === 'storage' ? 'STORAGE_UNAVAILABLE' : phase === 'output' ? 'OUTPUT_REJECTED' : phase === 'request' ? 'REQUEST_REJECTED' : 'PROVIDER_UNAVAILABLE');
       const status = interrupted === 'CANCELLED' ? 499 : interrupted === 'TIMEOUT' ? 504 : error instanceof Stop ? error.status : phase === 'storage' ? 503 : phase === 'request' ? 400 : 502;
       return reply(status, { code, error: DEMO_ERRORS[code] });
-    } finally { inflight--; request.signal.removeEventListener('abort', abort); callOp?.dispose(); op.dispose(); }
+    } finally { inflight--; clientSignal?.removeEventListener('abort', abort); callOp?.dispose(); op.dispose(); }
   };
 }

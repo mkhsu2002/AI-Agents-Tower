@@ -1,4 +1,4 @@
-import { strictJson } from '../../spikes/m2/safety.js';
+import { strictJson, policyError } from '../../spikes/m2/safety.js';
 import type { Operation } from '../../spikes/m2/safety.js';
 import { demoErrorMessage } from './reviewer-errors.ts';
 import { decodeCompletion } from './keyless-inference.ts';
@@ -14,13 +14,13 @@ export async function reviewerAdapter(operation: Operation, origin: string): Pro
   if (!object(status)) throw new Error('Invalid live demo configuration.');
   if (status.enabled === false && Object.keys(status).length === 1) throw new Error('The live demo is not available yet. You can choose Simulation separately.');
   if (status.enabled !== true || Object.keys(status).length !== 2 || status.protocol !== REVIEWER_PROTOCOL) throw new Error('Invalid live demo configuration.');
-  const rejectResponse = async (response: Response, op: Operation): Promise<never> => {
-    let message: string | undefined;
-    try { const body: unknown = strictJson(await op.read(response.text())); if (object(body)) message = demoErrorMessage(body.code); } catch { op.assert(); }
-    throw new Error(message ?? `Demo service failed (${response.status}). This run has stopped.`);
+  const rejectResponse = async (response: Response, op: Operation, stage: string): Promise<never> => {
+    let message: string | undefined; let code = 'GATEWAY_RESPONSE_INVALID';
+    try { const body: unknown = strictJson(await op.read(response.text())); if (object(body)) { message = demoErrorMessage(body.code); if (message) code = String(body.code); } } catch { op.assert(); }
+    throw new Error(`${message ?? `Demo service failed (${response.status}). This run has stopped.`} [${code}; ${stage}]`);
   };
   const start = await operation.fetch(new URL('/api/reviewer/start', origin).href, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ consent: true }) });
-  if (!start.ok) await rejectResponse(start, operation);
+  if (!start.ok) await rejectResponse(start, operation, 'Start');
   const grant: unknown = strictJson(await operation.read(start.text()));
   if (!object(grant) || Object.keys(grant).length !== 2 || typeof grant.ticket !== 'string' || !/^[a-f0-9]{48}$/.test(grant.ticket) || grant.step !== 0) throw new Error('Invalid demo run authority.');
   const ticket = grant.ticket; let step = 0; let active = false; let stopped = false;
@@ -36,17 +36,17 @@ export async function reviewerAdapter(operation: Operation, origin: string): Pro
     async chat({ messages, tools, operation: turn }) {
       turn.assert();
       const reception = tools.some(tool => tool.function.name === 'home_builder');
-      if (stopped || active || step > 2 || reception !== (step !== 1) || messages.find(message => message.role === 'user')?.content !== REVIEWER_BRIEF) { cancel(); throw new Error('The demo role sequence or fixed input changed.'); }
+      if (stopped || active || step > 2 || reception !== (step !== 1) || messages.find(message => message.role === 'user')?.content !== REVIEWER_BRIEF) { cancel(); throw policyError('The demo role sequence or fixed input changed.'); }
       active = true; turn.signal.addEventListener('abort', cancel, { once: true });
       try {
         const response = await turn.fetch(new URL('/api/reviewer/v1/chat/completions', origin).href, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket, step }) });
-        if (!response.ok) await rejectResponse(response, turn);
+        if (!response.ok) await rejectResponse(response, turn, ['Reception', 'Home builder', 'Review'][step]!);
         const data: unknown = strictJson(await turn.read(response.text()));
         if (!object(data) || data.step !== step + 1) throw new Error('Invalid demo response sequence.');
         const result = decodeCompletion(data, tools, 'muse-spark-1.3');
         turn.assert(); if (result.usage) { usageTotals.calls++; usageTotals.inputTokens += result.usage.inputTokens; usageTotals.outputTokens += result.usage.outputTokens; } step++; if (step === 3) stopped = true;
         return result;
-      } catch (error) { cancel(); throw error; }
+      } catch (error) { cancel(); throw policyError(error instanceof Error ? error.message : 'The demo failed without a verified response.'); }
       finally { active = false; turn.signal.removeEventListener('abort', cancel); }
     },
   };

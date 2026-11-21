@@ -9,7 +9,7 @@ const key = 'SYNTHETIC-NOT-A-REAL-KEY';
 const request = (): ProviderRequest => ({ endpoint: META_ENDPOINT, redirect: 'error', signal: new AbortController().signal, body: { model: META_MODEL, store: false, max_output_tokens: 256, reasoning: { effort: 'minimal' }, instructions: 'Synthetic Reception fixture', input: REVIEWER_BRIEF, tools: [], tool_choice: 'none' } });
 test('prepared sender uses exact Meta endpoint, server-only authorization and bounded nonstoring payload', async () => {
   let calls = 0;
-  const send = createMetaSender(key, async (url, init) => { calls++; assert.equal(url, META_ENDPOINT); assert.equal(init?.redirect, 'error'); assert.equal(init?.credentials, 'omit'); assert.equal(new Headers(init?.headers).get('Authorization'), 'Bearer ' + key); return Response.json({ scripted: true }); });
+  const send = createMetaSender(key, async (url, init) => { calls++; assert.equal(url, META_ENDPOINT); assert.equal(init?.redirect, 'manual'); assert.equal(init?.credentials, 'omit'); assert.equal(new Headers(init?.headers).get('Authorization'), 'Bearer ' + key); return Response.json({ scripted: true }); });
   assert.deepEqual(await (await send(request())).json(), { scripted: true }); assert.equal(calls, 1);
 });
 test('missing credentials, extra fields, paid/model route changes and oversized payload cannot dispatch', async () => {

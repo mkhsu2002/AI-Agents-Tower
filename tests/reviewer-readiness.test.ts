@@ -32,3 +32,10 @@ test('Pages status enables only with both server bindings and never asserts prov
     assert.equal(readiness.enabled, true); assert.equal(readiness.trialReady, true); assert.equal(readiness.connectionVerified, false);
   } finally { storage.close(); }
 });
+test('Pages handler exceptions return safe JSON without exception detail', async () => {
+  const request = new Request(origin + '/api/reviewer/start');
+  Object.defineProperty(request, 'url', { get() { throw Error('SYNTHETIC-PRIVATE-EXCEPTION'); } });
+  const response = await onRequest({ request }); assert.equal(response.status, 502);
+  const raw = await response.text(); assert.ok(!raw.includes('SYNTHETIC-PRIVATE'));
+  assert.equal(JSON.parse(raw).code, 'GATEWAY_UNAVAILABLE'); assert.equal(response.headers.get('Cache-Control'), 'no-store');
+});
