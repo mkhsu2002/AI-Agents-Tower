@@ -71,3 +71,7 @@ T01 validation passed: lint, typecheck, all 17 unit tests and git diff --check. 
 ## T02 — native runtime validation action
 
 Registered the pure read validator using the existing attributed ActionRegistry and Engine.submitActions APIs. The builder proposes and reception relays a schema-bound action; the controller requires exact candidate equality, actual successful receipt/execution and final HomeBundle parsing. Added malformed/missing/substituted/denied/error/timeout/cancel tests. Initial run permission now describes local validation; external permissions remain separate. No vendor JS, credentials, storage or service change. Fresh lint/typecheck/build passed; 20 unit and 33 browser tests passed. Inference remains mock and full capability interoperability is not asserted.
+
+## T03 — keyless transport preparation
+
+Added a bounded exact-origin keyless OpenAI-compatible adapter, kept disconnected from public Studio and its mock-only runtime gate. Four actual-local-HTTP fixture tests cover format/tools/no credentials, errors, truncation, unknown calls, redirect refusal, cancellation and deadline. Scripted responses do not establish real inference. Lint/typecheck and 24 unit tests passed at this checkpoint. No installed/configured authorized model route, weights download, credential or provider request; T03 actual-inference acceptance remains blocked.

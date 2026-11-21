@@ -249,3 +249,7 @@ T01 validation: lint, typecheck, 17 unit tests and diff checks passed. No fresh 
 ## T02 registered validation checkpoint
 
 The two-agent flow now proposes the runtime’s registered read-only validate_home_bundle action. Studio executes it through the existing ActionRegistry/receipt API and requires matching input, a successful actual execution and final code validation before review/apply. Missing, forged/mismatched, denied, failed, cancelled or timed-out validation cannot create a success proposal. Run approval covers this local read-only check; external contact still needs separate consent. See [implementation and evidence](docs/STUDIO-VALIDATION-ACTION.md). Fresh lint/typecheck/build, 20 unit and 33 browser tests passed. Inference remains mock; portable full-profile capability discovery and real model execution remain unverified.
+
+## T03 inference transport preparation
+
+A strict host-approved keyless inference adapter and four real-HTTP/scripted-response contract tests are ready. The public app still uses mock inference; no real provider/model was called, installed or enabled. See [readiness and remaining gate](docs/REAL-INFERENCE-READINESS.md). The checkpoint passed lint/typecheck and 24 unit tests; actual model execution and free reviewer capacity remain blocked on an authorized route.
