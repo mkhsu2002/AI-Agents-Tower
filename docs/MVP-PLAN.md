@@ -49,3 +49,8 @@ No server-saved private homes, move-in success, publication, social features, gi
 ## Immediate stage-two package after bounded stage-one closeout
 
 Prepare a custom-brief contract and offline tests only. Do not enable custom input at the public model gateway yet. Specify bounded fields/size, explicit exact outgoing-data consent, default-deny transitions, server-owned prompt construction, no arbitrary model/router/tool selection, no prompt/body logging, session-to-brief binding, rejection/cancel/timeout/no-retry behavior and unchanged initial consumption limits. Keep the existing fixed fictional demo intact. Define privacy/retention and review/apply conflict requirements. Acceptance for this minimum package is reviewed specification plus focused offline tests; production input expansion requires its own safety/release review, not a silent extension of the fixed-demo permission. Private persistence, accounts, publishing and new hosting are excluded.
+
+
+### Stage-two offline preparation delivered
+
+The minimal offline custom-brief contract/session/turn candidate and focused tests now exist, with no production import or HTTP adapter. It binds exact preview/consent to private revisions, rejects changed input/source and stale apply, enforces the existing request/response/call/token/deadline limits, and exercises code validation with scripted responses. See stage-2/BRIEF-CONTRACT.md and stage-2/INTEGRATION-CANDIDATE.md. This advances local consent/validation evidence only; no public arbitrary-input model path, D1 retention change, authenticated Home or new cross-origin inference capability is shipped.

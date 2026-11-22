@@ -1,0 +1,43 @@
+{
+  "baseCommit": "88ed04713618ecbdbd0eeb0bc1a7ab740a2fa344",
+  "scope": "minimum offline custom-brief contract/session/turn candidate",
+  "mode": "scripted-offline",
+  "publicCustomInputEnabled": false,
+  "newActualProviderRequests": 0,
+  "defaultFetchAttemptsInNewTestWorker": 0,
+  "newCredentialsOrSettings": false,
+  "privateContentLogged": false,
+  "productionEntryImportsOfflineModules": false,
+  "frontendAsset": "/assets/index-D5Gw9J4L.js",
+  "frontendAssetUnchanged": true,
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 149,
+    "newOfflineCases": 27,
+    "studioBrowserRegressions": 48,
+    "interceptedNativeCases": 27,
+    "productionInteraction": "not attempted",
+    "runtimeBrowser61": "prior-stage evidence, not rerun"
+  },
+  "verifiedOffline": [
+    "strict versioned input and exact Unicode/UTF-8 boundaries",
+    "outgoing-data scope and redacted default serialization",
+    "default deny and exact session preview identity",
+    "edit/source/deny/revoke/cancel invalidation",
+    "server-owned model/route/tools/budgets and encoded-size preflight",
+    "real local code validation with explicit scripted-only receipt",
+    "draft retention and revision-guarded explicit apply",
+    "provider/output failure, timeout, expiry, cancellation and late rejection",
+    "single-use grants and explicit fresh restart without refunds",
+    "zero default HTTP attempts"
+  ],
+  "remainingGates": [
+    "public request-envelope change",
+    "durable brief/origin/sequence binding",
+    "private generated-text retention design before D1 reuse",
+    "reviewed real transport integration and separately controlled live trial",
+    "public UI custom-brief integration and receipt verification"
+  ]
+}

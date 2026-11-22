@@ -105,3 +105,8 @@ Owner reported a 502 live failure through the normal public entry. No successful
 ### Repeated public 502 diagnostic checkpoint — 2026-11-21
 
 The owner observed GATEWAY_RESPONSE_INVALID at Reception after successful admission. Actual modern/legacy Pages routers now join the wholly intercepted workerd/D1 tests, and safe lifecycle logs/response markers support production correlation. These verify local routing and failure handling only. Public turn-path GET returns the expected 403 JSON; it is not a POST/model pass. Real inference, production execution diagnosis, independent HTTPS caller and portable real-router/full-profile compliance remain unverified. See [the log-assisted diagnostic procedure](PUBLIC-LIVE-ACCEPTANCE.md#unrecognized-502-at-reception--diagnostic-procedure).
+
+
+## Stage-two offline custom-brief boundary
+
+A new in-memory, scripted-only contract/session candidate verifies precise outgoing-data preview, default-deny consent, exact-input/source binding, edit revocation, finite dispatch, strict output/action validation and revision-guarded review/apply. Tests block default fetch and assert zero network attempts. There is no production entry-point import or public custom-input activation. Its local quota object and validation receipt are explicitly not durable server authorization or a browser-runtime/real-inference receipt. Production model, tools, limits, D1 rules and fixed sample are unchanged. This is bounded local safety evidence, not additional live/portable network conformance.

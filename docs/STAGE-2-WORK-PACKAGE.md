@@ -1,5 +1,9 @@
 # Stage two: minimum offline custom-brief contract
 
+## Offline package delivered
+
+Implementation is under server/offline-brief with focused scripted tests in tests/offline-brief.test.ts. See [contract and privacy semantics](stage-2/BRIEF-CONTRACT.md), [unapplied integration touchpoints](stage-2/INTEGRATION-CANDIDATE.md) and [evidence](evidence/stage-2-offline-brief.json). This fulfills the minimum offline preparation package, not activation of public custom briefs. No production module imports it. The following original scope remains the review checklist.
+
 ## Goal and boundary
 
 Prepare the smallest reviewable contract/test package for custom briefs without changing public model execution. Preserve the working fixed Atlas demo and all existing endpoint/model/quota/token/deadline/consent rules. No new provider request, credential, D1 schema, model selection, deployment setting, private Home persistence, login or publication is required.

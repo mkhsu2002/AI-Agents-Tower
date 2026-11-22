@@ -20,6 +20,14 @@ The server pins Meta / muse-spark-1.3, enforces three single-use stages, shared 
 
 See [stage-one closeout and remaining acceptance](docs/STAGE-1-CLOSEOUT.md), [production observation](docs/evidence/production-live-demo-b6006d1.json), [gateway limits](docs/META-REVIEWER-GATEWAY.md), [current conformance gaps](docs/CONFORMANCE-MATRIX.md) and [next stages](docs/MVP-PLAN.md). The earlier 502/tool-choice/mixed-output development snapshots are preserved in [history](docs/HISTORY-2026-11-21.md) and the development log; they are not current claims of a broken live demo. Browser delivery of coded error responses remains a separate unresolved diagnostic observation.
 
+## Stage-two offline brief package
+
+The offline custom-brief candidate now implements strict versioned input, exact outgoing-data preview, default-deny session-bound consent, edit/source revocation, bounded scripted turns, code validation and explicit revision-guarded apply. It has no default HTTP transport, credentials, storage or production entry-point import. Default serialization omits private text; only explicit preview/editor/proposal accessors expose it to the local host. Model text never selects routing, tools or authority.
+
+Fresh checks passed: lint/typecheck/build, 149 unit tests (27 new offline cases), 48 Studio browser regressions and 27 intercepted native Cloudflare cases. Run `node --experimental-strip-types --test tests/offline-brief.test.ts` for the focused offline suite.
+
+This is **offline preparation**, not public custom-input inference. The production Atlas example, rules, limits and model remain unchanged. See [the English contract](docs/stage-2/BRIEF-CONTRACT.md), [minimal integration candidate and gates](docs/stage-2/INTEGRATION-CANDIDATE.md) and [offline evidence](docs/evidence/stage-2-offline-brief.json). Before live integration, request-envelope and private-input/draft retention/binding design require K's review; the current D1 builder field must not silently become private custom-content storage.
+
 ## Run the local Home Studio
 
 Use Node >=22.12 (Node 24 verified) and npm:
@@ -59,7 +67,7 @@ Stage-one local checks passed: lint/typecheck/build, 122 unit, 48 Studio browser
 
 Stage one is a draft-workflow checkpoint, not completion of all P0/P1 tasks or competition conformance. See [acceptance scope](docs/STAGE-1-CLOSEOUT.md), [M0–M5 milestones](docs/MVP-PLAN.md), [stage-two minimum package](docs/STAGE-2-WORK-PACKAGE.md), [task inventory](docs/TASKS.md), [original product direction](docs/PRODUCT-VISION.md), [schema contract](docs/HOMEBUNDLE.md) and [architecture decisions](docs/adr/0001-local-draft-stack.md).
 
-The next minimum work package is a design/test-only custom-brief boundary: preserve the fixed demo, describe precisely what input may leave the browser, define server-owned validation/budgets and test hostile/provider-failure paths offline. Enabling that larger model-input scope is a separate release gate. No accounts, DB-backed Homes, public listings, new service or second site is introduced by closeout.
+The minimum offline custom-brief package is implemented and ready for K's integration review: fixed-demo preservation, outgoing-data scope, server-owned validation/budgets and hostile/provider-failure tests. Enabling that larger model-input scope is a separate release gate. No accounts, DB-backed Homes, public listings, new service or second site is introduced by closeout.
 
 ## Repeatable acceptance
 
