@@ -25,7 +25,8 @@
     "generate:domain": "node scripts/generate-homebundle-validator.mjs",
     "test:live": "playwright test --config playwright.live.config.ts",
     "test:pages:interop": "npm run build && node scripts/run-pages-interop.mjs",
-    "test:edge:fixture": "node scripts/run-edge-live.mjs"
+    "test:edge:fixture": "node scripts/run-edge-live.mjs",
+    "test:public:studio": "playwright test --config playwright.public-studio.config.ts"
   },
   "dependencies": {
     "ajv": "8.20.0"

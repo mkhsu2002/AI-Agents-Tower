@@ -1,5 +1,12 @@
 # Deployment status
 
+## Current bounded production observation
+
+K verified active application b6006d1a19e1b2d181c9e091711acef22ca3c7f2 through one normal Live demo: Draft ready, explicit Apply → Draft applied, download control available, no simulation/retry. The exact successful deployment ID/time and raw receipt/usage were not supplied and are not invented. This supersedes older failed/disabled checkpoints below for that fixed host workflow. See [reported scope](evidence/production-live-demo-b6006d1.json) and [stage-one closeout](STAGE-1-CLOSEOUT.md).
+
+Closeout changes only acceptance tooling and documentation; product application source, provider execution rules, model, limits and configuration stay unchanged. The existing main Git integration remains the release path. No new model request or direct upload is performed. Additional public file verification failed before navigation with ERR_TUNNEL_CONNECTION_FAILED; isolated actual-file acceptance passed. A deployment check is not expanded into unobserved public interaction evidence.
+
+
 The owner supplied the final error excerpt from the failed Pages Functions build. A local legacy Wrangler 2.20.2 / esbuild 0.16.3 build reproduced the ES2023 warning plus a fatal unsupported JSON import-attributes error. The repair changes the TypeScript output target to ES2022 and imports prompt schema data from the checked build-generated JavaScript module. Both legacy and modern Wrangler compile the repaired source; Cloudflare successfully deployed repaired application b11f65d2e351c18afa59f141d92f8d59332cd050, deployment c88ccf37-e681-4cd1-b99d-6a317bead92a. Fresh ordinary public GETs of status and readiness both returned HTTP 200: status enabled false; readiness credentialConfigured true with enabled/connectionVerified/trialReady false. This verifies successful delivery and disabled configuration only. It does not verify provider health or public interaction. Evidence: evidence/pages-legacy-bundler-repair.json.
 
 The earlier e28a5dd / 1863547 Pages checks failed. No real Meta call occurred. Production still requires the dedicated TOWER_RUNTIME D1 binding before the fixed demo can activate. Configuration status and a successful deployment do not verify Meta or browser interaction. See the historical records below and the latest development log for exact tests and readback.

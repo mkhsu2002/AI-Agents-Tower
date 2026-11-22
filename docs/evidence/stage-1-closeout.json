@@ -1,0 +1,43 @@
+{
+  "applicationCommit": "b6006d1a19e1b2d181c9e091711acef22ca3c7f2",
+  "stage": "1 - bounded fixed draft workflow closeout",
+  "publicLiveEvidence": "production-live-demo-b6006d1.json",
+  "newRealProviderRequests": 0,
+  "checks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTests": 122,
+    "studioBrowserTests": 48,
+    "runtimeBrowserTests": 61,
+    "interceptedCloudflareCases": 27,
+    "isolatedActualFileAcceptance": {
+      "origin": "http://127.0.0.1:4173",
+      "mode": "local-no-inference-static-studio",
+      "downloadSha256": "b46d0cbfdcbfcbbc6979bf7496e71ed56cb48c0b8352a4e7bab63ec287a557ad",
+      "downloadBytes": 536,
+      "downloadParsed": true,
+      "reimported": true,
+      "invalidImportsPreservedDraft": true,
+      "modelRequests": 0,
+      "persistentBrowserContent": false
+    }
+  },
+  "publicStaticAcceptance": {
+    "attempts": 1,
+    "result": "blocked before application navigation",
+    "error": "ERR_TUNNEL_CONNECTION_FAILED",
+    "providerCalls": 0,
+    "cloudBrowser": "tab creation failed: Browser Use could not read requirements"
+  },
+  "completionBoundary": "Operator-reported public fixed live draft/apply plus isolated actual-file and scripted safety regressions. Not a single observed public generated-file round-trip or full competition compliance.",
+  "remainingUnverified": [
+    "actual public downloaded bytes/reimport",
+    "independent public receipt/usage/network readback",
+    "production cancellation/error recovery",
+    "repeated live availability",
+    "portable real router and independent HTTPS caller"
+  ],
+  "productionRulesSettingsOrLimitsChanged": false,
+  "productApplicationSourceChanged": false
+}

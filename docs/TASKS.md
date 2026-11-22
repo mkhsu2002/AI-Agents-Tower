@@ -1,5 +1,8 @@
 # Current inventory and next tasks
 
+Latest bounded checkpoint: [stage one](STAGE-1-CLOSEOUT.md) records K-reported public fixed-model draft/apply success plus isolated actual-file round-trip and local safety evidence. Earlier no-real-inference/disabled checkpoints below are historical for that host demo. Full P0/P1 and competition compliance remain open. Next immediate package: [offline custom-brief contract](STAGE-2-WORK-PACKAGE.md), with no expansion of production model input, rules or costs.
+
+
 Current resource checkpoint: the bounded public Meta gateway and shared D1 quota/session implementation are complete locally. Production binding readiness is confirmed; real-provider and normal public interaction evidence remain open. No real model call has passed. Earlier inventory below is historical where superseded; see META-REVIEWER-GATEWAY.md and DEVELOPMENT-LOG.md.
 
 ## Completed and bounded evidence

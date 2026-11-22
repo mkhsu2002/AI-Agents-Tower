@@ -1,10 +1,16 @@
 # Public live demo acceptance
 
-## Current verified boundary — 2026-11-21
+## Current verified boundary — stage-one closeout
 
-The owner completed Production D1 binding and redeployment. Fresh public GET readiness returned enabled true, credentialConfigured true and trialReady true. Status enabled means configuration is present; connectionVerified intentionally remains false because a GET never calls the model. No real inference success has been verified from this environment.
+K verified the active b6006d1a19e1b2d181c9e091711acef22ca3c7f2 production through the normal Live demo UI: Draft ready, explicit Apply → Draft applied, download control available, one run without simulation/retry. See [the exact operator-reported scope](evidence/production-live-demo-b6006d1.json). Downloaded-file content/reimport and independent receipt/usage/network readback were not supplied in that report and are not inferred as observed.
 
-The cloud browser failed before opening a tab (Browser Use could not read requirements). The normal production Playwright attempt failed at initial navigation with ERR_TUNNEL_CONNECTION_FAILED; an ordinary command-line public GET returned HTTP 403. No provider request was submitted, no security setting was changed and no alternate network/protection bypass was attempted. Public GET extraction remains available and is used only for configuration/delivery checks.
+Stage-one isolated browser acceptance performs actual JSON download/read/validation/reimport using fixed fictional content and tests cancellation/failure recovery without new real-model calls. A separate no-inference public Studio command is available below. This workspace's public attempt failed at navigation with ERR_TUNNEL_CONNECTION_FAILED, and cloud tab creation failed with Browser Use could not read requirements; neither means the owner's site is unavailable. No bypass or secret transfer was attempted. See [closeout scope](STAGE-1-CLOSEOUT.md).
+
+The older diagnostic sections below are historical failure procedures, not assertions that the current live demo still fails. Gateway configuration readiness intentionally retains connectionVerified false because its GET performs no model call. No new model request was made by the closeout agent.
+
+## No-inference file-control acceptance
+
+Run `TOWER_PUBLIC_STUDIO_ACCEPTANCE=1 CHROMIUM_PATH=/usr/bin/chromium npm run test:public:studio` from a normally connected environment, or use `TOWER_STUDIO_LOCAL_FIXTURE=1` to validate the same assertions against the local build. The latter emits explicitly local evidence. The check uses synthetic editor content, actually reads the browser-downloaded file, validates it, reimports it, exercises invalid-import retention and asserts zero reviewer API calls/content writes/browser storage. No model response is injected; no generation/consent control is activated. This does not prove the complete live-generated-file path from a single production run.
 
 ## One deliberate browser run
 

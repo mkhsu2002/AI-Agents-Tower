@@ -1,5 +1,8 @@
 # M0/M1 validation evidence
 
+Current evidence is summarized in [STAGE-1-CLOSEOUT.md](STAGE-1-CLOSEOUT.md): K-reported public real-model draft/apply success is separate from isolated actual-file download/reimport and scripted failure/cancel/restart tests. Older no-real-inference counts below are historical snapshots. No new production model call was made during closeout.
+
+
 Verified locally 2026-11-17 on Node v24.22.1, npm 11.9.0 and system Chromium 156.0.8078.79 (Debian Linux). Feature branch: `feat/m0-m1-homebundle`. Base commit: `d789f2c`. No remote writes or deployment performed.
 
 ## Reproduce

@@ -31,6 +31,7 @@
     "api",
     "functions",
     "playwright.live.config.ts",
-    "playwright.pages-interop.config.ts"
+    "playwright.pages-interop.config.ts",
+    "playwright.public-studio.config.ts"
   ]
 }

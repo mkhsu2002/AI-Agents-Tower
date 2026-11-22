@@ -1,0 +1,30 @@
+{
+  "observedApplicationCommit": "b6006d1a19e1b2d181c9e091711acef22ca3c7f2",
+  "publicOrigin": "https://1st-tower.neobabylon.app",
+  "reportedBy": "K (authorized independent production operator)",
+  "evidenceType": "operator-reported normal public UI observation",
+  "observationDate": null,
+  "dateNote": "Exact success timestamp was not supplied; preserve this limitation rather than infer it from the earlier failed run.",
+  "reportedObservations": {
+    "activeProductionShaVerified": true,
+    "normalLiveDemo": true,
+    "singleRun": true,
+    "noSimulation": true,
+    "noRetry": true,
+    "draftReady": true,
+    "explicitApply": true,
+    "draftApplied": true,
+    "downloadControlAvailable": true
+  },
+  "notCapturedOrNotVerified": {
+    "downloadFileAndReimport": true,
+    "rawValidationReceiptReadback": true,
+    "providerReportedUsageReadback": true,
+    "independentNetworkCallCount": true,
+    "repeatedLiveReliability": true,
+    "publicErrorRecoveryAndCancellation": true
+  },
+  "newProviderRequestsByCloseoutAgent": 0,
+  "fullCompetitionConformanceClaimed": false,
+  "privateHomeOrPublicResidencyClaimed": false
+}
