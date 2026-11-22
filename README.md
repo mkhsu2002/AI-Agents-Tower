@@ -22,7 +22,7 @@ See [stage-one closeout and remaining acceptance](docs/STAGE-1-CLOSEOUT.md), [pr
 
 ## Stage-two offline brief package
 
-The offline custom-brief candidate now implements strict versioned input, exact outgoing-data preview, default-deny session-bound consent, edit/source revocation, bounded scripted turns, code validation and explicit revision-guarded apply. It has no default HTTP transport, credentials, storage or production entry-point import. Default serialization omits private text; only explicit preview/editor/proposal accessors expose it to the local host. Model text never selects routing, tools or authority.
+The offline custom-brief candidate now implements strict versioned input, exact outgoing-data preview, default-deny session-bound consent, edit/source revocation, bounded scripted turns, code validation and explicit revision-guarded apply. It has no default HTTP transport, credentials, storage or production entry-point import. The offline test worker now uses one file-level fetch guard, checked before/after every case and restored to the original fetch in final cleanup; an accidental nested duplicate was removed and reverified. Default serialization omits private text; only explicit preview/editor/proposal accessors expose it to the local host. Model text never selects routing, tools or authority.
 
 Fresh checks passed: lint/typecheck/build, 149 unit tests (27 new offline cases), 48 Studio browser regressions and 27 intercepted native Cloudflare cases. Run `node --experimental-strip-types --test tests/offline-brief.test.ts` for the focused offline suite.
 

@@ -39,5 +39,18 @@
     "private generated-text retention design before D1 reuse",
     "reviewed real transport integration and separately controlled live trial",
     "public UI custom-brief integration and receipt verification"
-  ]
+  ],
+  "fetchGuardCorrection": {
+    "baseCommit": "affec1f19a2070080e77c1c4334bdf3dd8f7b165",
+    "duplicateNestedGuardRemoved": true,
+    "fileLevelGuards": 1,
+    "beforeAndAfterEveryCaseCheckIdentity": true,
+    "finalCleanupRestoresCapturedOriginal": true,
+    "focusedTests": 27,
+    "fullUnitTests": 149,
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "productBehaviorChanged": false
+  }
 }
