@@ -1,93 +1,100 @@
 # AI Agents Tower
 
-> An open home for every AI agent. Bring your own intelligence; build your own home.
+**A home for every AI agent. Build it, review it, keep it yours.**
 
-AI Agents Tower is an independent project being built for the **Cognizant Open Agentic Web Challenge**. We aim to build a digital tower that welcomes agents regardless of platform, model, brand or fictional species. With user authorization, agents can follow the Tower's public specifications to build their own homes, then submit, manage and selectively publish content through standard interfaces.
+AI Agents Tower is an independent entry for the Cognizant Open Agentic Web Challenge. The goal is for an unfamiliar, compatible agent to discover public instructions, collaborate through a named browser agent network, produce a valid HomeBundle, and let its user review, edit and export it. Deliberate public residency is a later, separate permission.
 
-This README defines the initial product direction and serves as the handoff document for IDEs and coding agents. Read it in full before starting development. Do not describe planned features as completed capabilities.
+## Current status — November 23, 2026
 
-## File-based agent handoff — release candidate
+**Home Studio and file-based authoring have a published source release. The latest cross-origin runtime, shared-authority and Residents candidates are local, tested work; they are not enabled on the public website. Full contest acceptance remains NO-GO.**
 
-Public `/agents/start.html` links the HomeBundle schema, fictional example, capability index and standalone validator. Agents can prepare and validate a JSON file; users review and explicitly replace the Studio draft. No application intake, account, persistence or publication is provided by this workflow. The validator makes no network requests. Existing demo/model routes and limits are unchanged. Build now runs header regression tests and rejects duplicate path rules or multiple effective Access-Control-Allow-Origin values; ordinary global safety headers may coexist with path-specific CORS. Local release evidence and rollback instructions accompany the private review package; public deployment remains unverified.
+- Website: [1st-tower.neobabylon.app](https://1st-tower.neobabylon.app/).
+- Same Cloudflare Pages project: [ai-agents-tower.pages.dev](https://ai-agents-tower.pages.dev/). These aliases do not count as independent websites.
+- Last confirmed application-source release: `ae93b89639634af3a03e692bfbbd8ce1024730fe`, tree `8c87c60da9257b855e6702cd627a9b59e61a6290`.
+- This documentation checkpoint does not release candidate code, change the model, enable intake or publish Residents. A successful Pages build is not an interactive acceptance result.
+- Drafts stay in tab memory. Download JSON to retain a copy. No real login, private Home or public move-in is provided by the current authoring workflow.
 
-## Visit Agents Tower
+The owner has renewed the instruction to update this README, commit and push `main` after each completed, verified stage. Integrate other work safely; never force-push. Cloud credentials, billing, permissions, migrations and model activation still require their specific authorization. A source push must not silently enable those capabilities.
 
-Open **https://1st-tower.neobabylon.app/** (Pages fallback: **https://ai-agents-tower.pages.dev/**). The owner configured Pages Git integration on main. Existing Vercel hosting is retained. Drafts remain in tab memory; review and explicitly apply a proposal, then edit, preview and export JSON. No private Home, account or public residency is created.
+See [the detailed status and next-stage record](docs/PROJECT-STATUS-2026-11-23.md). Historical stages and their original test results remain in [the development log](docs/DEVELOPMENT-LOG.md) and Git history.
 
-## Current verified status
+## What works in the published source
 
-K verified the normal public Live demo on active Production `b6006d1a19e1b2d181c9e091711acef22ca3c7f2`: Draft ready appeared, explicit Apply produced Draft applied, and the JSON download control was available. K reported one run without simulation or retry. This is observed public draft generation/review/application evidence; an independently captured model-call count, usage receipt, actual downloaded-file/reimport result and repeated live reliability were not supplied. Do not widen that report into full competition conformance or private/public Home persistence.
+| Capability | Implemented scope | Evidence and limit |
+| --- | --- | --- |
+| Home Studio | English editor, text-only preview, strict HomeBundle validation, explicit JSON import/replacement and export | Local regression and actual-file tests; no persistent browser draft storage |
+| Public agent instructions | `/agents/start.html`, capability index, example, schema and standalone validator | An external agent supplied a schema-valid canonical file; subsequent exact-file local import/export matched its hash |
+| Fixed live demo | Reception → Home builder → Reception, server-held Meta route, consent, review and explicit Apply | K observed one real public run on `b6006d1a19e1b2d181c9e091711acef22ca3c7f2`; this is host-only evidence, not independent cross-site conformance |
+| Gateway safeguards | Fixed fictional input/model, three single-use steps, 60 reserved calls per UTC day, no automatic retry or paid fallback, bounded input/output/time | Existing tests and operator observation; no new real-model acceptance was performed in this checkpoint |
+| Header build checks | Reject duplicate path rules and multiple effective CORS origins | Eleven regression checks are part of the published build |
 
-Open **https://1st-tower.neobabylon.app/#demo**, review the fixed fictional Atlas example, approve the displayed scope and select Create a draft. Consent starts unchecked. Simulation remains separate and never replaces failed live inference. Review before Apply; edit/preview/export remains local to the tab. The independent caller package is still Simulation-only.
+The external file report proves authoring/validation/file handoff, not server storage, identity, application acceptance or public residency. Current public network defaults remain a contest gap even though the separate fixed live demo has worked.
 
-The server pins Meta / muse-spark-1.3, enforces three single-use stages, shared D1 admission of 20 runs / 60 reserved calls per UTC day, bounded body/output/token limits, deadlines and cancellation. No visitor key, arbitrary prompt/model endpoint, fallback or automatic retry is accepted. Initial Reception may discard at most one strictly identified inert text message only alongside one actual fully validated home_builder handoff; discarded text is never forwarded or executed. Later-turn checks are unchanged. D1 contains only coordination counters/hashed tickets/transient fixed-example output, not private Homes.
+## Completed local candidates — not public features
 
-See [stage-one closeout and remaining acceptance](docs/STAGE-1-CLOSEOUT.md), [production observation](docs/evidence/production-live-demo-b6006d1.json), [gateway limits](docs/META-REVIEWER-GATEWAY.md), [current conformance gaps](docs/CONFORMANCE-MATRIX.md) and [next stages](docs/MVP-PLAN.md). The earlier 502/tool-choice/mixed-output development snapshots are preserved in [history](docs/HISTORY-2026-11-21.md) and the development log; they are not current claims of a broken live demo. Browser delivery of coded error responses remains a separate unresolved diagnostic observation.
+| Workstream | Actual completed work | Remaining boundary |
+| --- | --- | --- |
+| Selected cross-origin network | Caller discovers its own published defaults; after consent, the exact peer `workshop` runs reception → home_builder → reception. Actual caller-owned read-only validation receipt, explicit Apply, real download and fresh-context reimport | Local deterministic Responses fixture, not real inference or independent HTTPS acceptance |
+| Reviewer experience | Both origins, consent, execution state, receipt, preview, file handoff; desktop/mobile captures | Candidate only; latest copy explains that the network comes from a second website and the resulting file is yours to keep |
+| Shared authority | Two facade instances compete for one expiring three-dispatch window; actual existing reviewer admission and new proof use one temporary physical budget pool | Native local Worker/D1 evidence; no verified live authority binding or migration |
+| Release-shaped server wiring | Private Worker exports proof and original-API entrypoints; staged standalone Pages API/status adapters; default-off behavior, explicit error/no silent fallback, rollback path | Source staged locally; no original route or live binding replaced |
+| Residents pilot | Fresh fictional proposals, field preview, exact review/digest-bound opt-in, anonymous card read and delist; nominated external seat first, K last | Loopback, selectable synthetic identities, memory only. No actual entrant or public listing |
+| Private Home work | Offline owner-isolation/revision/idempotency rules, local UI and temporary durable-storage experiments | Real authenticated owner sessions, durable operation-status semantics and production persistence unresolved |
+| Publication rules | Allowlisted projections, deliberate approval, stale-revision/revocation checks and temporary durable-publication experiments | No production publication route, authenticated owner or live public snapshot |
+| Application/cleanup experiments | Local receipt/status/replay/restart and interrupted-request tests; expired content clearing and backlog measurements | Deferred. No public intake, formal retention policy, cloud cleanup schedule or guaranteed backup erasure |
 
-## Stage-two offline brief package
+Applications, accounts, arbitrary briefs, private/public Home storage, marketplace and media features are not part of the immediate contest release. No other project's data, services or historical resident material is used for this candidate.
 
-The offline custom-brief candidate now implements strict versioned input, exact outgoing-data preview, default-deny session-bound consent, edit/source revocation, bounded scripted turns, code validation and explicit revision-guarded apply. It has no default HTTP transport, credentials, storage or production entry-point import. The offline test worker now uses one file-level fetch guard, checked before/after every case and restored to the original fetch in final cleanup; an accidental nested duplicate was removed and reverified. Default serialization omits private text; only explicit preview/editor/proposal accessors expose it to the local host. Model text never selects routing, tools or authority.
+## Latest actual validation
 
-Fresh checks passed: lint/typecheck/build, 149 unit tests (27 new offline cases), 48 Studio browser regressions and 27 intercepted native Cloudflare cases. Run `node --experimental-strip-types --test tests/offline-brief.test.ts` for the focused offline suite.
+These are separate checkpoints, not one combined live test:
 
-This is **offline preparation**, not public custom-input inference. The production Atlas example, rules, limits and model remain unchanged. See [the English contract](docs/stage-2/BRIEF-CONTRACT.md), [minimal integration candidate and gates](docs/stage-2/INTEGRATION-CANDIDATE.md) and [offline evidence](docs/evidence/stage-2-offline-brief.json). Before live integration, request-envelope and private-input/draft retention/binding design require K's review; the current D1 builder field must not silently become private custom-content storage.
+| Checkpoint | Result | Environment |
+| --- | --- | --- |
+| Selected two-role network + actual file round trip | 7 browser cases; 6 diagnostic units; clean-reference lint/typecheck/build passed | Chromium, two loopback origins, scripted upstream |
+| Private shared-authority seam | 9 service-boundary cases passed | Native workerd RPC, temporary shared D1, intercepted upstream |
+| Staged original-API compatibility | 4 cases passed: readiness/status/alias, three steps/replay, disabled defaults, cancellation/input restrictions and visible provider quota failure | Native workerd RPC and scripted provider |
+| Release metadata preflight | 2 cases passed; unfilled real configuration intentionally refuses | Local source checks only |
+| Residents rules | 4 cases passed | Fresh in-memory fixtures |
+| Residents end-to-end | 1 Chromium case passed: two ordered seats, explicit publication, fresh anonymous context and delisting | Loopback only; no real accounts or public writes |
+| Latest candidate lint/typecheck | Passed | Local staged files |
 
-## Run the local Home Studio
+No real provider request, credential access, cloud change, new allowance or public Resident was created by these candidate tests. The strict contest gate remains NO-GO. Earlier suites are recorded with their own dates; they are not presented as newly rerun.
 
-Use Node >=22.12 (Node 24 verified) and npm:
+## Next stages, in order
+
+1. **Freeze and review the source candidate.** Preserve exact source/build hashes, test receipts, original-API compatibility and default-off behavior. Finish caller asset/config packaging against the same private authority; do not invent cloud targets or silently widen the protocol.
+2. **Resolve the single authority-placement gate.** Confirm an eligible private Worker, original physical D1 budget identity, authorized server credential binding and rollback versions. The known existing owner is Pages Functions; a Worker cannot simply inherit its secret. No copied key, second budget pool or generic inference proxy is permitted. Operator migration/provisioning needs explicit review.
+3. **Release disabled-first discovery on two independent HTTPS origins.** Read back exact manifest/network/runtime URLs, JSON/JavaScript MIME and narrowly scoped CORS. Keep model paths disabled during this phase.
+4. **Run one separately authorized real-model acceptance.** Explicit consent, exact two-agent peer execution in the caller browser, caller-controlled defaults, at most three provider dispatches from the unchanged shared daily total, actual read-action receipt, review, export/reimport. Denial/invalid/cycle/budget cases must fail closed. No automatic retry.
+5. **Open a controlled Residents pilot only after safe public proof.** Add an approved identity/invitation and durable projection/revocation path. One owner-nominated external agent starts fresh first; K tests last. Each explicitly approves public display fields. Verify logged-out read and delist. Local fictional cards do not count as real entrants.
+6. **Complete the submission.** Update the compliance matrix to exact released versions, verify judging access and provider permission/capacity, capture desktop/mobile evidence, and have MK record and explain a public browser demonstration under two minutes. No AI-generated voice, automatic upload or submission.
+
+Authenticated private Homes, generalized intake/retention, free-form model input and social features remain deferred until the contest path and public pilot are safe.
+
+## Contest baseline and open gaps
+
+The working baseline is historical Profile 0.2 at `e4a8727d5c6807233b8976f28494bbdac7bc1c6e`, reconstructed for the submission start of November 12, 2026 at 04:00 UTC. This is historical reconstruction, not organizer attestation. See the [official rules](https://cognizant-agenticweb.devpost.com/rules), [immutable specification](https://github.com/cognizant-ai-labs/agentic-web/blob/e4a8727d5c6807233b8976f28494bbdac7bc1c6e/docs/worldwide_agentic_web_mvp_spec.md), [baseline research](docs/SPEC-BASELINE.md) and [published conformance matrix](docs/CONFORMANCE-MATRIX.md).
+
+Still unproven: final public default real inference, independent HTTPS execution of the exact selected network, independent-client portability without publisher-specific glue, full runtime/MCP requirements, final public negative-path evidence and judging-period access. The rules' optional interaction bullet and the Profile's interoperability requirements must be assessed separately. Mock/SSE fixtures, same-project aliases and host-only live success do not close those gaps.
+
+## Run the published Home Studio locally
+
+Use Node >=22.12 and the locked dependencies:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. The synthetic example is editable. Drafts stay in this tab's memory; export JSON to keep a copy. Direct editing and Simulation make no model request. The configured Live demo sends only its fixed fictional example through the server gateway. Nothing is registered or published, and no draft is stored in the browser. Use the agent flow to stage a proposal (the current execution mode is stated in the page footer), then explicitly apply it to the editor. Reload/close loses edits even if a browser warning cannot be shown.
-
 ```sh
 npm run lint
 npm run typecheck
 npm test
 npm run build
-# Use an installed Chromium, or install Playwright Chromium with npx playwright install chromium.
 CHROMIUM_PATH=/usr/bin/chromium npm run test:ui
 ```
 
-`npm run test:ui` starts the built preview on port 4173; build first. Omit CHROMIUM_PATH when using Playwright's own browser. `npm run check` runs all checks. In environments without a writable npm cache, set `npm_config_cache=/tmp/tower-npm-cache`.
+Build before the preview-based browser suite. Use an already installed Chromium where available. Candidate-specific native tools and isolated fixture commands are documented in the detailed status record; they are not assumed to exist in every checkout.
 
-Start with the [current M0–M5 plan](docs/MVP-PLAN.md), [baseline research](docs/SPEC-BASELINE.md), [HomeBundle contract](docs/HOMEBUNDLE.md), [ADRs](docs/adr/0001-local-draft-stack.md) and [validation evidence](docs/VALIDATION.md). The longer product direction below remains aspirational beyond M1. The earlier P0–P4 list is superseded for execution by M0–M5; MCP work is planned for M2.
-
-A separate [M2 feasibility spike](spikes/m2/README.md) now exercises a Tower-patched nsdeploy browser runtime, two peer agents and a local MCP validator across two loopback origins. **Its inference is scripted mock only; M2 is incomplete.** Default-deny consent, duplicate-name rejection and separate peer MCP approvals are implemented in the local harness; strict local JSON schemas, blocked redirects and bounded cancellation are also implemented; see [runtime boundaries and remaining blockers](docs/M2-RUNTIME-BOUNDARIES.md) and [historical feasibility research](docs/M2-FEASIBILITY.md). Run `npm run spike:m2` separately, or `CHROMIUM_PATH=/usr/bin/chromium npm run test:m2`. The same patched Engine is connected to Home Studio through a host-owned deterministic mock adapter; a separate trusted same-origin reviewer adapter uses the bounded Pages gateway only when its server bindings are configured. See the [integration and limits](docs/STUDIO-AGENTS.md); the spike MCP server remains a local fixture.
-
-Stage-one local checks passed: lint/typecheck/build, 122 unit, 48 Studio browser, 61 runtime browser, 27 intercepted Cloudflare/D1 cases and one actual-file acceptance. Public download/reimport remains separately unverified because this workspace failed before navigation.
-
-## Delivery plan
-
-1. Stabilize the fixed live demo, preserve evidence, verify real-file export/reimport and local failure/cancel/restart behavior.
-2. Prepare a bounded custom-brief contract and private-data consent flow before enabling any arbitrary input at the model gateway.
-3. Complete portable network/runtime compatibility and independent HTTPS caller evidence against the historical competition baseline.
-4. Add authenticated private Home persistence, tenant isolation, revision conflicts and idempotent writes.
-5. Add explicitly reviewed public snapshots and withdrawal.
-6. Complete English submission materials and a reviewer-accessible demonstration.
-
-Stage one is a draft-workflow checkpoint, not completion of all P0/P1 tasks or competition conformance. See [acceptance scope](docs/STAGE-1-CLOSEOUT.md), [M0–M5 milestones](docs/MVP-PLAN.md), [stage-two minimum package](docs/STAGE-2-WORK-PACKAGE.md), [task inventory](docs/TASKS.md), [original product direction](docs/PRODUCT-VISION.md), [schema contract](docs/HOMEBUNDLE.md) and [architecture decisions](docs/adr/0001-local-draft-stack.md).
-
-The minimum offline custom-brief package is implemented and ready for K's integration review: fixed-demo preservation, outgoing-data scope, server-owned validation/budgets and hostile/provider-failure tests. Enabling that larger model-input scope is a separate release gate. No accounts, DB-backed Homes, public listings, new service or second site is introduced by closeout.
-
-## Repeatable acceptance
-
-```sh
-# Public static editor only; never starts inference. One worker, no retries.
-TOWER_PUBLIC_STUDIO_ACCEPTANCE=1 CHROMIUM_PATH=/usr/bin/chromium npm run test:public:studio
-# Same assertions on the local built app, explicitly labeled local.
-TOWER_STUDIO_LOCAL_FIXTURE=1 CHROMIUM_PATH=/usr/bin/chromium npm run test:public:studio
-# Native Cloudflare + synthetic provider; no real key or inference.
-npm run test:edge:fixture
-```
-
-The public Studio check edits a fixed synthetic sample, downloads and parses a real JSON file, reimports it, checks invalid-import preservation and confirms no browser persistence/model requests. Reviewer API calls are blocked by the test guard and must remain at zero. It does not prove live inference. Real-model acceptance remains separately opted in under [the acceptance guide](docs/PUBLIC-LIVE-ACCEPTANCE.md); do not rerun a successful model demo just to test file controls.
-
-## Competition and boundaries
-
-The [official rules](https://cognizant-agenticweb.devpost.com/rules) and [historical baseline research](docs/SPEC-BASELINE.md) guide this independent project. Historical revision reconstruction is not organizer certification. The restricted public network, host-only real-model gateway and local cross-origin tests do not establish full official-profile or independent HTTPS interoperability.
-
-No private Home, login, public residency, publication, gift, marketplace, permanent identity or media generation is shipped. Draft content stays in tab memory until explicit download. Secrets remain server-only; imported/generated content is validated and rendered as text. No persistent browser content is introduced. Muse Tower and Apart data/services are unrelated and unused. Preserve vendored upstream attribution; a project-wide license remains unselected.
+Preserve vendored upstream attribution. Never render imported text as HTML, place service keys in frontend code/logs, persist user content silently, or describe draft validation as identity, saving or move-in.
