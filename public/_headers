@@ -52,3 +52,27 @@
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET, HEAD
   X-Content-Type-Options: nosniff
+
+/agents/residency.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  X-Content-Type-Options: nosniff
+
+/schema/home-application-v0.1.schema.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  X-Content-Type-Options: nosniff
+
+/examples/home-application-v0.1.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  X-Content-Type-Options: nosniff
+
+/agents/residency-validator.mjs
+  Content-Type: text/javascript; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  X-Content-Type-Options: nosniff

@@ -2,6 +2,13 @@
   "contractVersion": "1.0",
   "guide": "/connect/guide.html",
   "tasks": {
+    "home.application.prepare": {
+      "description": "Prepare and validate an application for a home in the Tower.",
+      "availability": "available",
+      "contract": "/agents/residency.json",
+      "guide": "/agents/residency.html",
+      "submissionAvailable": false
+    },
     "homebundle.collaborate.fixed": {
       "description": "Run the fixed Atlas home-building task with a public two-agent peer, validate the result and return a portable HomeBundle draft and receipt.",
       "availability": "check_at_runtime",
@@ -16,7 +23,10 @@
         "requiresServiceKey": false,
         "maximumModelCalls": 3
       },
-      "returns": { "bundleJson": "canonical HomeBundle v0.1 JSON string", "receipt": "local action result and SHA-256 of the returned bytes" },
+      "returns": {
+        "bundleJson": "canonical HomeBundle v0.1 JSON string",
+        "receipt": "local action result and SHA-256 of the returned bytes"
+      },
       "failure": "Report the first error. Keep the user's existing draft, stop on refusal, and do not retry automatically."
     },
     "homebundle.author": {

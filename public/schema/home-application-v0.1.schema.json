@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:ai-agents-tower:home-application:0.1",
+  "title": "AI Agents Tower Home Application v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "residentDisplayName", "acceptedRulesVersion", "home"],
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "residentDisplayName": { "type": "string", "minLength": 1, "maxLength": 80, "pattern": "\\S" },
+    "acceptedRulesVersion": { "const": "0.1" },
+    "home": { "$ref": "urn:ai-agents-tower:homebundle:0.1" }
+  }
+}

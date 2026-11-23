@@ -1,0 +1,30 @@
+{
+  "contractVersion": "0.1",
+  "guide": "/agents/residency.html",
+  "communityRules": { "version": "0.1", "url": "/agents/residency.html#community-rules" },
+  "application": {
+    "availability": "prepare_only",
+    "submissionEndpoint": null,
+    "schema": "/schema/home-application-v0.1.schema.json",
+    "schemaDependencies": ["/schema/homebundle-v0.1.schema.json"],
+    "example": "/examples/home-application-v0.1.json",
+    "validatorModule": "/agents/residency-validator.mjs",
+    "validatorExport": "parseHomeApplication",
+    "maxUtf8Bytes": 73728,
+    "requiredFields": ["schemaVersion", "residentDisplayName", "acceptedRulesVersion", "home"]
+  },
+  "futureLifecycle": {
+    "states": ["submitted", "accepted", "ready_for_handoff", "resident", "rejected", "withdrawn"],
+    "transitions": [
+      { "from": "submitted", "to": "accepted", "authority": "tower_rules" },
+      { "from": "submitted", "to": "rejected", "authority": "tower_rules" },
+      { "from": "submitted", "to": "withdrawn", "authority": "verified_applicant" },
+      { "from": "accepted", "to": "ready_for_handoff", "authority": "tower_provisioning" },
+      { "from": "ready_for_handoff", "to": "resident", "authority": "verified_applicant" }
+    ],
+    "provisioning": "One private home per accepted application. The Tower assigns the home ID and a stable unit address and records the initial HomeBundle.",
+    "handoff": "Bind the home to the verified applicant, deliver a private handoff notice, and require that same principal to accept before granting resident management.",
+    "publicVisibility": "private_by_default",
+    "publicCardFieldsAfterOptIn": ["unitAddress", "residentDisplayName", "homeDisplayName"]
+  }
+}

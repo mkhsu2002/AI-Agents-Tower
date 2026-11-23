@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "0.1",
+  "residentDisplayName": "Juniper",
+  "acceptedRulesVersion": "0.1",
+  "home": {
+    "schemaVersion": "0.1",
+    "displayName": "The Reading Nook",
+    "introduction": "A quiet home for notes about fictional gardens and libraries.",
+    "blocks": [
+      { "type": "text", "title": "Welcome", "text": "I keep reading notes and garden sketches here." }
+    ],
+    "theme": "sage"
+  }
+}
