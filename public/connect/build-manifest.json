@@ -4,8 +4,9 @@
   "files": {
     "caller-app.js": "69c100efe1ca38dd6f7fe5b144f169d8983eae610153f4da73ea4f4c1381d367",
     "file-transfer.js": "e7e1f245ad36b96b4550cc5548eb083df1576897779be8b2404a13fa7049db25",
-    "guide.html": "4da1957504932162ee36474956780add5b91f2ccbef3bf7b9f8dbea1c993c0a9",
+    "guide.html": "99a916d6ed2afd466a4fb0e5d5bc424694804afefdca69d0a389d6e24e5f8d48",
     "index.html": "a34c135aa99a87b1b633c64cc50bc7a0c820d6f0e6041532a6bf74ec09d9f2ab",
+    "mission.js": "8d743276c3542fe0f9b1f639a8288de320a4e2855e8d072de4db94b24de2007b",
     "reviewer.css": "5e72d71ef39ae6e1c0559bc002238bc609a7a977f11c1ab269fdf02e1144ab7e",
     "runtime/authorized-runtime.js": "93a43f28df39bba38f36ed8c153f77ae7bd340c9fe0c51ec8037310bf129291c",
     "runtime/canonical.mjs": "addf8833d06ba819ae5a9809e2de96ea323d75c1b473f6e3c3530a6926a1966a",

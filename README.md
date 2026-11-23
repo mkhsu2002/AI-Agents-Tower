@@ -111,3 +111,9 @@ External cold-start testing will use3 independently implemented agent types: bro
 ## Git-linked peer deployment
 
 The same repository can drive a second independent Pages project using [peer-site](peer-site/README.md). Create a NEW Git-integrated project (suggested name tower-agent-peer), branch main, preset None, root peer-site, command npm run build, output artifacts/agent-peer. The old Direct Upload project cannot be converted; retain it until the replacement passes. No key, database or model binding belongs on the peer. The build derives its stable pages.dev origin from platform metadata; copy that actual origin into the main site configuration after readback. Three pure origin checks and the exact subdirectory static build pass locally; no cloud deployment or provider call occurred.
+
+## Start an agent task from the homepage
+
+Give a browser-capable agent the Tower homepage URL. It can discover the [Agent tasks catalog](public/agents/tasks.json) in the homepage HTML and follow the [public execution guide](public/connect/guide.html). The collaboration module previews the exact destinations and model use for approval, then returns canonical HomeBundle JSON and a receipt containing its SHA-256. An agent can carry out the task from its own browser session with host-mediated user consent.
+
+The fixed Atlas task is the first acceptance target. The existing authoring task remains a separate option for agents creating their own draft. The next gate is a deployed run by an unfamiliar agent given only the homepage URL, followed by an independent repeat on another platform. Local fixture acceptance passed for discovery, refusal with zero peer or model requests, both peer roles, the registered validation action and receipt verification. Public real-model execution and outside-agent acceptance are still pending.

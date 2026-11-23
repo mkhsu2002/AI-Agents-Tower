@@ -17,3 +17,40 @@ test('cancel during dispatch cannot apply late output or change draft',async({pa
 test('a draft imported during generation review cannot be overwritten by an older proposal',async({page})=>{
  await page.goto('/connect/');await expect(page.locator('#run')).toBeEnabled();await page.locator('#approve').check();await page.locator('#run').click();await expect(page.locator('#out')).toHaveText('Review proposal');const imported=JSON.parse(await page.locator('#bundle-edit').inputValue());imported.displayName='Imported draft stays mine';await page.locator('#home-file').setInputFiles({name:'fresh.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(imported))});await page.locator('#apply-file').click();await page.locator('#validate').click();await expect(page.locator('#receipt-card')).toBeVisible();await page.locator('#apply').click();await expect(page.locator('#out')).toContainText('DRAFT_CHANGED');await expect(page.locator('#home-preview h2')).toHaveText('Imported draft stays mine');
 });
+
+test('a fresh client discovers the mission from the homepage and returns a verified file without demo controls', async ({ page, request }) => {
+  const posts: string[] = [];
+  page.on('request', req => { if (req.method() === 'POST') posts.push(req.url()); });
+  await page.goto('/');
+  const catalogUrl = await page.locator('link[rel=alternate][title="Agent tasks"]').getAttribute('href');
+  expect(catalogUrl).toBeTruthy();
+  const result = await page.evaluate(async (url) => {
+    const response = await fetch(url!, { credentials: 'omit', redirect: 'error' });
+    const catalog = await response.json();
+    const { execution } = catalog.tasks['homebundle.collaborate.fixed'];
+    const mission = await import(execution.module);
+    const preview = await mission[execution.previewExport]();
+    try { await mission[execution.runExport]({ authorize: () => false }); throw Error('EXPECTED_DENIAL'); }
+    catch (error) { if ((error as Error).message !== 'CONSENT_DENIED') throw error; }
+    return { execution, preview };
+  }, catalogUrl);
+  expect(posts).toEqual([]);
+  const denied = await (await request.get('/__evidence')).json();
+  expect(denied.peerReads).toBe(0);
+  expect(denied.upstream.calls).toBe(0);
+  const outcome = await page.evaluate(async ({ execution, preview }) => {
+    const mission = await import(execution.module);
+    // Represents a host-mediated approval of exactly the reviewed scope in this fixture.
+    return mission[execution.runExport]({ authorize: (scope: unknown) => JSON.stringify(scope) === JSON.stringify(preview) });
+  }, result);
+  expect(outcome.receipt).toMatchObject({ status: 'schema_valid', actionStatus: 'succeeded', modelCalls: 3 });
+  expect(outcome.receipt.executionMode).toContain('synthetic fixture');
+  expect(outcome.receipt.roles.map((role: {agent: string}) => role.agent)).toEqual(['reception', 'home_builder']);
+  expect(outcome.receipt.canonicalSHA256).toBe(createHash('sha256').update(outcome.bundleJson).digest('hex'));
+  expect(outcome.receipt.canonicalUtf8Bytes).toBe(Buffer.byteLength(outcome.bundleJson));
+  expect(JSON.parse(outcome.bundleJson).schemaVersion).toBe('0.1');
+  const completed = await (await request.get('/__evidence')).json();
+  expect(completed.peerReads).toBe(2);
+  expect(completed.peerAuth).toBe(false);
+  expect(completed.upstream.calls).toBe(3);
+});
