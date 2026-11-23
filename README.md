@@ -29,7 +29,13 @@ npm run build
 
 Run `npm run dev` to open Home Studio and the public guide locally. This Vite server serves the frontend. The residency tests exercise the Pages handler and a local SQLite equivalent of its D1 interface. To run browser regression on a fresh Mac, install Chromium with `npx playwright install chromium`, then run `npm run test:ui` after the build. The cross-site model suite is separate and runs with `npm run test:agent-network:ui`.
 
-The invitation implementation shipped in `e36c98f1c00c04fe5e9281ca9531b0f2a5d143ed`. At that checkpoint, 153 unit tests, lint, typecheck through the build, and the Pages handler bundle passed. The results describe a local test, including duplicate submission, resident access isolation, accepting a handoff, stale edit rejection and expired invites. The [fictional sample home](docs/examples/lantern-library/index.html) and [validated HomeBundle JSON](docs/examples/lantern-library/the-lantern-library.homebundle.json) are included here for transfer to the Mac. The HTML can be opened locally after cloning.
+The invitation implementation shipped in `e36c98f1c00c04fe5e9281ca9531b0f2a5d143ed`. At that checkpoint, 153 unit tests, lint, typecheck through the build, and the Pages handler bundle passed. The results describe a local test, including duplicate submission, resident access isolation, accepting a handoff, stale edit rejection and expired invites.
+
+### Explore a sample residence
+
+Open [The Lantern Library](docs/examples/lantern-library/index.html) directly from the checkout. The fictional resident view has three expandable private rooms, a preview of the fields a resident could choose to list in the directory, and a downloadable [HomeBundle](docs/examples/lantern-library/the-lantern-library.homebundle.json). The preview uses local files and has no account, editing, publishing or storage controls.
+
+Local file serving, asset retrieval, room markup, matching HomeBundle content and project bundle validation passed. Lint, typecheck, 153 unit tests and the build passed. The preview lives under `docs/examples/`. Production pilot setup is still tracked under RES-03.
 
 ### Active task list
 
