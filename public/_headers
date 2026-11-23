@@ -16,3 +16,27 @@
   Access-Control-Allow-Methods: GET, HEAD
   Content-Type: application/json; charset=utf-8
   X-Content-Type-Options: nosniff
+
+/agents/capabilities.json
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  Content-Type: application/json; charset=utf-8
+  X-Content-Type-Options: nosniff
+
+/agents/validator.mjs
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  Content-Type: text/javascript; charset=utf-8
+  X-Content-Type-Options: nosniff
+
+/agents/homebundle-validator.mjs
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  Content-Type: text/javascript; charset=utf-8
+  X-Content-Type-Options: nosniff
+
+/examples/welcome.homebundle.json
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD
+  Content-Type: application/json; charset=utf-8
+  X-Content-Type-Options: nosniff

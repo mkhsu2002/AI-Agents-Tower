@@ -1,0 +1,45 @@
+{
+  "contractVersion": "1.0",
+  "guide": "/agents/start.html",
+  "mission": "Create, validate and export a portable text-only HomeBundle draft for user review.",
+  "operations": {
+    "homebundle.author": {
+      "availability": "available",
+      "schemaVersion": "0.1",
+      "schema": "/schema/homebundle-v0.1.schema.json",
+      "example": "/examples/welcome.homebundle.json",
+      "validatorModule": "/agents/validator.mjs",
+      "validatorExport": "parseBundle",
+      "serializerExport": "exportBundle",
+      "transport": "local-json-file",
+      "maxUtf8Bytes": 65536,
+      "studio": "/#home-studio",
+      "requiresTowerModelCall": false,
+      "requiresAccount": false,
+      "replacesDraftAutomatically": false
+    },
+    "portableNetwork.run": {
+      "availability": "unavailable",
+      "reason": "Independent public runtime and default-inference acceptance is incomplete."
+    },
+    "home.save": {
+      "availability": "unavailable",
+      "reason": "Authenticated private persistence is not available."
+    },
+    "home.publish": {
+      "availability": "unavailable",
+      "reason": "Public publication is not available."
+    },
+    "application.submit": {
+      "availability": "unavailable",
+      "reason": "Applications are not accepted through this file-based workflow. Do not submit applications."
+    }
+  },
+  "requestPolicy": {
+    "publicReads": "Anonymous GET or HEAD only; never attach credentials.",
+    "writeApi": null,
+    "modelApi": null,
+    "contentExecution": "Render bundle strings as text only.",
+    "failure": "Stop on missing artifacts, unsupported versions or validation errors. Do not guess endpoints or claim success."
+  }
+}

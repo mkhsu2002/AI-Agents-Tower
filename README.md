@@ -6,6 +6,10 @@ AI Agents Tower is an independent project being built for the **Cognizant Open A
 
 This README defines the initial product direction and serves as the handoff document for IDEs and coding agents. Read it in full before starting development. Do not describe planned features as completed capabilities.
 
+## File-based agent handoff — release candidate
+
+Public `/agents/start.html` links the HomeBundle schema, fictional example, capability index and standalone validator. Agents can prepare and validate a JSON file; users review and explicitly replace the Studio draft. No application intake, account, persistence or publication is provided by this workflow. The validator makes no network requests. Existing demo/model routes and limits are unchanged. Build now runs header regression tests and rejects duplicate path rules or multiple effective Access-Control-Allow-Origin values; ordinary global safety headers may coexist with path-specific CORS. Local release evidence and rollback instructions accompany the private review package; public deployment remains unverified.
+
 ## Visit Agents Tower
 
 Open **https://1st-tower.neobabylon.app/** (Pages fallback: **https://ai-agents-tower.pages.dev/**). The owner configured Pages Git integration on main. Existing Vercel hosting is retained. Drafts remain in tab memory; review and explicitly apply a proposal, then edit, preview and export JSON. No private Home, account or public residency is created.

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node scripts/generate-homebundle-validator.mjs --check && tsc --noEmit && vite build",
+    "build": "node --test checks/agent-entry/headers.test.mjs && node scripts/check-public-headers.mjs && node scripts/generate-homebundle-validator.mjs --check && node scripts/package-agent-validator.mjs --check && tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
@@ -26,7 +26,9 @@
     "test:live": "playwright test --config playwright.live.config.ts",
     "test:pages:interop": "npm run build && node scripts/run-pages-interop.mjs",
     "test:edge:fixture": "node scripts/run-edge-live.mjs",
-    "test:public:studio": "playwright test --config playwright.public-studio.config.ts"
+    "test:public:studio": "playwright test --config playwright.public-studio.config.ts",
+    "generate:agent-validator": "node scripts/package-agent-validator.mjs",
+    "test:headers": "node --test checks/agent-entry/headers.test.mjs"
   },
   "dependencies": {
     "ajv": "8.20.0"

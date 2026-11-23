@@ -324,3 +324,13 @@ Final checks: lint/typecheck/build and 149 unit tests passed, including 27 new o
 K identified an accidental second OFFLINE_NETWORK_DISABLED setup inside the authority-bearing-bundle fixture, inserted by the earlier broad text replacement. It recaptured the already-guarded fetch and registered nested cleanup, so the prior teardown did not reliably restore the original global fetch. Removed that duplicate, retained one file-level original reference/guard, and added beforeEach/afterEach identity checks. The final after hook verifies the guard and zero attempts, restores the captured original in finally, then verifies restored identity. No fixture callback can silently replace it without failing a case.
 
 Fresh 27 focused offline tests and all 149 unit tests passed, plus lint/typecheck/build. This corrects test isolation/evidence, not production behavior, scopes, model, quota, D1 or settings. Prior browser/native regression results are not reported as newly rerun for this test-only change. Base/origin main matched affec1f19a2070080e77c1c4334bdf3dd8f7b165. No real model or external fixture transmission occurred. Next package remains local two-origin scripted work, with independent HTTPS/real inference/public custom input and deployment disabled.
+
+
+## File-based handoff release candidate — 2026-11-22
+
+Isolated additive candidate on exact main1b3727959cccae38e942ad0760bedeb487d27fd6. Adds public guide/schema links/example reuse/standalone actual Studio validator and explicit user import path. No application route, database/cleanup Worker, runtime/model change or configuration. No intake test rerun. Release-specific build/static/browser results are recorded separately in the private package; no public deployment or external acceptance claimed. Roll back only the reviewed source patch/additive static overlay, preserving existing application and demo state.
+
+
+## File-only header correction — 2026-11-22
+
+Independent review found duplicate schema rules in the first sealed static package; its dictionary-based check incorrectly folded them. Removed the duplicate at source. Added an array-preserving path-rule parser, case-insensitive ACAO duplicate/value validation, effective-rule overlap checks for public/declared exact resources, and11 positive/negative tests as a build prerequisite. Normal global non-CORS safety headers are accepted. Strict support is limited to path selectors with wildcard support; unsupported selector syntax fails closed. Old package is superseded for release, retained for traceability. No deployed headers readback, source/backend/model scope expansion or repeated intake/browser tests. Existing browser evidence is retained only where HTML/JS/CSS hashes match the previous package.

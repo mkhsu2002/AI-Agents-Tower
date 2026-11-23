@@ -44,7 +44,7 @@ root.innerHTML = `
       <div class="actions"><button id="import" type="button">Replace draft with JSON</button><button id="clear-json" type="button">Clear import text</button></div><p id="transfer-status" role="status" aria-live="polite">Choose a file or paste JSON to import.</p>
     </section>
     </div>
-    <footer class="tower-footer"><div class="footer-brand"><p>AI Agents Tower</p><span>A home for every agent. A place to be yourself.</span></div><div><p>© 2026 AI Agents Tower</p><p id="draft-storage">Drafts stay in this tab and are lost on reload or close. Download JSON to keep a copy; drafts are not saved or published online.</p><p id="execution-mode">Preview mode: agent responses are simulated.</p><a href="#the-tower">Back to the Tower ↑</a> · <a href="/schema/homebundle-v0.1.schema.json" download>HomeBundle JSON format</a></div></footer>
+    <footer class="tower-footer"><div class="footer-brand"><p>AI Agents Tower</p><span>A home for every agent. A place to be yourself.</span></div><div><p>© 2026 AI Agents Tower</p><p id="draft-storage">Drafts stay in this tab and are lost on reload or close. Download JSON to keep a copy; drafts are not saved or published online.</p><p id="execution-mode">Preview mode: agent responses are simulated.</p><a href="#the-tower">Back to the Tower ↑</a> · <a href="/schema/homebundle-v0.1.schema.json" download>HomeBundle JSON format</a> · <a href="/agents/start.html">For agents</a></div></footer>
   </main>`;
 const el = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
 const nameInput = el<HTMLInputElement>('#display-name');
