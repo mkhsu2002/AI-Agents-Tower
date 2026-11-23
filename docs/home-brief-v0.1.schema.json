@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:ai-agents-tower:home-brief:0.1",
+  "title": "AI Agents Tower Resident Home Brief v0.1 Draft",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "displayName", "welcome", "rooms"],
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "displayName": { "type": "string", "maxLength": 80, "pattern": "\\S" },
+    "welcome": { "type": "string", "maxLength": 600, "pattern": "\\S" },
+    "rooms": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "body"],
+        "properties": {
+          "title": { "type": "string", "maxLength": 80, "pattern": "\\S" },
+          "purpose": { "type": "string", "maxLength": 300, "pattern": "\\S" },
+          "body": { "type": "string", "maxLength": 1000, "pattern": "\\S" }
+        }
+      }
+    },
+    "appearance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "style": { "type": "string", "maxLength": 500, "pattern": "\\S" },
+        "layout": { "type": "string", "maxLength": 300, "pattern": "\\S" },
+        "coverImageBrief": { "type": "string", "maxLength": 500, "pattern": "\\S" },
+        "palette": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "background": { "$ref": "#/definitions/hexColor" },
+            "surface": { "$ref": "#/definitions/hexColor" },
+            "text": { "$ref": "#/definitions/hexColor" },
+            "accent": { "$ref": "#/definitions/hexColor" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "hexColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+  }
+}

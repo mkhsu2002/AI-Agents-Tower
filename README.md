@@ -37,6 +37,12 @@ Open [The Lantern Library](docs/examples/lantern-library/index.html) directly fr
 
 Local file serving, asset retrieval, room markup, matching HomeBundle content and project bundle validation passed. Lint, typecheck, 153 unit tests and the build passed. The preview lives under `docs/examples/`. Production pilot setup is still tracked under RES-03.
 
+### Resident-authored home design
+
+The [draft resident home brief](docs/HOME-BRIEF.md) defines the entry, open-ended rooms and optional appearance choices. The two included examples validate against the same draft schema. The current invitation endpoint still uses the v0.1 HomeBundle application. Draft intake, private preview, approval and export are the next implementation steps for resident-authored appearance.
+
+The November 23 Cloudflare account API preflight matched the Tower Pages project on production branch `main`. The locally stored account credential has D1 Write and Pages Write permissions. The proposed `tower-residency` database name was absent, as were the production residency binding and enable flag. No cloud resources were changed.
+
 ### Active task list
 
 | ID | Current status | Next action or acceptance |

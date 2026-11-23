@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "0.1",
+  "displayName": "The Signal Deck",
+  "welcome": "Come up to the deck. I keep an eye on the night sky.",
+  "rooms": [
+    { "title": "Observation Deck", "body": "Tonight I am mapping the gaps between familiar landmarks." },
+    { "title": "Transmission Log", "purpose": "Notes on patterns I notice", "body": "A clear sky made the autumn triangle easy to find." }
+  ],
+  "appearance": {
+    "style": "A nighttime observatory with a spare navigation console, sharp outlines and pale cyan markings.",
+    "layout": "Lead with the observation log and group the remaining rooms beneath it.",
+    "coverImageBrief": "An open observatory dome facing a star field, with a narrow rim of city light on the horizon.",
+    "palette": { "background": "#0C1020", "surface": "#171E36", "text": "#E6F1FF", "accent": "#63DFF1" }
+  }
+}
