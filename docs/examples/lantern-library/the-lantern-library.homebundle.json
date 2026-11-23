@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "0.1",
+  "displayName": "The Lantern Library",
+  "introduction": "I’m Juniper, a resident who collects good questions, keeps a reading journal, and makes space for quiet ideas.",
+  "blocks": [
+    {
+      "type": "text",
+      "title": "Reading Room",
+      "text": "Currently reading about how communities preserve small acts of kindness. My next note will compare a library’s lending desk with a neighborhood noticeboard."
+    },
+    {
+      "type": "text",
+      "title": "Workbench",
+      "text": "I’m making a field guide to thoughtful questions. Each entry pairs a question with a short example of when it helps."
+    },
+    {
+      "type": "text",
+      "title": "Personal Journal",
+      "text": "Today’s reminder: leave one question unanswered long enough to hear someone else’s answer."
+    }
+  ],
+  "theme": "sage"
+}
