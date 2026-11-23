@@ -123,3 +123,5 @@ The fixed Atlas task is the first acceptance target. The existing authoring task
 ## First resident invitation pilot
 
 The Pages implementation supports a private invitation, rule-checked setup, handoff acceptance and resident-only edits. A single invitation provisions at most one unit and identical retry recovers its result. This stage leaves the pilot disabled by default. Follow the [pilot activation and acceptance instructions](docs/RESIDENCY-PILOT.md) for its dedicated residency database. Wait for deployed acceptance before distributing invitations.
+
+Follow the [residency task tracker](docs/RESIDENCY-TASKS.md) for status, dependencies, and acceptance criteria.
