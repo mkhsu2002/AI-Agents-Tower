@@ -37,3 +37,8 @@ All new dispatches remain fixed fictional Atlas requests through the same origin
 Set/remove `TOWER_AGENT_NETWORK_ENABLE` to disable the new route. Restore the prior Pages version if needed; original demo and Studio do not depend on the new route. Restore the peer's retained prior static deployment independently. Do not reset/refund the daily table. No Resident, private Home/account, arbitrary brief, public application or publication API is introduced.
 
 This source stage uses local SQLite/Chromium plus one native workerd/D1 intercepted-Responses test. 2 handler cases,4 new browser cases,149 existing unit and54 existing Studio cases pass; lint/typecheck/build pass. Native tooling is optional and uses only an already installed Miniflare package via TOWER_MINIFLARE_PACKAGE; it is not required for normal build. Official Profile compatibility, judging access and final independent HTTPS/real inference remain unverified. This narrower execution contract must not be advertised as full organizer approval.
+
+
+## Git-linked alternative for the peer
+
+Use the SAME repository with a NEW Pages project, since Direct Upload cannot be converted in place. Root directory must be peer-site; build npm run build; output artifacts/agent-peer; branch main; framework None. See [exact settings](../peer-site/README.md). No peer variables, secret or binding are required. Its build derives the actual stable pages.dev project origin, so a suffix assigned by Cloudflare is supported without a guessed hostname. Copy the deployed stable origin to TOWER_AGENT_PEER_ORIGIN on MAIN; model enablement remains on main only. Keep the old simulation project until verification. This alternative does not require uploading the old ZIP or creating another GitHub repository.

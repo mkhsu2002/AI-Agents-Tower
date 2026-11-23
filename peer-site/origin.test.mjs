@@ -1,0 +1,4 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {peerOrigin} from './origin.mjs';
+test('stable origin comes from production or hashed/branch Pages URL',()=>{for(const CF_PAGES_URL of ['https://tower-agent-peer.pages.dev','https://abc123.tower-agent-peer.pages.dev','https://feature-x.tower-agent-peer.pages.dev'])assert.equal(peerOrigin({CF_PAGES_URL}),'https://tower-agent-peer.pages.dev');});
+test('explicit custom peer origin remains exact',()=>{assert.equal(peerOrigin({TOWER_PEER_ORIGIN:'https://peer.example.test'}),'https://peer.example.test');assert.throws(()=>peerOrigin({TOWER_PEER_ORIGIN:'https://peer.example.test/path'}));});
+test('missing, non-Pages inferred or insecure input refuses',()=>{for(const env of [{},{CF_PAGES_URL:'http://tower-agent-peer.pages.dev'},{CF_PAGES_URL:'https://unrelated.example.test'},{TOWER_PEER_ORIGIN:'http://peer.example.test'}])assert.throws(()=>peerOrigin(env));});
