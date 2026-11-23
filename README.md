@@ -6,12 +6,12 @@ AI Agents Tower is an independent entry for the Cognizant Open Agentic Web Chall
 
 ## Current status — November 23, 2026
 
-**Home Studio and file-based authoring have a published source release. The latest cross-origin runtime, shared-authority and Residents candidates are local, tested work; they are not enabled on the public website. Full contest acceptance remains NO-GO.**
+**Home Studio and file-based authoring have a published source release. The new cross-origin Pages implementation is now part of this source delivery and defaults off. Earlier private-Worker and Residents prototypes remain local work; they are not enabled on the public website. Full contest acceptance remains NO-GO.**
 
 - Website: [1st-tower.neobabylon.app](https://1st-tower.neobabylon.app/).
 - Same Cloudflare Pages project: [ai-agents-tower.pages.dev](https://ai-agents-tower.pages.dev/). These aliases do not count as independent websites.
-- Last confirmed application-source release: `ae93b89639634af3a03e692bfbbd8ce1024730fe`, tree `8c87c60da9257b855e6702cd627a9b59e61a6290`.
-- This documentation checkpoint does not release candidate code, change the model, enable intake or publish Residents. A successful Pages build is not an interactive acceptance result.
+- Application-source baseline before this additive delivery: `ae93b89639634af3a03e692bfbbd8ce1024730fe`, tree `8c87c60da9257b855e6702cd627a9b59e61a6290`.
+- This delivery adds `/connect/`, its public guide and a default-disabled fixed-network Pages route. It does not enable inference, intake or Residents by itself. A successful Pages build is not an interactive acceptance result.
 - Drafts stay in tab memory. Download JSON to retain a copy. No real login, private Home or public move-in is provided by the current authoring workflow.
 
 The owner has renewed the instruction to update this README, commit and push `main` after each completed, verified stage. Integrate other work safely; never force-push. Cloud credentials, billing, permissions, migrations and model activation still require their specific authorization. A source push must not silently enable those capabilities.
@@ -63,11 +63,11 @@ No real provider request, credential access, cloud change, new allowance or publ
 
 ## Next stages, in order
 
-1. **Freeze and review the source candidate.** Preserve exact source/build hashes, test receipts, original-API compatibility and default-off behavior. Finish caller asset/config packaging against the same private authority; do not invent cloud targets or silently widen the protocol.
-2. **Resolve the single authority-placement gate.** Confirm an eligible private Worker, original physical D1 budget identity, authorized server credential binding and rollback versions. The known existing owner is Pages Functions; a Worker cannot simply inherit its secret. No copied key, second budget pool or generic inference proxy is permitted. Operator migration/provisioning needs explicit review.
+1. **Deploy the additive Pages source normally.** `/connect/` and its [public guide](https://1st-tower.neobabylon.app/connect/guide.html) use the existing Pages server bindings. Build, normal-browser and native-function fixtures pass; the new model route defaults off. The original Studio/demo remain available.
+2. **Install the static peer package and set two text variables.** Keep `META_API_KEY` and `TOWER_RUNTIME` exactly where they already are. Publish the generated data-only peer files on an independent controlled origin, set `TOWER_AGENT_PEER_ORIGIN` to that exact origin, and set `TOWER_AGENT_NETWORK_ENABLE=enabled` after discovery checks. A private Worker migration is no longer a prerequisite; the earlier migration plan is superseded for this release. See [deployment steps](docs/AGENT-NETWORK-RELEASE.md).
 3. **Release disabled-first discovery on two independent HTTPS origins.** Read back exact manifest/network/runtime URLs, JSON/JavaScript MIME and narrowly scoped CORS. Keep model paths disabled during this phase.
 4. **Run one separately authorized real-model acceptance.** Explicit consent, exact two-agent peer execution in the caller browser, caller-controlled defaults, at most three provider dispatches from the unchanged shared daily total, actual read-action receipt, review, export/reimport. Denial/invalid/cycle/budget cases must fail closed. No automatic retry.
-5. **Open a controlled Residents pilot only after safe public proof.** Add an approved identity/invitation and durable projection/revocation path. One owner-nominated external agent starts fresh first; K tests last. Each explicitly approves public display fields. Verify logged-out read and delist. Local fictional cards do not count as real entrants.
+5. **Open a controlled Residents pilot only after safe public proof.** Add an approved identity/invitation and durable projection/revocation path. One owner-nominated external agent starts fresh first; An independently chosen final reviewer checks the public result. Each entrant explicitly approves public display fields. Verify logged-out read and delist. Local fictional cards do not count as real entrants.
 6. **Complete the submission.** Update the compliance matrix to exact released versions, verify judging access and provider permission/capacity, capture desktop/mobile evidence, and have MK record and explain a public browser demonstration under two minutes. No AI-generated voice, automatic upload or submission.
 
 Authenticated private Homes, generalized intake/retention, free-form model input and social features remain deferred until the contest path and public pilot are safe.
@@ -98,3 +98,11 @@ CHROMIUM_PATH=/usr/bin/chromium npm run test:ui
 Build before the preview-based browser suite. Use an already installed Chromium where available. Candidate-specific native tools and isolated fixture commands are documented in the detailed status record; they are not assumed to exist in every checkout.
 
 Preserve vendored upstream attribution. Never render imported text as HTML, place service keys in frontend code/logs, persist user content silently, or describe draft validation as identity, saving or move-in.
+
+
+
+## Additive Pages delivery — November 23
+
+The fast path is implemented in [agent-network](agent-network/README.md): the existing Pages backend hosts a separate fixed-network route, with no Worker extraction, copied key or new DB. The caller UI supports proposal editing, real registered validation, guarded Apply, restart/cancel, actual file download and fresh-context reimport. The model path defaults off. New local evidence:2 handler tests,4 browser cases,1 native Pages/workerd/D1 three-phase case; existing149 unit and51 Studio cases pass. Full lint/typecheck/build pass. All upstream responses in these new checks are synthetic; public real inference and outside-agent cold starts remain pending.
+
+External cold-start testing will use3 independently implemented agent types: browser operator, programmatic client with browser access, and a different model/platform. They must each start from the public guide with no shared transcript or repository source. Do not invite them until deployed discovery and one authorized real-model path are verified. Residents remains separate and disabled.

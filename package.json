@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node --test checks/agent-entry/headers.test.mjs && node scripts/check-public-headers.mjs && node scripts/generate-homebundle-validator.mjs --check && node scripts/package-agent-validator.mjs --check && tsc --noEmit && vite build",
+    "build": "node scripts/build-agent-network.mjs && node --test checks/agent-entry/headers.test.mjs && node scripts/check-public-headers.mjs && node scripts/generate-homebundle-validator.mjs --check && node scripts/package-agent-validator.mjs --check && tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
@@ -28,7 +28,11 @@
     "test:edge:fixture": "node scripts/run-edge-live.mjs",
     "test:public:studio": "playwright test --config playwright.public-studio.config.ts",
     "generate:agent-validator": "node scripts/package-agent-validator.mjs",
-    "test:headers": "node --test checks/agent-entry/headers.test.mjs"
+    "test:headers": "node --test checks/agent-entry/headers.test.mjs",
+    "build:agent-network": "node scripts/build-agent-network.mjs",
+    "package:agent-peer": "node scripts/package-agent-peer.mjs",
+    "test:agent-network": "node --experimental-strip-types --test tests/network-release/handler.test.mjs",
+    "test:agent-network:ui": "playwright test --config tests/network-release/playwright.config.ts"
   },
   "dependencies": {
     "ajv": "8.20.0"
@@ -36,6 +40,7 @@
   "devDependencies": {
     "@playwright/test": "1.65.1",
     "@types/node": "^24.0.0",
+    "esbuild": "0.28.2",
     "eslint": "10.15.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.73.0",

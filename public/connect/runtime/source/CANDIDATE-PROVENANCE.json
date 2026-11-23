@@ -1,0 +1,26 @@
+{
+  "mode": "isolated-local-only generic ephemeral authorization extension",
+  "source": "spikes/m2/vendor with retained provenance and Apache notices",
+  "patchedFiles": [
+    {
+      "path": "vendor/runtime/engine.js",
+      "sourceSHA256": "d7cb04b82249965c6c692e48815bc7c569df03357052e5411b1a96360980bd46",
+      "candidateSHA256": "ec9d62494381a8ab8df8ffbe7f8592d4c0c55637413027cb5fb88b896337a633"
+    },
+    {
+      "path": "vendor/runtime/llm.js",
+      "sourceSHA256": "623afc0ceed24c417893e9447f60dbf1a9988710ff2dcb46a017f8d5208a4c67",
+      "candidateSHA256": "02f4309327308bdfb9277bf55861592d8537831bd398173fdee588868c526ae8"
+    },
+    {
+      "path": "vendor/runtime/remote.js",
+      "sourceSHA256": "09a98b697c440425dfa82282eeee37854dc8ec379c9281a0f3432a92f5d0e7b2",
+      "candidateSHA256": "91fab9b8d1fe550db3d01bd288daf5be7d148268cd36a2e39a38c1bd9cafbc50"
+    },
+    {
+      "path": "vendor/runtime/runner.js",
+      "sourceSHA256": "0696aa7977a87597c8782e4f511076dfc3d6e2903a52c4c7b4e95cc991279667",
+      "candidateSHA256": "8f2ab46eeea3f66452fb0a7cdb38d617260828da153fd35914ab552e3d06b99a"
+    }
+  ]
+}

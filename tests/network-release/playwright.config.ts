@@ -1,0 +1,2 @@
+import {defineConfig} from '@playwright/test';
+export default defineConfig({testDir:'.',testMatch:'browser.spec.ts',workers:1,retries:0,timeout:30000,outputDir:'../../test-results/network-release',use:{baseURL:'http://127.0.0.1:4551',launchOptions:{executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium'},trace:'off'},webServer:{command:'node --experimental-strip-types tests/network-release/server.mjs',cwd:'../..',url:'http://127.0.0.1:4551/connect/',reuseExistingServer:false}});

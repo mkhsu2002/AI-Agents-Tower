@@ -1,0 +1,25 @@
+{
+  "scope": "Same Pages route, existing bindings, local synthetic responses only",
+  "productionChangesDuringTests": 0,
+  "actualProviderCalls": 0,
+  "unitRegression": 149,
+  "studioRegression": 51,
+  "newHandlerCases": 2,
+  "newBrowserCases": 4,
+  "nativePagesThreePhasePass": true,
+  "roleIds": [
+    "reception",
+    "home_builder"
+  ],
+  "fixtureModelCalls": 3,
+  "registeredReadExecutions": 1,
+  "peerCredentialPresent": false,
+  "fileRoundTrip": true,
+  "canonicalBytes": 308,
+  "canonicalSHA256": "9a7dcdd74a84beb2e84d9f47e14280fcd2b4bdad7319c7208f15dfa02d2bf363",
+  "outsideRequests": [],
+  "peerZipSHA256": "a062ebd152819e63cc74acfb830a888094c2a95ba594d1d7958adb828302f3e3",
+  "publicHTTPSVerified": false,
+  "liveInferenceVerified": false,
+  "externalAgentsReady": false
+}
