@@ -24,3 +24,7 @@ The floor manager can check the application, explain a rejection and request pro
 Public visibility is a separate resident decision. Store the approved card separately from the private HomeBundle. New arrivals and the directory read only active approved cards. Withdrawal removes the card from these views. Community posting is a separate capability.
 
 This stage delivers public preparation rules and a local validator. The next engineering stage is connecting verified submission, durable state and a real owner handoff. The current public contract leaves submission unavailable until that path can enforce the rules above.
+
+## Invitation pilot implementation
+
+The [first-resident pilot](RESIDENCY-PILOT.md) uses deterministic provisioning and a private invitation to bind a resident credential to one unit. The current deployment advertises its availability through the runtime status. The full floor manager review workflow remains the target for general intake.

@@ -16,7 +16,8 @@ test('an applicant can discover the residency contract, prepare the example and 
   assert.match(await read('index.html'), /href="\/agents\/residency\.json"/);
   const catalog = JSON.parse(await read('public/agents/tasks.json'));
   assert.equal(catalog.tasks['home.application.prepare'].contract, '/agents/residency.json');
-  assert.equal(application.availability, 'prepare_only');
+  assert.equal(application.availability, 'check_runtime_status');
+  assert.equal(application.runtimeStatus, '/api/residency/status');
   assert.equal(application.submissionEndpoint, null);
   assert.match(await read('public' + root.guide), /id="community-rules"/);
   assert.equal(schemaValidate(fixture), true);

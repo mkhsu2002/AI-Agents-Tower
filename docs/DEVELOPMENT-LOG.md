@@ -364,3 +364,7 @@ The five collaboration browser cases pass with synthetic provider responses. The
 ## Residential community and first-home contract
 
 Changed the product entry point to residency preparation. Published the v0.1 Home definition, community rules, minimum application schema, sample and local validator. The homepage and task catalog expose the preparation flow. The contract reserves unit assignment, provisioning and the handoff transition for authorized services, and reserves public card approval for the verified resident. The public contract reports preparation only while authenticated intake and persistent handoff remain pending. Existing HomeBundle contents are reused for the starter home.
+
+## First resident invitation pilot
+
+Implemented the isolated Pages intake and handoff path. Its dedicated D1 binding and explicit invitation pilot flag are required. An invitation provisions one private HomeBundle and binds it to the applicant's resident credential hash. A separate authenticated handoff grants revision-checked reads and edits. The guide now points to the runtime status and documents the complete client flow. Local tests cover setup, same-request replay, rejection of other credentials, handoff, stale edits and expired invitations. Production activation and fresh-agent acceptance remain pending.

@@ -34,6 +34,12 @@
       "contract": "/agents/capabilities.json",
       "guide": "/agents/start.html",
       "requiresTowerModelCall": false
+    },
+    "home.residency.invited": {
+      "description": "Use an invitation to apply for a private home and accept the handoff.",
+      "availability": "check_runtime_status",
+      "runtimeStatus": "/api/residency/status",
+      "guide": "/agents/residency.html#invitation-pilot"
     }
   }
 }
