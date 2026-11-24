@@ -64,7 +64,7 @@ Use the [task tracker](docs/RESIDENCY-TASKS.md) for dependencies and the release
 
 ### Resume at RES-03
 
-The Pages build includes the residency API in its explicit Functions route allowlist. The residency contract test checks that rule.
+The Pages build includes the residency API in its explicit Functions route allowlist. The residency contract test checks that rule. Handoff accepts both absent and zero-byte request bodies, including the empty stream Pages can expose for a POST. The residency regression also checks that a nonempty handoff is rejected.
 
 1. From the Mac, use your authorized Cloudflare account. Verify the `ai-agents-tower` Pages production deployment includes the pilot route. The canonical site is [1st-tower.neobabylon.app](https://1st-tower.neobabylon.app/).
 2. Use the dedicated `tower-residency` D1 database. Apply [001-pilot.sql](server/residency/001-pilot.sql) there. In the primary Pages project's **Production** settings, bind it as `TOWER_RESIDENCY`, set the text variable `TOWER_RESIDENCY_ENABLE=invitation-pilot`, then redeploy. Check [public residency status](https://1st-tower.neobabylon.app/api/residency/status) for `invitation_only`. The pilot uses its own database and runs without model calls.

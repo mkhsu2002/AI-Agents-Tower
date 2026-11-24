@@ -41,7 +41,17 @@ test('private invitation provisions one home, survives replay and gives only the
     assert.equal((await call(env, 'home', 'GET', stranger)).status, 404);
     assert.equal((await call(env, 'handoff', 'POST', stranger)).status, 404);
     assert.equal((await call(env, 'home', 'PUT', resident, application.home, { 'If-Match': '"1"' })).status, 409);
-    const accepted = await (await call(env, 'handoff', 'POST', resident)).json();
+    const nonemptyHandoff = await call(env, 'handoff', 'POST', resident, {});
+    assert.equal(nonemptyHandoff.status, 400);
+    assert.deepEqual(await nonemptyHandoff.json(), { code: 'EMPTY_BODY_REQUIRED' });
+    // Pages can expose a body stream for a POST that contains zero bytes.
+    const request = new Request('https://tower.example/api/residency/handoff', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + resident },
+      body: ''
+    });
+    assert.ok(request.body);
+    const accepted = await (await onRequest({ request, env })).json();
     assert.deepEqual(accepted, { status: 'resident', unitAddress: first.unitAddress });
     assert.deepEqual(await (await call(env, 'handoff', 'POST', resident)).json(), accepted);
     const home = { ...application.home, displayName: 'Juniper Library' };

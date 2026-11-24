@@ -87,7 +87,10 @@ export async function handleResidency(request, env = {}) {
     if (!row) return reply(404, { code: 'NOT_FOUND' });
     if (reading) return reply(200, residentView(row));
     if (accepting) {
-      if (request.body) return reply(400, { code: 'EMPTY_BODY_REQUIRED' });
+      if (request.body) {
+        try { await boundedText(request.body, 0, op); }
+        catch { return reply(400, { code: 'EMPTY_BODY_REQUIRED' }); }
+      }
       if (row.state === 'resident') return reply(200, { status: row.state, unitAddress: row.unit_address });
       const change = await op.wait(db.prepare("UPDATE residency_pilot SET state='resident' WHERE resident_hash=? AND state='ready_for_handoff' RETURNING unit_address").bind(hash).first());
       if (change) return reply(200, { status: 'resident', unitAddress: change.unit_address });
