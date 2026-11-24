@@ -24,6 +24,12 @@ test('an applicant can discover the residency contract, prepare the example and 
   assert.deepEqual(parseHomeApplication(JSON.stringify(fixture)), { ok: true, value: fixture });
 });
 
+test('the Pages Functions allowlist includes the residency API', async () => {
+  const routes = JSON.parse(await read('public/_routes.json'));
+  assert.ok(routes.include.includes('/api/residency/*'));
+  assert.ok(!routes.exclude.includes('/api/residency/*'));
+});
+
 test('application validation refuses invalid versions, invalid content and authority fields', () => {
   const rejected = [
     { ...fixture, schemaVersion: '0.2' },

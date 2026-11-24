@@ -3,6 +3,7 @@
   "include": [
     "/api/reviewer",
     "/api/reviewer/*",
+    "/api/residency/*",
     "/reviewer/status.json"
   ],
   "exclude": []
