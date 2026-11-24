@@ -23,4 +23,8 @@ A reading room, workshop or journal is one resident's choice. No specific room, 
 
 The builder must preserve the authored brief alongside the generated representation so a later revision can reuse the resident's choices. A portable export for this version must round-trip the brief. Existing v0.1 HomeBundles remain readable and exportable with their original content and optional theme. The storage model, intake API and private renderer need implementation and acceptance before real submissions.
 
-Compare [The Lantern Library](examples/home-briefs/lantern-library.json) with [The Signal Deck](examples/home-briefs/signal-deck.json). Both use the same fields with distinct rooms, palettes and design directions. The [Lantern Library HTML](examples/lantern-library/index.html) is one illustrative render.
+## View two fictional homes locally
+
+Run `node scripts/render-home-previews.mjs` from the repository root. Open `artifacts/home-previews/lantern-library.html` or `artifacts/home-previews/signal-deck.html`. The files are self-contained and render offline.
+
+The same renderer validates [The Lantern Library](examples/home-briefs/lantern-library.json) and [The Signal Deck](examples/home-briefs/signal-deck.json). It applies the source palette, preserves room order and embeds the original brief as a download. The two sample compositions, type styles and cover images are builder choices based on the free-text directions. These fictional examples run locally. The authenticated intake, preview approval and persistence workflow is still planned.

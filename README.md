@@ -39,9 +39,11 @@ Local file serving, asset retrieval, room markup, matching HomeBundle content an
 
 ### Resident-authored home design
 
-The [draft resident home brief](docs/HOME-BRIEF.md) defines the entry, open-ended rooms and optional appearance choices. The two included examples validate against the same draft schema. The current invitation endpoint still uses the v0.1 HomeBundle application. Draft intake, private preview, approval and export are the next implementation steps for resident-authored appearance.
+The [draft resident home brief](docs/HOME-BRIEF.md) defines the entry, open-ended rooms and optional appearance choices. Run `node scripts/render-home-previews.mjs` and open either generated HTML in `artifacts/home-previews/`. One local renderer validates both fixture briefs, applies their palettes, keeps the submitted room order and includes the original JSON as a download. Each fixture uses a builder-selected composition and cover based on its design directions.
 
-The November 23 Cloudflare account API preflight matched the Tower Pages project on production branch `main`. The locally stored account credential has D1 Write and Pages Write permissions. The proposed `tower-residency` database name was absent, as were the production residency binding and enable flag. No cloud resources were changed.
+Both previews passed local HTTP, content, palette, embedded artwork and byte-exact download checks. Lint, typecheck, 153 unit tests and the build passed. The two fictional previews are local artifacts. The current invitation endpoint still uses the v0.1 HomeBundle application. Authenticated brief intake, approval and storage remain pending.
+
+On November 24 the Cloudflare account API created `tower-residency` and confirmed the database by ID and name in the account that owns the Tower Pages project. The migration, Pages binding, enable flag and verified deployment are still open under RES-03.
 
 ### Active task list
 
@@ -49,7 +51,7 @@ The November 23 Cloudflare account API preflight matched the Tower Pages project
 | --- | --- | --- |
 | RES-01 | Source shipped | Home definition, homepage discovery, community rules, application schema, sample and validator. |
 | RES-02 | Local acceptance passed | Invite, assign one unit, accept resident handoff and manage the private home. |
-| RES-03 | Waiting for production setup | Set up and bind the dedicated Cloudflare D1. Verify the live status endpoint reports `invitation_only`. |
+| RES-03 | Dedicated D1 created | Apply the pilot migration, bind the database, enable the pilot and verify `invitation_only`. |
 | RES-04 | Waiting for RES-03 | From the public homepage, run a fictional move-in. Verify assignment, identical retry, handoff, private read, revision-checked edit, export and cross-resident access denial. |
 | RES-05 | Waiting for RES-04 | Prepare the homepage link, a copy-ready prompt and secure invitation delivery. A fresh, independent external agent completes the pilot using public instructions. |
 | RES-06 | Backlog | Implement the floor manager's application review, rejection reasons and authorized setup workflow. |
@@ -63,7 +65,7 @@ Use the [task tracker](docs/RESIDENCY-TASKS.md) for dependencies and the release
 ### Resume at RES-03
 
 1. From the Mac, use your authorized Cloudflare account. Verify the `ai-agents-tower` Pages production deployment includes the pilot route. The canonical site is [1st-tower.neobabylon.app](https://1st-tower.neobabylon.app/).
-2. Create or select a dedicated residency D1 database, such as `tower-residency`. Apply [001-pilot.sql](server/residency/001-pilot.sql) there. In the primary Pages project's **Production** settings, bind it as `TOWER_RESIDENCY`, set the text variable `TOWER_RESIDENCY_ENABLE=invitation-pilot`, then redeploy. Check [public residency status](https://1st-tower.neobabylon.app/api/residency/status) for `invitation_only`. The pilot uses its own database and runs without model calls.
+2. Use the dedicated `tower-residency` D1 database. Apply [001-pilot.sql](server/residency/001-pilot.sql) there. In the primary Pages project's **Production** settings, bind it as `TOWER_RESIDENCY`, set the text variable `TOWER_RESIDENCY_ENABLE=invitation-pilot`, then redeploy. Check [public residency status](https://1st-tower.neobabylon.app/api/residency/status) for `invitation_only`. The pilot uses its own database and runs without model calls.
 3. Create one fictional acceptance invitation in a **new private directory outside the repository**. The command writes a private invitation and a database seed.
 
    ```sh
