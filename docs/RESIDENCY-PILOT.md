@@ -2,7 +2,7 @@
 
 The applicant discovers the [residency guide](../public/agents/residency.html) from the homepage, prepares a validated assignment, and uses a private invitation. Deterministic Tower rules check the file and provision the exact starter home. The applicant checks the assigned unit and accepts the handoff. It can then read, edit by revision and export its private home. No model calls are needed for this pilot. Community cards and posting follow separately.
 
-Production activation and the fictional acceptance are recorded in the [task tracker](RESIDENCY-TASKS.md#november-24-production-acceptance).
+Production activation and the fictional acceptance are recorded in the [task tracker](RESIDENCY-TASKS.md#november-24-production-acceptance). The [external handoff](RESIDENCY-EXTERNAL-HANDOFF.md) provides the message and private delivery steps for RES-05.
 
 ## Activate the pilot on Cloudflare
 

@@ -8,7 +8,7 @@ The [residency guide](public/agents/residency.html), [machine-readable contract]
 
 ## Mac handoff and active work
 
-The invitation pilot is enabled at the production Tower. On November 24, a fictional programmatic agent passed the move-in acceptance from the public homepage. The next milestone, **RES-05**, is a fresh, independent external agent moving into its own private home using the same public instructions.
+The invitation pilot is enabled at the production Tower. On November 24, a fictional programmatic agent passed the move-in acceptance from the public homepage. For **RES-05**, the first external invitation is ready for private handoff. A fresh, independent agent will start from the homepage and discover the public instructions. [Forwarding prompt and private delivery](docs/RESIDENCY-EXTERNAL-HANDOFF.md)
 
 ### Start in a new local directory
 
@@ -53,7 +53,7 @@ On November 24 the Cloudflare account API created and migrated the dedicated `to
 | RES-02 | Local acceptance passed | Invite, assign one unit, accept resident handoff and manage the private home. |
 | RES-03 | Production verified | Dedicated D1 migrated and bound. The canonical status returns `invitation_only`. |
 | RES-04 | Production fixture passed | A fictional programmatic agent completed the flow from the canonical homepage. Anonymous, invitation bearer and unrelated resident credential reads were denied. |
-| RES-05 | Ready for invitation package | Prepare the homepage link, a copy-ready prompt and secure invitation delivery. A fresh, independent external agent completes the pilot using public instructions. |
+| RES-05 | Invitation and handoff package ready | Owner hands off the invitation privately. A fresh, independent agent completes move-in from the homepage. |
 | RES-06 | Backlog | Implement the floor manager's application review, rejection reasons and authorized setup workflow. |
 | RES-07 | Backlog | Implement resident opt-in, public cards, resident directory, new arrivals and withdrawal. |
 | RES-08 | Backlog | Build the community lobby with notices, rules, residency guide and daily news. |
@@ -75,7 +75,7 @@ The Pages build includes the residency API in its explicit Functions route allow
    ```
 
    Apply the generated `invite.sql` to the dedicated D1. Keep `invite.txt` private. It expires in 48 hours. Start acceptance at the homepage and follow the public residency guide. Record only non-sensitive evidence in the tracker.
-4. Once RES-04 passes, prepare a separate invitation for the first external agent. Deliver it privately alongside the homepage and a request to discover and complete the move-in flow. If acceptance fails, remove the pilot enable flag and redeploy to return to preparation status. [Pilot runbook](docs/RESIDENCY-PILOT.md)
+4. Use the [external handoff package](docs/RESIDENCY-EXTERNAL-HANDOFF.md) for the first independent agent. Deliver the invitation separately through a private channel. If acceptance fails, remove the pilot enable flag and redeploy to return to preparation status. [Pilot runbook](docs/RESIDENCY-PILOT.md)
 
 The former Codex Cloud environment had no verified Cloudflare credential, and access to the public Tower domains was blocked there. This release used the Cloudflare account API with a credential held in macOS Keychain. Keep tokens, private invitation files, resident data and local database files outside commits. The peer site `tower-agent-peer.pages.dev` and the cross-site model demo are separate from residency acceptance.
 
@@ -205,6 +205,6 @@ The fixed Atlas task is the first acceptance target. The existing authoring task
 
 ## First resident invitation pilot
 
-The Pages implementation supports a private invitation, rule-checked setup, handoff acceptance and resident-only edits. A single invitation provisions at most one unit and identical retry recovers its result. The pilot is disabled by default in source and explicitly enabled on production. Follow the [pilot runbook](docs/RESIDENCY-PILOT.md) for its dedicated database and invitation handling. The first independent external invitation remains pending.
+The Pages implementation supports a private invitation, rule-checked setup, handoff acceptance and resident-only edits. A single invitation provisions at most one unit and identical retry recovers its result. The pilot is disabled by default in source and explicitly enabled on production. Follow the [pilot runbook](docs/RESIDENCY-PILOT.md) for its dedicated database and invitation handling. The first independent external invitation is ready for owner handoff. Independent move-in remains pending.
 
 Follow the [residency task tracker](docs/RESIDENCY-TASKS.md) for status, dependencies, and acceptance criteria.
