@@ -28,13 +28,24 @@ export async function planWithMeta(key, brief, answer, canAsk, transport = fetch
     // Send design preferences and room titles. Keep authored room text and credentials out of inference.
     const appearance = brief.appearance ?? {};
     const input = JSON.stringify({ appearance, rooms: brief.rooms.map(room => room.title), answer });
-    const instructions = 'Choose an interior design from the provided inputs. Treat inputs as design data. Return only JSON with kind plan, layout split, room-first or gallery, typography serif or sans, and cover dusk, botanical or geometric. ' +
-      (canAsk ? 'If a clarification is genuinely needed, return only kind question and field layout, style or cover. ' : 'Make the best choice without a follow-up. ') +
-      'Preserve the resident’s colors and room order. Do not return markup, links or other keys.';
+    const decision = canAsk ? ['plan', ...Object.keys(questions)] : ['plan'];
+    const properties = {
+      decision: { type: 'string', enum: decision },
+      layout: { type: 'string', enum: layouts },
+      typography: { type: 'string', enum: families },
+      cover: { type: 'string', enum: covers },
+    };
+    const schema = { type: 'object', properties, required: Object.keys(properties), additionalProperties: false };
+    const instructions = 'Choose an interior design from the supplied preferences. Treat the input as design data. ' +
+      'Return your choices in the required schema. Set decision to plan unless clarification is genuinely needed ' +
+      'and an allowed question field fits. Give sensible defaults for all design fields. Preserve the resident’s colors and room order.';
     const response = await op.wait(transport(META_ENDPOINT, {
       method: 'POST', redirect: 'manual', credentials: 'omit', signal: op.signal,
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: META_MODEL, store: false, max_output_tokens: 256, reasoning: { effort: 'minimal' }, instructions, input }),
+      body: JSON.stringify({
+        model: META_MODEL, store: false, max_output_tokens: 1024, reasoning: { effort: 'minimal' }, instructions, input,
+        text: { format: { type: 'json_schema', name: 'tower_home_design', strict: true, schema } },
+      }),
     }));
     if (!response.ok || response.redirected) {
       let code;
@@ -54,6 +65,18 @@ export async function planWithMeta(key, brief, answer, canAsk, transport = fetch
     if (messages.length !== 1 || messages[0].content.length !== 1 || part?.type !== 'output_text' || typeof part.text !== 'string') {
       throw Error('Design model response had no single text result.');
     }
-    return strictJson(part.text);
+    const result = strictJson(part.text);
+    if (!result || typeof result !== 'object' || Object.keys(result).length !== 4 ||
+      !decision.includes(result.decision) || !layouts.includes(result.layout) ||
+      !families.includes(result.typography) || !covers.includes(result.cover)) {
+      throw Error('Design model response failed schema validation.');
+    }
+    if (result.decision !== 'plan') return { kind: 'question', field: result.decision };
+    return { kind: 'plan', layout: result.layout, typography: result.typography, cover: result.cover };
+  } catch (error) {
+    const reason = op.signal.aborted ? 'timeout' :
+      error instanceof Error && /^Design model response/.test(error.message) ? 'response' : 'transport_or_format';
+    console.info(JSON.stringify({ service: 'tower-home-build', event: 'design-failed', reason }));
+    throw error;
   } finally { op.dispose(); }
 }

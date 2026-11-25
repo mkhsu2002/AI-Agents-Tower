@@ -107,15 +107,17 @@ async function createSession(request, db, env, now, op) {
 async function submitBrief(request, db, row, env, planner, now, op) {
   const body = await readBody(request, op);
   const answered = row.state === 'question';
-  if (!exact(body, answered ? ['brief', 'answer'] : ['brief']) ||
+  const operatorRetry = row.state === 'failed' && row.owner_hash === env.TOWER_HOME_SMOKE_OWNER_HASH &&
+    row.attempts === 1 && body?.retry === true;
+  if (!exact(body, answered ? ['brief', 'answer'] : operatorRetry ? ['brief', 'retry'] : ['brief']) ||
       !validate(body.brief) || answered && (typeof body.answer !== 'string' || !body.answer.trim() || body.answer.length > 500)) {
     stop(400, 'INVALID_BRIEF');
   }
   const brief = JSON.stringify(body.brief);
   const briefHash = await sha(brief);
   if (row.state === 'ready' && row.brief_hash === briefHash) return json({ state: 'ready' });
-  if (row.state !== 'open' && !answered) stop(409, 'SESSION_NOT_ACCEPTING_BRIEF');
-  if (answered && row.brief_hash !== briefHash) stop(409, 'BRIEF_CHANGED_DURING_CLARIFICATION');
+  if (row.state !== 'open' && !answered && !operatorRetry) stop(409, 'SESSION_NOT_ACCEPTING_BRIEF');
+  if ((answered || operatorRetry) && row.brief_hash !== briefHash) stop(409, 'BRIEF_CHANGED_DURING_CLARIFICATION');
 
   const claim = await db.prepare(`
     UPDATE home_build_sessions SET state='planning',brief_json=?,brief_hash=?,planning_started=?,attempts=attempts+1
@@ -134,9 +136,10 @@ async function submitBrief(request, db, row, env, planner, now, op) {
         .bind(row.state, row.id).run();
       stop(429, 'DESIGN_CAPACITY_REACHED');
     }
-    const design = await (planner ?? ((input, answer, canAsk) => planWithMeta(env.META_API_KEY, input, answer, canAsk)))
-      (body.brief, body.answer, !answered);
-    if (!validDesign(design, !answered)) throw Error('Unusable design.');
+    const canAsk = claim.attempts < 2;
+    const design = await (planner ?? ((input, answer, ask) => planWithMeta(env.META_API_KEY, input, answer, ask)))
+      (body.brief, body.answer, canAsk);
+    if (!validDesign(design, canAsk)) throw Error('Unusable design.');
     const state = design.kind === 'question' ? 'question' : 'ready';
     const question = state === 'question' ? designQuestion(design.field) : null;
     const saved = await db.prepare("UPDATE home_build_sessions SET state=?,question=?,plan_json=? WHERE id=? AND state='planning' RETURNING state")
