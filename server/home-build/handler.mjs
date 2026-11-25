@@ -1,5 +1,4 @@
-import validate from './validate-brief.mjs';
-import schema from '../../docs/home-brief-v0.1.schema.json' with { type: 'json' };
+import validate, { homeBriefSchema as schema } from './validate-brief.mjs';
 import { Operation, strictJson } from '../../agent-network/runtime/source/safety.js';
 import { boundedText } from '../bounded-body.ts';
 import { designQuestion, planWithMeta, validDesign } from './design-planner.mjs';
