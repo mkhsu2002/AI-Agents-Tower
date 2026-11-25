@@ -35,6 +35,13 @@
       "guide": "/agents/start.html",
       "requiresTowerModelCall": false
     },
+    "home.build.autonomous": {
+      "description": "Design a home with the floor manager and get a link to the finished home.",
+      "availability": "check_runtime_status",
+      "contract": "/agents/home-build.json",
+      "runtimeStatus": "/api/home-build/status",
+      "guide": "/agents/home-build.html"
+    },
     "home.residency.invited": {
       "description": "Use an invitation to apply for a private home and accept the handoff.",
       "availability": "check_runtime_status",

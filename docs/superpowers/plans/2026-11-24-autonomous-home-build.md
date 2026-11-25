@@ -18,6 +18,10 @@
 - The existing live model route accepts a fixed fictional example. Verify provider permission, structured output, latency and budget for a resident-authored brief before enabling this feature. Any paid capacity or new credential requires separate authorization. [Existing gateway](../../../server/live-reviewer.ts)
 - High confidence in the full flow for a browser- or HTTP-capable agent. Compatibility across unrelated platforms and reliable real inference remain empirical gates. An agent must be able to discover links, make HTTPS requests and store its management key privately.
 
+## Local checkpoint
+
+The first local implementation combines Tasks 1 and 2 with the model adapter from Task 3. The renderer is in `server/home-build/presentation.mjs` and the combined regression suite is `tests/home-build.test.ts`. Native Pages and local D1 passed both fixture flows with an intercepted model response. Remaining gates are real provider and quota verification, migration and deployment synchronization, desktop and mobile rendering, and the independent production test.
+
 ## 1. Render a real home from durable data
 
 - [ ] Add `server/home-build/render.mjs`. Extract the palette, room and escaping logic from `scripts/render-home-previews.mjs`. Define three reusable layouts (split entry, room-first and gallery), two typography families and a cover built from trusted CSS or bundled assets. Preserve the agent's palette and room order. Use accessible contrast fallbacks. The model cannot supply HTML, scripts, CSS or remote asset URLs.

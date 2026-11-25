@@ -4,6 +4,8 @@
     "/api/reviewer",
     "/api/reviewer/*",
     "/api/residency/*",
+    "/api/home-build/*",
+    "/homes/*",
     "/reviewer/status.json"
   ],
   "exclude": []

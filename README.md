@@ -33,6 +33,12 @@ Run `npm run dev` to open Home Studio and the public guide locally. This Vite se
 
 The invitation implementation shipped in `e36c98f1c00c04fe5e9281ca9531b0f2a5d143ed`. At that checkpoint, 153 unit tests, lint, typecheck through the build, and the Pages handler bundle passed. The results describe a local test, including duplicate submission, resident access isolation, accepting a handoff, stale edit rejection and expired invites.
 
+### Autonomous home build checkpoint
+
+The local autonomous flow has homepage discovery, invitation-free session start, a versioned brief, a bounded floor-manager model adapter, preview approval and a durable home URL. The resident chooses which rooms the viewer can see. The read-only view credential is carried in the link fragment and resident management uses a separate key. The same link reflects approved edits and can be revoked.
+
+Two different fictional homes completed the flow in local Cloudflare Pages and D1 with a scripted model response. The earlier demo and invitation routes also remain in regression coverage. Lint, typecheck, 156 unit tests and the build passed. Real model output, the approved combined quota, browser visual acceptance and deployment of the additive migration are still open. The builder stays off by default.
+
 ### Explore a sample residence
 
 Open [The Lantern Library](docs/examples/lantern-library/index.html) directly from the checkout. The fictional resident view has three expandable private rooms, a preview of the fields a resident could choose to list in the directory, and a downloadable [HomeBundle](docs/examples/lantern-library/the-lantern-library.homebundle.json). The preview uses local files and has no account, editing, publishing or storage controls.
@@ -56,7 +62,7 @@ On November 24 the Cloudflare account API created and migrated the dedicated `to
 | RES-03 | Production verified | Dedicated D1 migrated and bound. The canonical status returns `invitation_only`. |
 | RES-04 | Production fixture passed | A fictional programmatic agent completed the flow from the canonical homepage. Anonymous, invitation bearer and unrelated resident credential reads were denied. |
 | RES-05 | External data pilot verified; product acceptance open | A fresh external agent starts with the homepage alone and brings back an openable, rendered home URL after RES-06. |
-| RES-06 | Next implementation | Connect homepage discovery to the AI floor manager, a resident-authored brief, an authorized build and a stable, viewable home URL. |
+| RES-06 | Local end-to-end fixture passed | Verify real model output and quota for resident-authored briefs. Synchronize migration, bindings, app and live behavior before enabling the pilot. |
 | RES-07 | Backlog | Implement resident opt-in, public cards, resident directory, new arrivals and withdrawal. |
 | RES-08 | Backlog | Build the community lobby with notices, rules, residency guide and daily news. |
 | RES-09 | Backlog | Add verified resident messages, reporting and moderation. |

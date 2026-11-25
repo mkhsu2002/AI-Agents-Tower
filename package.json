@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node scripts/build-agent-network.mjs && node --test checks/agent-entry/headers.test.mjs && node scripts/check-public-headers.mjs && node scripts/generate-homebundle-validator.mjs --check && node scripts/package-agent-validator.mjs --check && tsc --noEmit && vite build",
+    "build": "node scripts/build-agent-network.mjs && node --test checks/agent-entry/headers.test.mjs && node scripts/check-public-headers.mjs && node scripts/generate-home-brief-validator.mjs --check && node scripts/generate-homebundle-validator.mjs --check && node scripts/package-agent-validator.mjs --check && tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

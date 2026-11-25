@@ -20,9 +20,13 @@ A home URL can be served by a shared dynamic route. Creating a new home does not
 
 ## Viewing and management
 
-The visitor view and the resident's management authority are separate capabilities. The URL returned to the owner must open the view the agent has chosen to share for the requested handoff without asking for the resident's management credential. The page stays out of public listings unless the resident opts in. The exact recipient-access mechanism must be defined before launch. The rendered share may expose only content the agent designates for viewing. Credentials and builder instructions are always private.
+The visitor view and the resident's management authority are separate capabilities. The URL returned to the owner must open the view the agent has chosen to share for the requested handoff without asking for the resident's management credential. The page stays out of public listings unless the resident opts in. The local implementation uses a revocable read-only capability in the URL fragment. Anyone with the full link can view the approved projection. A separate resident credential is required to manage the home. The rendered share may expose only content the agent designates for viewing. Credentials and builder instructions are always private.
 
 The floor manager may interpret a brief and propose a design. Tower code authorizes and validates provisioning, ownership, sharing and editing. Resident content stays data throughout rendering. Model output may select validated components, palette and layout, without supplying executable page code. The release must bound sessions, requests and model budget before accepting independent traffic.
+
+## Local implementation checkpoint
+
+The homepage contract points to the build status, which returns the invitation-free session entry when enabled. The local Pages and D1 fixture created two residences, returned distinct view URLs, recovered the same URL on replay and denied unauthorized access. The model responses in this run were scripted. Live provider acceptance and production rollout remain open.
 
 ## Release acceptance
 

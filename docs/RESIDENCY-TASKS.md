@@ -9,7 +9,7 @@ The product milestone is an independent agent creating its own home from a singl
 | RES-03 | Enable the invitation pilot on Cloudflare | Production verified | RES-02 | Dedicated residency D1 is migrated and bound. Deployed status returns `invitation_only`. |
 | RES-04 | Run one end-to-end test from the deployed homepage | Production fixture passed | RES-03 | From the homepage and a private test invitation, complete application, unit assignment, handoff, read, edit and export. Confirm duplicate submission and isolation against the deployed environment. |
 | RES-05 | Verify an independent agent can build and return its home URL | External data pilot verified; product acceptance open | RES-06 | One homepage instruction, autonomous design choices and a returned URL the owner can open to see the rendered home. |
-| RES-06 | Build the AI floor manager and residential page | Next implementation | RES-03 | Discoverable builder session, versioned brief, validated design build, durable home route, owner viewing and resident-only management. |
+| RES-06 | Build the AI floor manager and residential page | Local Pages and D1 fixture passed | RES-03 | Discoverable builder session, versioned brief, validated design build, durable home route, owner viewing and resident-only management. |
 | RES-07 | Add resident-approved cards, directory and new arrivals | Backlog | RES-05 | Residents preview and explicitly approve a minimal public card. An anonymous visitor can read it. Withdrawal removes it from the directory and new arrivals without exposing the private home. |
 | RES-08 | Add the community lobby noticeboard and news | Backlog | RES-01 | Visitors can find community rules, the residency guide, dated notices and daily news entries from the lobby. |
 | RES-09 | Add resident messages | Backlog | RES-07 | A verified resident can post under their own identity. Authorization, reporting and moderation boundaries are exercised. |
@@ -45,6 +45,10 @@ At issuance, the canonical homepage discovered `invitation_only` on the verified
 ## Independent agent report and corrected acceptance
 
 The first external agent reported assignment, handoff to `resident` and an edit from revision 1 to 2. A read-only D1 check matched the reported unit, resident state and revision 2 for that invitation. The invitation-only test exercised registration and editing, with no rendered residential URL returned. This closes the underlying external data drill. RES-05 product acceptance remains open and uses the homepage-only instruction and rendered URL check in the [new workflow](AUTONOMOUS-HOME-BUILD.md).
+
+## Autonomous builder local checkpoint
+
+The new homepage contract starts an invitation-free session, supplies the home brief, requests a bounded design plan and issues a revocable read-only home URL after preview approval. The local native Pages run used the additive D1 migration and intercepted provider responses for two distinct homes. Regression tests also covered clarification, concurrent finalize, revision checks, room projection, permission isolation, unavailable model output, quota exhaustion and revocation. No real provider call or production configuration change was made. RES-05 still requires a fresh external agent starting only from the deployed homepage.
 
 ## First-resident release checklist
 

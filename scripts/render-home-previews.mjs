@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import Ajv from 'ajv';
+import { escapeHtml as escape, homeColors } from '../server/home-build/presentation.mjs';
 
 const root = new URL('../', import.meta.url);
 const read = path => readFile(new URL(path, root));
@@ -23,44 +24,9 @@ const houses = [
   },
 ];
 
-const entities = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-const escape = value => value.replace(/[&<>"']/g, character => entities[character]);
-
-const defaults = {
-  background: '#F6F2E9',
-  surface: '#E7ECDF',
-  text: '#223B30',
-  accent: '#E6B974',
-};
-
-function luminance(hex) {
-  const channels = hex.slice(1).match(/../g).map(pair => {
-    const channel = parseInt(pair, 16) / 255;
-    return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
-  });
-  return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
-}
-
-function readableText(text, background) {
-  const light = luminance(background);
-  const foreground = luminance(text);
-  const ratio = (Math.max(light, foreground) + 0.05) / (Math.min(light, foreground) + 0.05);
-  if (ratio >= 4.5) return text;
-  return light >= 0.179 ? '#000000' : '#FFFFFF';
-}
-
 function renderHome(brief, house, artwork, source) {
   const appearance = brief.appearance ?? {};
-  const palette = { ...defaults, ...appearance.palette };
-  const mainText = readableText(palette.text, palette.background);
-  const surfaceText = readableText(palette.text, palette.surface);
-  const accentText = readableText(palette.text, palette.accent);
-  const textAdjusted = [mainText, surfaceText, accentText].some(color => color !== palette.text);
-  const variables = [
-    ['paper', palette.background], ['surface', palette.surface],
-    ['ink', mainText], ['surface-ink', surfaceText],
-    ['accent', palette.accent], ['accent-ink', accentText],
-  ].map(([name, value]) => `--${name}:${value}`).join(';');
+  const { palette, variables, textAdjusted } = homeColors(appearance.palette);
 
   const [firstRoom, ...remainingRooms] = brief.rooms;
   const room = ({ title, purpose, body }, featured = false) => `
