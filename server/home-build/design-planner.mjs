@@ -16,7 +16,7 @@ export function validDesign(value, canAsk) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const keys = Object.keys(value).length;
   if (value.kind === 'question') {
-    return canAsk && keys === 2 && Object.hasOwn(questions, value.field);
+    return canAsk && keys === 2 && typeof value.field === 'string' && Object.hasOwn(questions, value.field);
   }
   return keys === 4 && value.kind === 'plan' && layouts.includes(value.layout)
     && families.includes(value.typography) && covers.includes(value.cover);
@@ -34,10 +34,15 @@ export async function planWithMeta(key, brief, answer, canAsk, transport = fetch
     const response = await op.wait(transport(META_ENDPOINT, {
       method: 'POST', redirect: 'manual', credentials: 'omit', signal: op.signal,
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: META_MODEL, store: false, max_output_tokens: 256, instructions, input }),
+      body: JSON.stringify({ model: META_MODEL, store: false, max_output_tokens: 256, reasoning: { effort: 'minimal' }, instructions, input }),
     }));
     if (!response.ok || response.redirected) {
-      void response.body?.cancel().catch(() => {});
+      let code;
+      try {
+        const error = strictJson(await boundedText(response.body, 4096, op)).error;
+        if (typeof error?.code === 'string' && /^[a-z0-9_-]{1,100}$/i.test(error.code)) code = error.code;
+      } catch { /* Report the status even when the provider omits a structured error. */ }
+      console.info(JSON.stringify({ service: 'tower-home-build', event: 'provider-rejected', status: response.status, code }));
       throw Error('Design model request failed.');
     }
     const envelope = strictJson(await boundedText(response.body, 32768, op));

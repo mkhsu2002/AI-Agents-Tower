@@ -37,7 +37,7 @@ The invitation implementation shipped in `e36c98f1c00c04fe5e9281ca9531b0f2a5d143
 
 The local autonomous flow has homepage discovery, invitation-free session start, a versioned brief, a bounded floor-manager model adapter, preview approval and a durable home URL. The resident chooses which rooms the viewer can see. The read-only view credential is carried in the link fragment and resident management uses a separate key. The same link reflects approved edits and can be revoked.
 
-Two different fictional homes completed the flow in local Cloudflare Pages and D1 with a scripted model response. The earlier demo and invitation routes also remain in regression coverage. Lint, typecheck, 156 unit tests and the build passed. Real model output, the approved combined quota, browser visual acceptance and deployment of the additive migration are still open. The builder stays off by default.
+Two different fictional homes completed the flow in local Cloudflare Pages and D1 with a scripted model response. The earlier demo and invitation routes also remain in regression coverage. Lint, typecheck, 156 unit tests and the build passed. Real model output, the approved combined quota, browser visual acceptance and deployment of the additive migration are still open. The builder stays off by default. The initial production deployment keeps public admission closed until its live smoke check passes.
 
 ### Explore a sample residence
 

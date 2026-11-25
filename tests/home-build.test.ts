@@ -18,6 +18,7 @@ const sha = (value: string) => createHash('sha256').update(value).digest('hex');
 function fixture() {
   const store = sqliteRuntime();
   store.sql.exec(migration);
+  store.sql.exec('UPDATE home_build_control SET public_enabled=1 WHERE id=1');
   const env = { TOWER_RESIDENCY: store.db, TOWER_HOME_BUILD_ENABLE: 'enabled', TOWER_HOME_VIEW_KEY: 'a'.repeat(64) };
   let calls = 0;
   const plan = async (brief: typeof lamp, answer: string | undefined) => {
@@ -121,6 +122,14 @@ test('creation defaults off and unusable designs and exhausted budget cannot pub
   const store = fixture();
   try {
     assert.deepEqual(await (await handleHomeBuild(new Request(origin + root + '/status'), { ...store.env, TOWER_HOME_BUILD_ENABLE: 'disabled' })).json(), { availability: 'unavailable' });
+    const smokeKey = ownerKey();
+    store.sql.exec('UPDATE home_build_control SET public_enabled=0 WHERE id=1');
+    Object.assign(store.env, { TOWER_HOME_SMOKE_OWNER_HASH: sha(smokeKey) });
+    assert.deepEqual(await (await store.send(root + '/status')).json(), { availability: 'unavailable' });
+    assert.equal((await store.send(root + '/start', 'POST', undefined, { ownerKeyHash: sha(smokeKey), acceptedRulesVersion: '0.1' })).status, 503);
+    assert.equal((await store.send(root + '/start', 'POST', smokeKey, { ownerKeyHash: sha(ownerKey()), acceptedRulesVersion: '0.1' })).status, 503);
+    assert.equal((await store.send(root + '/start', 'POST', smokeKey, { ownerKeyHash: sha(smokeKey), acceptedRulesVersion: '0.1' })).status, 201);
+    store.sql.exec('UPDATE home_build_control SET public_enabled=1 WHERE id=1');
     const start = async () => {
       const key = ownerKey();
       const response = await store.send(root + '/start', 'POST', undefined, { ownerKeyHash: sha(key), acceptedRulesVersion: '0.1' });

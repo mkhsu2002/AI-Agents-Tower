@@ -41,6 +41,15 @@ function canCreateHomes(env, planner) {
     (typeof planner === 'function' || typeof env.META_API_KEY === 'string' && /^[^\s]{1,8192}$/.test(env.META_API_KEY));
 }
 
+async function canStart(request, env, planner) {
+  if (!canCreateHomes(env, planner)) return false;
+  const control = await env.TOWER_RESIDENCY.prepare('SELECT public_enabled FROM home_build_control WHERE id=1').first();
+  if (!control) return false;
+  if (control.public_enabled === 1) return true;
+  const key = matchOwner.exec(request.headers.get('Authorization') ?? '')?.[1];
+  return !!key && isHash(env.TOWER_HOME_SMOKE_OWNER_HASH) && await sha(key) === env.TOWER_HOME_SMOKE_OWNER_HASH;
+}
+
 async function signature(env, value) {
   const key = await crypto.subtle.importKey('raw', encode(env.TOWER_HOME_VIEW_KEY), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return hex(await crypto.subtle.sign('HMAC', key, encode(value)));
@@ -72,6 +81,11 @@ async function createSession(request, db, env, now, op) {
   const body = await readBody(request, op);
   if (!exact(body, ['ownerKeyHash', 'acceptedRulesVersion']) || !isHash(body.ownerKeyHash) ||
     body.acceptedRulesVersion !== rulesVersion) stop(400, 'INVALID_SESSION_REQUEST');
+  const restricted = await db.prepare('SELECT public_enabled FROM home_build_control WHERE id=1').first();
+  if (restricted?.public_enabled !== 1) {
+    const key = matchOwner.exec(request.headers.get('Authorization') ?? '')?.[1];
+    if (!key || body.ownerKeyHash !== env.TOWER_HOME_SMOKE_OWNER_HASH || await sha(key) !== body.ownerKeyHash) stop(503, 'BUILDER_UNAVAILABLE');
+  }
   const network = await signature(env, 'start:' + (request.headers.get('CF-Connecting-IP') ?? 'unknown'));
   const id = hex(crypto.getRandomValues(new Uint8Array(16)));
   const created = await db.prepare(`
@@ -158,7 +172,7 @@ async function owned(request, route, db, env, origin, now, planner, op) {
       ...(row.state === 'resident' ? { brief: JSON.parse(row.brief_json), ...(row.sharing ? { url: await homeUrl(env, row, origin) } : {}) } : {}) });
   }
   if (action === 'brief' && request.method === 'POST') {
-    if (!canCreateHomes(env, planner)) stop(503, 'BUILDER_UNAVAILABLE');
+    if (!await canStart(request, env, planner)) stop(503, 'BUILDER_UNAVAILABLE');
     return submitBrief(request, db, row, env, planner, now, op);
   }
   if (action === 'preview' && request.method === 'POST' && row.state === 'ready') {
@@ -174,7 +188,7 @@ async function owned(request, route, db, env, origin, now, planner, op) {
       if (row.approval_hash !== body.digest) stop(409, 'APPROVAL_CHANGED');
       return json({ state: 'resident', ...(row.sharing ? { url: await homeUrl(env, row, origin) } : {}) });
     }
-    if (!canCreateHomes(env, planner)) stop(503, 'BUILDER_UNAVAILABLE');
+    if (!await canStart(request, env, planner)) stop(503, 'BUILDER_UNAVAILABLE');
     if (row.state !== 'ready') stop(409, 'DESIGN_NOT_READY');
     const view = JSON.stringify(projection(JSON.parse(row.brief_json), JSON.parse(row.plan_json), body.rooms));
     if (await sha(view) !== body.digest) stop(409, 'APPROVAL_CHANGED');
@@ -218,12 +232,12 @@ export async function handleHomeBuild(request, env = {}, planner) {
   try {
     if (url.search || request.headers.has('Cookie')) stop(400, 'REQUEST_REJECTED');
     if (route === root + '/status' && request.method === 'GET') {
-      if (!canCreateHomes(env, planner)) return json({ availability: 'unavailable' });
+      if (!await canStart(request, env, planner)) return json({ availability: 'unavailable' });
       await db.prepare('SELECT id FROM home_build_sessions LIMIT 1').first();
       return json({ availability: 'available', start: root + '/start' });
     }
     if (route === root + '/start' && request.method === 'POST') {
-      if (!canCreateHomes(env, planner)) stop(503, 'BUILDER_UNAVAILABLE');
+      if (!await canStart(request, env, planner)) stop(503, 'BUILDER_UNAVAILABLE');
       return await createSession(request, db, env, Date.now(), op);
     }
     if (!canReadHomes(env)) stop(503, 'BUILDER_UNAVAILABLE');

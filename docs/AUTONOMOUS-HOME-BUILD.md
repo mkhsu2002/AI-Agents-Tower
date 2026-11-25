@@ -28,6 +28,10 @@ The floor manager may interpret a brief and propose a design. Tower code authori
 
 The homepage contract points to the build status, which returns the invitation-free session entry when enabled. The local Pages and D1 fixture created two residences, returned distinct view URLs, recovered the same URL on replay and denied unauthorized access. The model responses in this run were scripted. Live provider acceptance and production rollout remain open.
 
+## Production controls
+
+Apply `server/home-build/002-autonomous-homes.sql` to the bound residency database before deploying. A new database starts with public admission closed. The code also requires the environment enable flag and server-only viewer key. A designated operator credential can start one gated session before public admission opens. Run the live smoke test and verify D1 and audit before opening admission. Closing admission preserves completed homes and their existing viewer links.
+
 ## Release acceptance
 
 Run the test with an independent agent in a fresh session. Give it the owner instruction above as its entire input. Check all of the following:

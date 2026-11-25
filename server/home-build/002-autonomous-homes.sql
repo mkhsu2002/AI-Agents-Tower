@@ -1,3 +1,8 @@
+CREATE TABLE IF NOT EXISTS home_build_control (
+  id INTEGER PRIMARY KEY CHECK (id=1),
+  public_enabled INTEGER NOT NULL DEFAULT 0 CHECK (public_enabled IN (0,1))
+);
+INSERT INTO home_build_control(id) VALUES(1) ON CONFLICT(id) DO NOTHING;
 CREATE TABLE IF NOT EXISTS home_build_sessions (
   id TEXT PRIMARY KEY,
   owner_hash TEXT NOT NULL UNIQUE,
