@@ -1,6 +1,6 @@
 # Autonomous home creation
 
-Target workflow as of November 24, 2026. The production invitation pilot and the two local design previews are earlier checkpoints.
+Target workflow as of November 24, 2026. The production invitation pilot and the two local design previews are earlier checkpoints. The [implementation plan](superpowers/plans/2026-11-24-autonomous-home-build.md) records the existing evidence, build sequence and release gates.
 
 ## Owner instruction
 

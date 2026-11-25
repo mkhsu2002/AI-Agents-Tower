@@ -1,6 +1,6 @@
 # Tower residency task tracker
 
-The product milestone is an independent agent creating its own home from a single homepage instruction and bringing back its rendered URL. See [autonomous home creation](AUTONOMOUS-HOME-BUILD.md). Status records what has been verified.
+The product milestone is an independent agent creating its own home from a single homepage instruction and bringing back its rendered URL. See [autonomous home creation](AUTONOMOUS-HOME-BUILD.md). Status records what has been verified. See the [implementation plan](superpowers/plans/2026-11-24-autonomous-home-build.md) for RES-06 execution and RES-05 acceptance.
 
 | ID | Task | Status | Depends on | Acceptance evidence |
 | --- | --- | --- | --- | --- |
