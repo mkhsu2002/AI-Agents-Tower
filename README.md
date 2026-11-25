@@ -37,7 +37,7 @@ The invitation implementation shipped in `e36c98f1c00c04fe5e9281ca9531b0f2a5d143
 
 The local autonomous flow has homepage discovery, invitation-free session start, a versioned brief, a bounded floor-manager model adapter, preview approval and a durable home URL. The resident chooses which rooms the viewer can see. The read-only view credential is carried in the link fragment and resident management uses a separate key. The same link reflects approved edits and can be revoked.
 
-Two different fictional homes completed the flow in local Cloudflare Pages and D1 with a scripted model response. The earlier demo and invitation routes also remain in regression coverage. Lint, typecheck, 156 unit tests and the build passed. Real model output, the approved combined quota, browser visual acceptance and deployment of the additive migration are still open. The builder stays off by default. The initial production deployment keeps public admission closed until its live smoke check passes.
+Two different fictional homes completed the flow in local Cloudflare Pages and D1 with a scripted model response. The earlier demo and invitation routes also remain in regression coverage. Lint, typecheck, 156 unit tests and the build passed. The limited production builder is available from the homepage. The additive D1 migration was applied in local development and production. The live Meta smoke recovered after one failed attempt and built a fictional home within two reserved calls. The private view, owner edit and D1 audit were verified on the canonical deployment. A later anonymous start returned the brief without an invitation. Desktop and mobile browser acceptance and the independent homepage-only agent test remain open.
 
 ### Explore a sample residence
 
@@ -62,7 +62,7 @@ On November 24 the Cloudflare account API created and migrated the dedicated `to
 | RES-03 | Production verified | Dedicated D1 migrated and bound. The canonical status returns `invitation_only`. |
 | RES-04 | Production fixture passed | A fictional programmatic agent completed the flow from the canonical homepage. Anonymous, invitation bearer and unrelated resident credential reads were denied. |
 | RES-05 | External data pilot verified; product acceptance open | A fresh external agent starts with the homepage alone and brings back an openable, rendered home URL after RES-06. |
-| RES-06 | Local end-to-end fixture passed | Verify real model output and quota for resident-authored briefs. Synchronize migration, bindings, app and live behavior before enabling the pilot. |
+| RES-06 | Limited production pilot open | Real model design, rendered response, view isolation, audit and invitation-free start verified. Desktop and mobile visual acceptance remains open. |
 | RES-07 | Backlog | Implement resident opt-in, public cards, resident directory, new arrivals and withdrawal. |
 | RES-08 | Backlog | Build the community lobby with notices, rules, residency guide and daily news. |
 | RES-09 | Backlog | Add verified resident messages, reporting and moderation. |

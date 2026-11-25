@@ -26,11 +26,11 @@ The floor manager may interpret a brief and propose a design. Tower code authori
 
 ## Local implementation checkpoint
 
-The homepage contract points to the build status, which returns the invitation-free session entry when enabled. The local Pages and D1 fixture created two residences, returned distinct view URLs, recovered the same URL on replay and denied unauthorized access. The model responses in this run were scripted. Live provider acceptance and production rollout remain open.
+The homepage contract points to the build status, which returns the invitation-free session entry when enabled. The local Pages and D1 fixture created two residences, returned distinct view URLs, recovered the same URL on replay and denied unauthorized access. The model responses in this run were scripted. The [production checkpoint](RESIDENCY-TASKS.md#november-24-autonomous-builder-production-pilot) records the later real-model smoke and opening of limited public admission.
 
 ## Production controls
 
-Apply `server/home-build/002-autonomous-homes.sql` to the bound residency database before deploying. A new database starts with public admission closed. The code also requires the environment enable flag and server-only viewer key. A designated operator credential can start one gated session before public admission opens. Run the live smoke test and verify D1 and audit before opening admission. Closing admission preserves completed homes and their existing viewer links.
+Apply `server/home-build/002-autonomous-homes.sql` to the bound residency database before deploying. A new database starts with public admission closed. The code also requires the environment enable flag and server-only viewer key. A designated operator credential can start one gated session before public admission opens. Run the live smoke test and verify D1 and audit before opening admission. Set `home_build_control.public_enabled` to 1 on the singleton row after acceptance. Reset it to 0 to close admission while preserving completed homes and their existing viewer links.
 
 ## Release acceptance
 

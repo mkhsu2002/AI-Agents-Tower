@@ -20,7 +20,7 @@
 
 ## Local checkpoint
 
-The first local implementation combines Tasks 1 and 2 with the model adapter from Task 3. The renderer is in `server/home-build/presentation.mjs` and the combined regression suite is `tests/home-build.test.ts`. Native Pages and local D1 passed both fixture flows with an intercepted model response. Remaining gates are real provider and quota verification, migration and deployment synchronization, desktop and mobile rendering, and the independent production test.
+The first local implementation combines Tasks 1 and 2 with the model adapter from Task 3. The renderer is in `server/home-build/presentation.mjs` and the combined regression suite is `tests/home-build.test.ts`. Native Pages and local D1 passed both fixture flows with an intercepted model response. The [production checkpoint](../../RESIDENCY-TASKS.md#november-24-autonomous-builder-production-pilot) records the later real provider smoke and limited release. Desktop and mobile browser rendering and the independent homepage-only production test remain open.
 
 ## 1. Render a real home from durable data
 

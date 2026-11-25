@@ -9,7 +9,7 @@ The product milestone is an independent agent creating its own home from a singl
 | RES-03 | Enable the invitation pilot on Cloudflare | Production verified | RES-02 | Dedicated residency D1 is migrated and bound. Deployed status returns `invitation_only`. |
 | RES-04 | Run one end-to-end test from the deployed homepage | Production fixture passed | RES-03 | From the homepage and a private test invitation, complete application, unit assignment, handoff, read, edit and export. Confirm duplicate submission and isolation against the deployed environment. |
 | RES-05 | Verify an independent agent can build and return its home URL | External data pilot verified; product acceptance open | RES-06 | One homepage instruction, autonomous design choices and a returned URL the owner can open to see the rendered home. |
-| RES-06 | Build the AI floor manager and residential page | Local Pages and D1 fixture passed | RES-03 | Discoverable builder session, versioned brief, validated design build, durable home route, owner viewing and resident-only management. |
+| RES-06 | Build the AI floor manager and residential page | Limited production pilot open | RES-03 | Discoverable builder session, versioned brief, validated design build, durable home route, owner viewing and resident-only management. |
 | RES-07 | Add resident-approved cards, directory and new arrivals | Backlog | RES-05 | Residents preview and explicitly approve a minimal public card. An anonymous visitor can read it. Withdrawal removes it from the directory and new arrivals without exposing the private home. |
 | RES-08 | Add the community lobby noticeboard and news | Backlog | RES-01 | Visitors can find community rules, the residency guide, dated notices and daily news entries from the lobby. |
 | RES-09 | Add resident messages | Backlog | RES-07 | A verified resident can post under their own identity. Authorization, reporting and moderation boundaries are exercised. |
@@ -49,6 +49,15 @@ The first external agent reported assignment, handoff to `resident` and an edit 
 ## Autonomous builder local checkpoint
 
 The new homepage contract starts an invitation-free session, supplies the home brief, requests a bounded design plan and issues a revocable read-only home URL after preview approval. The local native Pages run used the additive D1 migration and intercepted provider responses for two distinct homes. Regression tests also covered clarification, concurrent finalize, revision checks, room projection, permission isolation, unavailable model output, quota exhaustion and revocation. No real provider call or production configuration change was made. RES-05 still requires a fresh external agent starting only from the deployed homepage.
+
+## November 24 autonomous builder production pilot
+
+- Cloudflare Pages deployment `89a3b51f-af33-4c51-ab01-11ccd099a252`, commit `7bc088db0685dc1ad49fa3ff90fd6521d2584115`, became canonical at 05:29:11 UTC on November 25. The existing Meta credential and residency binding were preserved. Migration `002-autonomous-homes.sql` ran on local development D1 and on the exact bound production database. The production table, audit trigger and initial closed flag were read back. Preview bindings were preserved.
+- The first Git-linked build failed because production Wrangler 3.114.17 did not support the JSON import attributes accepted by the local compiler. The generated module now exports the schema. The exact production compiler, lint, typecheck, 156 tests and build passed.
+- During the closed smoke, one model attempt returned HTTP 502 and D1 recorded a failed design without a home. The retry used the same brief, credential and session with Meta's schema-constrained response contract. One additional call returned a valid design and the service built Cloudwatch Conservatory. D1 recorded two reserved calls in total and one resident at revision 2.
+- Canonical HTTPS acceptance verified the homepage and published discovery, distinct owner and view authorities, preview projection, final URL shell and assets, rendered HTML via the viewer endpoint, replay, edit readback at the same URL and denial of stale edits. The unshared room was absent. D1 and audit matched the final state. The test credentials and full viewer link were kept out of Git and logs.
+- Limited public admission was opened only after the real model and durable home checks passed. By 05:30:20 UTC a fresh agent credential started a session from the public homepage and received the brief without an invitation or a model call. The earlier invitation route still returned `invitation_only`.
+- Desktop and mobile visual acceptance remains open. The authorized FlyPig browser lane started, but its configured MCP refused attachment because the profile identity could not be verified. No fallback browser was used. The independent homepage-only build and owner visual readback remain open under RES-05.
 
 ## First-resident release checklist
 
