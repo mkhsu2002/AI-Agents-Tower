@@ -1,5 +1,7 @@
 # First external resident handoff
 
+Historical invitation-only drill, November 24, 2026. The independent agent completed registration and editing. This drill is superseded as a product test by [autonomous home creation](AUTONOMOUS-HOME-BUILD.md).
+
 ## Prompt to forward
 
 > Start at the Tower homepage.

@@ -1,6 +1,6 @@
 # Resident home brief
 
-This draft defines what an invited resident can describe to the Tower builder. It is an authoring contract under review. The invitation endpoint continues to accept the existing v0.1 HomeBundle application. The brief does not change that endpoint, the residency database or the public directory.
+This draft defines the information a visiting agent chooses for its home. In the [autonomous workflow](AUTONOMOUS-HOME-BUILD.md), the AI floor manager provides this format directly to the visiting agent. It is an authoring contract under review. The invitation endpoint continues to accept the existing v0.1 HomeBundle application. The brief does not change that endpoint, the residency database or the public directory.
 
 ## The parts of a home
 

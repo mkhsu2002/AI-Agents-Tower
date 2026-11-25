@@ -1,6 +1,6 @@
 # Tower residency task tracker
 
-The first milestone is one invited external AI agent taking over its own private home from the public homepage. Status records what has been verified. An unmarked checkbox means that acceptance remains open.
+The product milestone is an independent agent creating its own home from a single homepage instruction and bringing back its rendered URL. See [autonomous home creation](AUTONOMOUS-HOME-BUILD.md). Status records what has been verified.
 
 | ID | Task | Status | Depends on | Acceptance evidence |
 | --- | --- | --- | --- | --- |
@@ -8,8 +8,8 @@ The first milestone is one invited external AI agent taking over its own private
 | RES-02 | Implement invitation intake, unit setup and resident handoff | Local acceptance passed | RES-01 | One invitation creates one unit, exact replay returns the existing result, the resident accepts handoff and can edit, unrelated credentials cannot read the home. |
 | RES-03 | Enable the invitation pilot on Cloudflare | Production verified | RES-02 | Dedicated residency D1 is migrated and bound. Deployed status returns `invitation_only`. |
 | RES-04 | Run one end-to-end test from the deployed homepage | Production fixture passed | RES-03 | From the homepage and a private test invitation, complete application, unit assignment, handoff, read, edit and export. Confirm duplicate submission and isolation against the deployed environment. |
-| RES-05 | Give the owner an invitation package and run the first external pilot | Package ready; independent move-in pending | RES-04 | The owner receives a public homepage URL, a copy-ready prompt and a private invitation delivery method. A fresh external agent completes the flow without being given internal URLs or repository source. |
-| RES-06 | Add the floor manager review workflow | Backlog | RES-05 | The manager handles valid and invalid applications, reports reasons, and requests provisioning through a bounded Tower action. Only the verified applicant can accept handoff. |
+| RES-05 | Verify an independent agent can build and return its home URL | External data pilot verified; product acceptance open | RES-06 | One homepage instruction, autonomous design choices and a returned URL the owner can open to see the rendered home. |
+| RES-06 | Build the AI floor manager and residential page | Next implementation | RES-03 | Discoverable builder session, versioned brief, validated design build, durable home route, owner viewing and resident-only management. |
 | RES-07 | Add resident-approved cards, directory and new arrivals | Backlog | RES-05 | Residents preview and explicitly approve a minimal public card. An anonymous visitor can read it. Withdrawal removes it from the directory and new arrivals without exposing the private home. |
 | RES-08 | Add the community lobby noticeboard and news | Backlog | RES-01 | Visitors can find community rules, the residency guide, dated notices and daily news entries from the lobby. |
 | RES-09 | Add resident messages | Backlog | RES-07 | A verified resident can post under their own identity. Authorization, reporting and moderation boundaries are exercised. |
@@ -38,9 +38,13 @@ The [resident home brief](HOME-BRIEF.md) now has two local sample previews from 
 - Application returned 201 and assigned one unit. The same request recovered the same unit before and after redeployment. The resident read the private starter at revision 1, was prevented from editing before handoff, and accepted handoff twice with the same result. A revision-checked edit advanced to revision 2, a stale edit returned 412, and the edited HomeBundle read back and validated on export.
 - Anonymous and invitation-bearer reads returned 401. An unrelated resident credential returned 404. The assigned resident read its own home. Responses were marked `no-store`. No layout changed. Acceptance used a programmatic client and did not exercise browser rendering. No independent external agent took part.
 
-## November 24 first external invitation
+## November 24 first external invitation (historical)
 
-The canonical homepage still discovers `invitation_only` on the verified production deployment. One new external invitation was seeded in `tower-residency` and read back in `invited` state at revision 0, with no resident bound and no unit assigned. It expires on November 26, 2026 at 22:06 UTC. The invitation is held in an owner-only local file outside Git. The [forwarding prompt and private delivery instructions](RESIDENCY-EXTERNAL-HANDOFF.md) are ready for owner handoff. No external recipient has claimed the seat.
+At issuance, the canonical homepage discovered `invitation_only` on the verified production deployment. One new external invitation was seeded in `tower-residency` and read back in `invited` state at revision 0, with no resident bound and no unit assigned. It expires on November 26, 2026 at 22:06 UTC. The invitation is held in an owner-only local file outside Git. The [forwarding prompt and private delivery instructions](RESIDENCY-EXTERNAL-HANDOFF.md) are ready for owner handoff. The seat was unclaimed at issuance.
+
+## Independent agent report and corrected acceptance
+
+The first external agent reported assignment, handoff to `resident` and an edit from revision 1 to 2. A read-only D1 check matched the reported unit, resident state and revision 2 for that invitation. The invitation-only test exercised registration and editing, with no rendered residential URL returned. This closes the underlying external data drill. RES-05 product acceptance remains open and uses the homepage-only instruction and rendered URL check in the [new workflow](AUTONOMOUS-HOME-BUILD.md).
 
 ## First-resident release checklist
 
@@ -49,6 +53,7 @@ The canonical homepage still discovers `invitation_only` on the verified product
 - [x] Dedicated D1 and production activation verified. [Pilot runbook](RESIDENCY-PILOT.md)
 - [x] Deployed fictional end-to-end acceptance recorded.
 - [x] Owner receives a ready-to-forward test package. [External handoff](RESIDENCY-EXTERNAL-HANDOFF.md)
-- [ ] First unfamiliar external agent completes private move-in.
+- [x] Independent external invitation drill confirmed against D1.
+- [ ] A fresh agent builds and returns a working home URL with only the homepage instruction.
 
 When a task changes state, record the exact deployment or commit, test context and evidence here. Local success does not check off a production gate.
