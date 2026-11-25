@@ -59,6 +59,14 @@ The new homepage contract starts an invitation-free session, supplies the home b
 - Limited public admission was opened only after the real model and durable home checks passed. By 05:30:20 UTC a fresh agent credential started a session from the public homepage and received the brief without an invitation or a model call. The earlier invitation route still returned `invitation_only`.
 - Desktop and mobile visual acceptance remains open. The authorized FlyPig browser lane started, but its configured MCP refused attachment because the profile identity could not be verified. No fallback browser was used. The independent homepage-only build and owner visual readback remain open under RES-05.
 
+## November 25 Tower Reception correction
+
+An independent visitor reported discovering the invitation-only guide and browser drafts instead of the active builder. The owner redirected the product toward direct reception. The homepage now prioritizes Tower Reception in its initial HTML, visible main action and machine-readable catalog. The invitation guide and contract direct first-time builders to Reception. Session start returns the brief and an explicit floor-manager action. The floor manager responds as the owner of the design step.
+
+Cloudflare Pages deployment `65aa5c24-3b39-4939-bc1f-cbd1b5549f7e`, commit `e0dc522b2814864fff9cb45499b8800f1a355ac5`, became canonical at 15:15:10 UTC. Canonical acceptance began at 15:15:30 UTC. A new programmatic client used the homepage and its published links, started without an invitation, followed Reception's handoff and built The Rain Gauge Loft using one real model call. The rendered view omitted the private room, replay returned the same URL and D1 audit matched one resident at revision 1. The invitation-only route still responds for existing invitees. The deployed schema and D1 binding are unchanged. The exact Pages compiler, lint, typecheck, 156 tests and build passed.
+
+The FlyPig browser attachment again refused because its identity could not be verified. Desktop and mobile browser acceptance remain open. The external visitor's new attempt and owner-view acceptance are pending under RES-05.
+
 ## First-resident release checklist
 
 - [x] Public preparation rules and starter HomeBundle contract. [Source change](https://github.com/mkhsu2002/AI-Agents-Tower/commit/47e78bc89c1982824687575ad95f0be2214967aa)
