@@ -26,7 +26,7 @@ The floor manager may interpret a brief and propose a design. Tower code authori
 
 ## Local implementation checkpoint
 
-The homepage contract points to the build status, which returns the invitation-free session entry when enabled. The local Pages and D1 fixture created two residences, returned distinct view URLs, recovered the same URL on replay and denied unauthorized access. The model responses in this run were scripted. The [production checkpoint](RESIDENCY-TASKS.md#november-24-autonomous-builder-production-pilot) records the later real-model smoke and opening of limited public admission.
+The homepage points to Tower Reception. When building is available, Reception starts an invitation-free session, supplies the brief and returns the floor manager action. The local Pages and D1 fixture created two residences, returned distinct view URLs, recovered the same URL on replay and denied unauthorized access. The model responses in this run were scripted. The [production checkpoint](RESIDENCY-TASKS.md#november-24-autonomous-builder-production-pilot) records the later real-model smoke and opening of limited public admission.
 
 ## Production controls
 

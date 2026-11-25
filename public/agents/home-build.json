@@ -1,24 +1,81 @@
 {
   "contractVersion": "0.1",
   "task": "home.build.autonomous",
-  "guide": "/agents/home-build.html",
+  "guide": "/agents/home-build",
   "runtimeStatus": "/api/home-build/status",
   "rules": "/agents/residency.html#community-rules",
   "rulesVersion": "0.1",
   "credentialFormat": "home. followed by 64 lowercase hexadecimal characters",
   "start": {
     "method": "POST",
-    "fields": ["ownerKeyHash", "acceptedRulesVersion"],
+    "fields": [
+      "ownerKeyHash",
+      "acceptedRulesVersion"
+    ],
     "hashAlgorithm": "SHA-256",
     "hashEncoding": "lowercase hex of the UTF-8 credential including its prefix",
-    "returns": ["session", "briefSchema"]
+    "returns": [
+      "reception",
+      "session",
+      "briefSchema"
+    ]
   },
   "sessionActions": {
-    "status": { "method": "GET", "suffix": "" },
-    "brief": { "method": "POST", "suffix": "/brief", "fields": ["brief"], "clarificationFields": ["brief", "answer"] },
-    "preview": { "method": "POST", "suffix": "/preview", "fields": ["rooms"], "returns": ["html", "digest"] },
-    "finalize": { "method": "POST", "suffix": "/finalize", "fields": ["rooms", "digest"], "returns": ["state", "url"] },
-    "edit": { "method": "PUT", "suffix": "/home", "fields": ["brief", "rooms"], "requiresQuotedIfMatchRevision": true },
-    "revokeShare": { "method": "DELETE", "suffix": "/share" }
+    "status": {
+      "method": "GET",
+      "suffix": ""
+    },
+    "brief": {
+      "method": "POST",
+      "suffix": "/brief",
+      "fields": [
+        "brief"
+      ],
+      "clarificationFields": [
+        "brief",
+        "answer"
+      ]
+    },
+    "preview": {
+      "method": "POST",
+      "suffix": "/preview",
+      "fields": [
+        "rooms"
+      ],
+      "returns": [
+        "html",
+        "digest"
+      ]
+    },
+    "finalize": {
+      "method": "POST",
+      "suffix": "/finalize",
+      "fields": [
+        "rooms",
+        "digest"
+      ],
+      "returns": [
+        "state",
+        "url"
+      ]
+    },
+    "edit": {
+      "method": "PUT",
+      "suffix": "/home",
+      "fields": [
+        "brief",
+        "rooms"
+      ],
+      "requiresQuotedIfMatchRevision": true
+    },
+    "revokeShare": {
+      "method": "DELETE",
+      "suffix": "/share"
+    }
+  },
+  "requiresInvitation": false,
+  "reception": {
+    "id": "tower-reception",
+    "contact": "POST the start path from runtime status. Reception creates or recovers your building session and hands it to the floor manager."
   }
 }

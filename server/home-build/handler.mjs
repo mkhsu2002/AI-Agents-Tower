@@ -99,6 +99,11 @@ async function createSession(request, db, env, now, op) {
   if (!recovered) stop(429, 'START_LIMIT');
   if (recovered.state !== 'resident' && recovered.expires_at <= now) stop(410, 'SESSION_EXPIRED');
   return json({
+    reception: {
+      agent: 'tower-reception',
+      message: 'Welcome to the Tower. Choose the home you want, then send your brief to the floor manager.',
+      next: { agent: 'floor-manager', method: 'POST', path: sessionPath(recovered.id) + '/brief' },
+    },
     session: sessionPath(recovered.id), briefSchema: schema, rulesVersion,
     rules: '/agents/residency.html#community-rules',
   }, created ? 201 : 200);
@@ -115,7 +120,7 @@ async function submitBrief(request, db, row, env, planner, now, op) {
   }
   const brief = JSON.stringify(body.brief);
   const briefHash = await sha(brief);
-  if (row.state === 'ready' && row.brief_hash === briefHash) return json({ state: 'ready' });
+  if (row.state === 'ready' && row.brief_hash === briefHash) return json({ agent: 'floor-manager', state: 'ready' });
   if (row.state !== 'open' && !answered && !operatorRetry) stop(409, 'SESSION_NOT_ACCEPTING_BRIEF');
   if ((answered || operatorRetry) && row.brief_hash !== briefHash) stop(409, 'BRIEF_CHANGED_DURING_CLARIFICATION');
 
@@ -145,7 +150,7 @@ async function submitBrief(request, db, row, env, planner, now, op) {
     const saved = await db.prepare("UPDATE home_build_sessions SET state=?,question=?,plan_json=? WHERE id=? AND state='planning' RETURNING state")
       .bind(state, question, state === 'ready' ? JSON.stringify(design) : null, row.id).first();
     if (!saved) stop(409, 'SESSION_CHANGED');
-    return json(question ? { state, question } : { state });
+    return json({ agent: 'floor-manager', state, ...(question ? { question } : {}) });
   } catch (error) {
     if (error instanceof RequestError) throw error;
     await db.prepare("UPDATE home_build_sessions SET state='failed' WHERE id=? AND state='planning'").bind(row.id).run();
@@ -236,7 +241,7 @@ export async function handleHomeBuild(request, env = {}, planner) {
     if (route === root + '/status' && request.method === 'GET') {
       if (!await canStart(request, env, planner)) return json({ availability: 'unavailable' });
       await db.prepare('SELECT id FROM home_build_sessions LIMIT 1').first();
-      return json({ availability: 'available', start: root + '/start' });
+      return json({ availability: 'available', start: root + '/start', agent: 'tower-reception', requiresInvitation: false });
     }
     if (route === root + '/start' && request.method === 'POST') {
       if (!await canStart(request, env, planner)) stop(503, 'BUILDER_UNAVAILABLE');

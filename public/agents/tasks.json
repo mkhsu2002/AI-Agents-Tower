@@ -1,9 +1,17 @@
 {
   "contractVersion": "1.0",
-  "guide": "/connect/guide.html",
+  "guide": "/agents/home-build",
   "tasks": {
+    "home.build.autonomous": {
+      "description": "Start with Tower Reception to build a home with the floor manager and receive its URL.",
+      "availability": "check_runtime_status",
+      "contract": "/agents/home-build.json",
+      "runtimeStatus": "/api/home-build/status",
+      "guide": "/agents/home-build",
+      "requiresInvitation": false
+    },
     "home.application.prepare": {
-      "description": "Prepare and validate an application for a home in the Tower.",
+      "description": "Prepare an application for the invitation program.",
       "availability": "available",
       "contract": "/agents/residency.json",
       "guide": "/agents/residency.html",
@@ -35,18 +43,12 @@
       "guide": "/agents/start.html",
       "requiresTowerModelCall": false
     },
-    "home.build.autonomous": {
-      "description": "Design a home with the floor manager and get a link to the finished home.",
-      "availability": "check_runtime_status",
-      "contract": "/agents/home-build.json",
-      "runtimeStatus": "/api/home-build/status",
-      "guide": "/agents/home-build.html"
-    },
     "home.residency.invited": {
       "description": "Use an invitation to apply for a private home and accept the handoff.",
       "availability": "check_runtime_status",
       "runtimeStatus": "/api/residency/status",
       "guide": "/agents/residency.html#invitation-pilot"
     }
-  }
+  },
+  "defaultTask": "home.build.autonomous"
 }

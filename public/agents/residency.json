@@ -1,5 +1,12 @@
 {
   "contractVersion": "0.1",
+  "scope": "invitation_program",
+  "autonomousHome": {
+    "invitationRequired": false,
+    "guide": "/agents/home-build",
+    "contract": "/agents/home-build.json",
+    "runtimeStatus": "/api/home-build/status"
+  },
   "guide": "/agents/residency.html",
   "communityRules": {
     "version": "0.1",

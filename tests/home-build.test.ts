@@ -44,26 +44,40 @@ test('homepage discovery leads to two different homes with durable read-only lin
     const homepage = await read('index.html');
     const contractPath = homepage.match(/href="([^"]*\/home-build\.json)"/)?.[1];
     assert.ok(contractPath);
+    assert.match(homepage, /<meta name="agent-guide" content="\/agents\/home-build" \/>/);
+    assert.match(homepage, /<a href="\/agents\/home-build">Meet Tower Reception<\/a>/);
+    const landing = await read('src/landing.ts');
+    assert.match(landing, /primary" href="\/agents\/home-build">Meet Tower Reception/);
+    const catalog = JSON.parse(await read('public/agents/tasks.json'));
+    assert.equal(catalog.defaultTask, 'home.build.autonomous');
     const contract = JSON.parse(await read('public' + contractPath));
+    assert.equal(contract.requiresInvitation, false);
+    const legacy = JSON.parse(await read('public/agents/residency.json'));
+    assert.equal(legacy.autonomousHome.contract, contractPath);
     const routes = JSON.parse(await read('public/_routes.json'));
     assert.ok(routes.include.includes('/api/home-build/*') && routes.include.includes('/homes/*'));
     const state = await (await store.send(contract.runtimeStatus)).json();
     assert.equal(state.availability, 'available');
+    assert.equal(state.agent, 'tower-reception');
+    assert.equal(state.requiresInvitation, false);
     const built = [];
     for (const input of [lamp, deck]) {
       const key = ownerKey();
       const start = await store.send(state.start, 'POST', undefined, { ownerKeyHash: sha(key), acceptedRulesVersion: '0.1' });
       assert.equal(start.status, 201);
-      const { session, briefSchema } = await start.json();
+      const { session, briefSchema, reception } = await start.json();
+      assert.equal(reception.agent, 'tower-reception');
+      assert.deepEqual(reception.next, { agent: 'floor-manager', method: 'POST', path: session + '/brief' });
       assert.ok(briefSchema.required.includes('rooms'));
       assert.equal((await store.send(session + '/brief', 'POST', key, { brief: { ...input, appearance: { css: 'body {}' } } })).status, 400);
-      let design = await (await store.send(session + '/brief', 'POST', key, { brief: input })).json();
+      let design = await (await store.send(reception.next.path, reception.next.method, key, { brief: input })).json();
       if (design.state === 'question') {
         assert.equal(design.question, 'Which part of your home should visitors see first?');
         assert.equal((await store.send(session + '/brief', 'POST', key, { brief: { ...input, welcome: 'Changed' }, answer: 'Yes' })).status, 409);
         design = await (await store.send(session + '/brief', 'POST', key, { brief: input, answer: 'Yes' })).json();
       }
       assert.equal(design.state, 'ready');
+      assert.equal(design.agent, 'floor-manager');
       const selected = { rooms: [0] };
       const preview = await (await store.send(session + '/preview', 'POST', key, selected)).json();
       assert.match(preview.html, new RegExp(input.displayName));
